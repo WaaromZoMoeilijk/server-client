@@ -1,16 +1,8 @@
 #!/bin/bash
 # info@waaromzomoeilijk.nl
 ###################################
-# Variables
-
-#for i in $HOME/.local/include/*;
-#  do source ../lib.sh
-#done
-source "$GITDIR"/rpi/lib.sh
-
-#CONFIG="/boot/config.txt"
-#GITDIR="/var/opt/wzm"
-#REPO="https://github.com/ezraholm50/server-client"
+# Variables & functions
+source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
 
 ###################################
 # Update
