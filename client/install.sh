@@ -3,9 +3,15 @@
 # login root/raspberry, dietpi/raspberry, pi/raspberry
 ###################################
 # Variables & functions
-source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
+#source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
 # Check if script runs as root
 #root_check
+
+CONFIG="/boot/config.txt"
+GITDIR="/var/opt/wzm"
+REPO="https://github.com/ezraholm50/server-client" 
+DJANGO="/home/pi/pidjango"
+TEMPPI="/home/pi"
 
 ###################################
 # Update
@@ -22,11 +28,16 @@ sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force
       nano \
       git \
       python3 \
+      python3-pip \
+      python3-pygame \
+      python3-requests \
+      python3-setuptools \
       unattended-upgrades \
       openssh-server
 
 sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
       libnss-mdns \
+      python3-requests \
       avahi-daemon 
       
 ###################################
@@ -45,15 +56,14 @@ DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
   chown -R pi:pi /home/pi/.ssh
   chmod -R 600 /home/pi/.ssh/*
   ssh-copy-id -i /home/pi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
-fi
 
 ###################################
-# Clone git repo or pull latest updates
+# Clone git repo
 if [ -d "$GITDIR" ]; then
-  cd "$GITDIR" && git pull && cd ~
-else  
-  git clone "$REPO" "$GITDIR"
+  rm -r "$GITDIR"
 fi
+
+git clone "$REPO" "$GITDIR"
 
 ###################################
 # Add rc.local
@@ -125,9 +135,10 @@ fi
 
 ###################################
 # Overclock
-if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
-    /bin/bash "$GITDIR"/client/scripts/overclock.sh
-fi
+#if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
+#     dos2unix "$GITDIR"/client/scripts/overclock.sh
+#    /bin/bash "$GITDIR"/client/scripts/overclock.sh
+#fi
 
 ###################################
 # RPI-monitor
@@ -148,6 +159,7 @@ if [ -d "$DJANGO" ]; then
       rm -r "$DJANGO"
 fi
 mv "$GITDIR"/client/python/* "$TEMPPI"/
-/usr/bin/python "$TEMPPI"/client.py
+# Needs fixing, dont want to be running python2 anymore
+/usr/bin/python2 "$TEMPPI"/client.py
 
 exit 0
