@@ -1,4 +1,3 @@
-# davidcloudserver
 ![Project layout](/media/projectlayout.png)
 
 ## Timeline
