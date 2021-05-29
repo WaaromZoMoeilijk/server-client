@@ -76,7 +76,7 @@ AUTO_SETUP_BACKUP_RESTORE=0
 AUTO_SETUP_SSH_SERVER_INDEX=-2
 
 # File Server Selection: 0=none/custom | -1=ProFTP | -2=Samba
-AUTO_SETUP_FILE_SERVER_INDEX=-2
+AUTO_SETUP_FILE_SERVER_INDEX=0
 
 # Logging Mode Selection: 0=none/custom | -1=RAMlog 1h clear | -2=RAMlog 1h save clear | -3=rsyslog + logrotate
 AUTO_SETUP_LOGGING_INDEX=-2
