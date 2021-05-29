@@ -28,21 +28,11 @@ def writelog(sstr):
 	print sstr
 
 if True:
-	ossystem('sudo apt-get update')
-	ossystem('sudo apt-get -y upgrade')
-
-if True:
 	f = open("/home/pi/log.txt", 'w')
 	f.write('New system.')
 	f.close()
 	writelog('/home/pi/log.txt')
-if False:
-	ossystem('sudo apt-get -y install python3-requests') # could be installed by default
 if True:
-	ossystem('sudo apt-get -y install apache2')
-	ossystem('sudo apt-get install -y python3-pygame')
-	ossystem('sudo apt-get -y install git')
-	ossystem('sudo apt-get -y install sshpass')
 	os.system('sudo cp /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime')
 	writelog('time zone')
 	f = open("/home/pi/config.txt", 'w')
