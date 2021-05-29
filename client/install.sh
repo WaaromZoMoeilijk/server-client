@@ -21,6 +21,10 @@ sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force
       unattended-upgrades \
       openssh-server
 
+sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
+      libnss-mdns \
+      avahi-daemon 
+      
 ###################################
 # unattended-upgrades
 dpkg --reconfigure unattended-upgrades
