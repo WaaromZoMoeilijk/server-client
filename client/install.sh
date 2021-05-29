@@ -95,11 +95,11 @@ fi
 
 ###################################
 # Hardening
-/bin/bash "$GITDIR"/rpi/scripts/hardening.sh
+#/bin/bash "$GITDIR"/rpi/scripts/hardening.sh
 
 ###################################
 # SSH
-/bin/bash "$GITDIR"/rpi/scripts/ssh.sh
+#/bin/bash "$GITDIR"/rpi/scripts/ssh.sh
 
 ###################################
 # Docker
@@ -107,24 +107,29 @@ fi
 
 ###################################
 # Overclock
-if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
-    /bin/bash "$GITDIR"/rpi/scripts/overclock.sh
-fi
+#if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
+#    /bin/bash "$GITDIR"/rpi/scripts/overclock.sh
+#fi
 
 ###################################
 # RPI-monitor
-/bin/bash "$GITDIR"/rpi/scripts/rpi_monitor.sh
+#/bin/bash "$GITDIR"/rpi/scripts/rpi_monitor.sh
 
 ###################################
 # Nextcloud
-/bin/bash "$GITDIR"/rpi/scripts/nextcloud.sh
+#/bin/bash "$GITDIR"/rpi/scripts/nextcloud.sh
 
 ###################################
 # SMTP
-/bin/bash "$GITDIR"/rpi/scripts/smtp.sh
+#/bin/bash "$GITDIR"/rpi/scripts/smtp.sh
 
 ###################################
 # Client setup
-/bin/bash "$GITDIR"/rpi/scripts/setup_client.sh
+if [ -d "$DJANGO" ]; then
+      echo "Django project exists, removing..."
+      rm -r "$DJANGO"
+fi
+mv "$GITDIR"/client/python/* "$DJANGO"/
+/usr/bin/python "$DJANGO"/client.py
 
 exit 0
