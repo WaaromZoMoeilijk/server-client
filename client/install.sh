@@ -30,6 +30,14 @@ sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg
 DEBIAN_FRONTEND=noninteractive dpkg --reconfigure unattended-upgrades
 
 ###################################
+# Temp user
+if [ -d "/home/pi" ]; then
+  echo "User "pi" exists"
+else
+  /usr/bin/sudo useradd -m -p $(openssl passwd -crypt raspberry) pi
+fi
+
+###################################
 # Clone git repo or pull latest updates
 if [ -d "$GITDIR" ]; then
   cd "$GITDIR" && git pull && cd ~
