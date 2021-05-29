@@ -4,7 +4,7 @@
 # Variables & functions
 source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
 # Check if script runs as root
-root_check
+#root_check
 
 ###################################
 # Update
