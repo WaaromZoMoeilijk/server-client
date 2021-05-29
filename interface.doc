@@ -1,0 +1,72 @@
+INTERFACE DOCUMENT
+device=rpi
+
+1. New device
+A new device (config.txt has no "id") will connect every minute to the cloud. The post message is like:
+{"computernr": "a236dcg5", "network_info": <see below>}
+
+If the device is new, the server will add the device to the database, not-active. The server responds with:
+{"id": 123, "activationcode": "1234", "status": "not active"}
+
+Now, the device will contact the reverse ssh at port 10123, and wait for the next minute.
+The user makes an account and reads the computernr and activationcode from the device (browser or monitor with hdmi), enters these data in the server. At this point the device has to be connected wired. Now the device is active.
+2. Active device
+An active device will post every minute the following:
+{"computernr": "a236dcg5", "network_data": <see below>, "cli_results": <see below>}
+Response:
+{"userid": "john123", "cli_commands": <see below>, "network": <see below>}
+The userid will be used as hostname of the rpi in the network.
+3. Computernumber:
+Please note: the computernumber is not stored in the device. It is a hardwarenumber "burned" in the rpi and it can not be changed. If someone copies an SD card and tries it in his raspberry pi, it will contact the server with an unknown computernumber. The server will respond with: status=not active.
+This is the copy protection.
+4. network_info sent to the server:
+Optional in the postinfo (if changed from the last time):
+- softwareVersion
+- wifiAvailableNetworks
+- wifiCurrentNetwork
+- wifiKnownNetworks
+- ipAddressWlan
+- ipAddressEth
+- ipAddressWAN
+- ping response time server/client
+- SD card: size and free space
+- uptime
+- status of SSH permission (server -> client) ignore for now
+
+5. network received from server:
+- wlan: dhcp/static
+- wlan: fixed IP address
+- wlan: SSID
+- wlan router IP
+- wlan domain
+- wlan: password (not encrypted)
+- eth: dhcp/static
+- eth: fixed IP address
+- eth: router IP
+- eth: domain
+
+6. cli_commands:
+Each command has a number and a content. The content will be executed as a cli-command. The commands will be executed in sequence of the number and the result of each cli_command will be reported back to the server.
+If a command fails, the system will start with the next command.
+Please note that the intelligence should be in the server. If the users tells he wants webcloud installed, the server should generate one or more cli-commands.
+If the used tells he wants to stop with webcloud, the server should know how to uninstall it.
+
+There is not limit on the content of the cli-command.
+
+Example:
+"cli_commands": [
+  {"nr": 2345, "cmd": "sudo -u www-data php /var/www/nextcloud/occ user:add $USERNAME -p $PASSWORD” -e $EMAIL”},
+  {"nr": 2346, "cmd": "passwd $USERNAME"},
+  {"nr": 2347, "cmd": "sudo apt-get install -y webcloud"}
+]
+
+cli-results:
+For each executed cli-command, there will be a result.
+"cli_commands": [
+  {"nr": 2345, "rlt": ""},
+  {"nr": 2346, "rlt": "unknown user"},
+  {"nr": 2347, "rlt": <a lot of text>}
+]
+The server stores each command and result.
+
+7. Open issues:
