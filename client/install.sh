@@ -1,5 +1,6 @@
 #!/bin/bash
 # info@waaromzomoeilijk.nl
+# login root/raspberry, dietpi/raspberry, pi/raspberry
 ###################################
 # Variables & functions
 source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
