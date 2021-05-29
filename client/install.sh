@@ -27,7 +27,7 @@ sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg
       
 ###################################
 # unattended-upgrades
-dpkg --reconfigure unattended-upgrades
+DEBIAN_FRONTEND=noninteractive dpkg --reconfigure unattended-upgrades
 
 ###################################
 # Clone git repo or pull latest updates
