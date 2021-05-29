@@ -1,16 +1,17 @@
 #!/bin/bash
 # info@waaromzomoeilijk.nl
+# login root/raspberry, dietpi/raspberry, pi/raspberry
 ###################################
-# Variables
+# Variables & functions
+#source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
+# Check if script runs as root
+#root_check
 
-#for i in $HOME/.local/include/*;
-#  do source ../lib.sh
-#done
-source "$GITDIR"/rpi/lib.sh
-
-#CONFIG="/boot/config.txt"
-#GITDIR="/var/opt/wzm"
-#REPO="https://github.com/ezraholm50/server-client"
+CONFIG="/boot/config.txt"
+GITDIR="/var/opt/wzm"
+REPO="https://github.com/ezraholm50/server-client" 
+DJANGO="/home/pi/pidjango"
+TEMPPI="/home/pi"
 
 ###################################
 # Update
@@ -19,6 +20,7 @@ export DEBIAN_PRIORITY=critical
 sudo -E apt -qy update
 sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
 sudo -E apt -qy autoclean
+sudo -E apt -qy autoremove
 
 ###################################
 # Dependencies
@@ -26,20 +28,48 @@ sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force
       nano \
       git \
       python3 \
+      python3-pip \
+      python3-pygame \
+      python3-requests \
+      python3-setuptools \
       unattended-upgrades \
-      openssh-server
+      openssh-server \
+      net-tools
 
+sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
+      libnss-mdns \
+      python3-requests \
+      avahi-daemon 
+      
 ###################################
 # unattended-upgrades
-dpkg --reconfigure unattended-upgrades
+DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
 
 ###################################
-# Clone git repo or pull latest updates
+# Temp user, needs a one time password during installation to setup ssh keys.
+# Will be replaced with an API mechanism to retrieve clients pub keys.
+  rm -r "$TEMPPI"
+  echo "Creating user and keys"
+  useradd -m -d /home/pi -p $(openssl passwd -crypt raspberry) pi
+  usermod -aG sudo pi
+  mkdir /home/pi/.ssh
+  ssh-keygen -t rsa -N "" -f /home/pi/.ssh/id_rsa 
+  chown -R pi:pi /home/pi/.ssh
+  chmod -R 600 /home/pi/.ssh/*
+  ssh-copy-id -i /home/pi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
+
+###################################
+# Small hotfix, remove when testing is done
+#mkdir /var/www/html
+#cp /var/www/index.html /var/www/html/index.html
+
+###################################
+# Clone git repo
 if [ -d "$GITDIR" ]; then
-  cd "$GITDIR" && git pull && cd ~
-else  
-  git clone "$REPO" "$GITDIR"
+  rm -r "$GITDIR"
 fi
+
+git clone "$REPO" "$GITDIR"
 
 ###################################
 # Add rc.local
@@ -47,40 +77,41 @@ fi
 if [ -f "/etc/rc.local" ]; then
       echo "RC.local exists"
 else  
-      cat > /etc/systemd/system/rc-local.service <<EOF
-      [Unit]
-      Description=/etc/rc.local
-      ConditionPathExists=/etc/rc.local
 
-      [Service]
-      Type=forking
-      ExecStart=/etc/rc.local start
-      TimeoutSec=0
-      StandardOutput=tty
-      RemainAfterExit=yes
-      SysVStartPriority=99
+cat > /etc/systemd/system/rc-local.service <<EOF
+[Unit]
+Description=/etc/rc.local
+ConditionPathExists=/etc/rc.local
 
-      [Install]
-      WantedBy=multi-user.target
-      EOF
+[Service]
+Type=forking
+ExecStart=/etc/rc.local start
+TimeoutSec=0
+StandardOutput=tty
+RemainAfterExit=yes
+SysVStartPriority=99
 
-      # Add rc.local file
-      cat > /etc/rc.local <<EOF
-      #!/bin/sh -e
-      #
-      # rc.local
-      #
-      # This script is executed at the end of each multiuser runlevel.
-      # Make sure that the script will "exit 0" on success or any other
-      # value on error.
-      #
-      # In order to enable or disable this script just change the execution
-      # bits.
-      #
-      # By default this script does nothing.
+[Install]
+WantedBy=multi-user.target
+EOF
 
-      exit 0
-      EOF
+# Add rc.local file
+cat > /etc/rc.local <<EOF
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+exit 0
+EOF
 
       # Set execute permission
       chmod +x /etc/rc.local
@@ -98,36 +129,42 @@ fi
 
 ###################################
 # Hardening
-/bin/bash "$GITDIR"/rpi/scripts/hardening.sh
+#/bin/bash "$GITDIR"/client/scripts/hardening.sh
 
 ###################################
 # SSH
-/bin/bash "$GITDIR"/rpi/scripts/ssh.sh
+#/bin/bash "$GITDIR"/client/scripts/ssh.sh
 
 ###################################
 # Docker
-#/bin/bash "$GITDIR"/rpi/scripts/docker.sh
+#/bin/bash "$GITDIR"/client/scripts/docker.sh
 
 ###################################
 # Overclock
-if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
-    /bin/bash "$GITDIR"/rpi/scripts/overclock.sh
-fi
+#if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
+#     dos2unix "$GITDIR"/client/scripts/overclock.sh
+#    /bin/bash "$GITDIR"/client/scripts/overclock.sh
+#fi
 
 ###################################
 # RPI-monitor
-/bin/bash "$GITDIR"/rpi/scripts/rpi_monitor.sh
+#/bin/bash "$GITDIR"/client/scripts/rpi_monitor.sh
 
 ###################################
 # Nextcloud
-/bin/bash "$GITDIR"/rpi/scripts/nextcloud.sh
+#/bin/bash "$GITDIR"/client/scripts/nextcloud.sh
 
 ###################################
 # SMTP
-/bin/bash "$GITDIR"/rpi/scripts/smtp.sh
+#/bin/bash "$GITDIR"/client/scripts/smtp.sh
 
 ###################################
 # Client setup
-/bin/bash "$GITDIR"/rpi/scripts/setup_client.sh
+if [ -d "$DJANGO" ]; then
+      echo "Django project exists, removing..."
+      rm -r "$DJANGO"
+fi
+mv "$GITDIR"/client/python/* "$TEMPPI"/
+/usr/bin/python3 "$TEMPPI"/client.py
 
 exit 0

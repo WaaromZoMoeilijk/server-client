@@ -28,17 +28,17 @@ while True:
 	except:
 		sstr = 'do nothing'
 	if cf.read('activation_code') == '':
-		lable_id = 'ID'
+		lable_id = 'User:'
 		lable_act_code = ''
 	else:
 		lable_id = 'Temporary ID'
-		lable_act_code = 'Activation Code:'
+		lable_act_code = 'Activation number:'
 	screen.fill((0,0,0))
 	label = myfont.render(lable_id, 1, (255, 255, 0))
 	screen.blit(label, (210, 110))
 	label = myfont.render(str(cf.read('id')), 1, (255, 255, 0))
 	screen.blit(label, (230, 160))
-	label = myfont.render("Computer: ", 1, (255, 255, 0))
+	label = myfont.render("Device Identifier: ", 1, (255, 255, 0))
 	screen.blit(label, (210, 260))
 	label = myfont.render(str(ssm.computernr), 1, (255, 255, 0))
 	screen.blit(label, (230, 310))
@@ -47,9 +47,9 @@ while True:
 		screen.blit(label, (210, 410))
 		label = myfont.render(cf.read('activation_code'), 1, (255, 255, 0))
 		screen.blit(label, (230, 460))
-	label = myfont.render("A product of:", 1, (255, 255, 0))
+	label = myfont.render("Once the activation number is visible please visit:", 1, (255, 255, 0))
 	screen.blit(label, (210, 560))
-	label = myfont.render("www.waaromzomeilijk.nl", 1, (255, 255, 0))
+	label = myfont.render("https://register.waaromzomoeilijk.nl:2021", 1, (255, 255, 0))
 	screen.blit(label, (230, 610))
 	# show the whole thing
 	pygame.display.flip()
@@ -71,20 +71,19 @@ table{
 <table width=100%>
 <tr>
 	<td width=20%>
-	<td width=30% align=left>Temporary ID: 
+	<td width=30% align=left>Temporary User: 
 	<td width=50%>iiii
 	<td width=20%>
 </tr>
 <tr>
-	<td>
-	<td align=left>Computernr: 
+	<td align=left>Device Identifier: 
 	<td>cccc
 	<td>
 </tr>
 aaaa
 <tr>
-	<td>
-	<td colspan=3><br><br>A product of www.waaromzomoeilijk.nl
+	<td>Once the activation number is visible please visit:
+	<td>https://register.waaromzomoeilijk.nl:2021
 </tr>
 </table></body></html>
 '''
@@ -99,7 +98,7 @@ aaaa
 	else:
 		index_html = index_html.replace('aaaa','<tr><td><td align=left>Activation code: <td>' + cf.read('activation_code') + '<td></tr>')
 		check_again = 1
-	f=open('/var/www/html/index.html','w+')
+	f=open('/var/www/index.html','w+')
 	f.write(index_html)
 	f.close()
 	tteller += 1
