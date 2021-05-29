@@ -60,8 +60,8 @@ DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
 
 ###################################
 # Small hotfix, remove when testing is done
-mkdir /var/www/html
-cp /var/www/index.html /var/www/html/index.html
+#mkdir /var/www/html
+#cp /var/www/index.html /var/www/html/index.html
 
 ###################################
 # Clone git repo
