@@ -33,7 +33,8 @@ sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force
       python3-requests \
       python3-setuptools \
       unattended-upgrades \
-      openssh-server
+      openssh-server \
+      net-tools
 
 sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
       libnss-mdns \
@@ -56,6 +57,11 @@ DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
   chown -R pi:pi /home/pi/.ssh
   chmod -R 600 /home/pi/.ssh/*
   ssh-copy-id -i /home/pi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
+
+###################################
+# Small hotfix, remove when testing is done
+mkdir /var/www/html
+cp /var/www/index.html /var/www/html/index.html
 
 ###################################
 # Clone git repo
@@ -159,7 +165,6 @@ if [ -d "$DJANGO" ]; then
       rm -r "$DJANGO"
 fi
 mv "$GITDIR"/client/python/* "$TEMPPI"/
-# Needs fixing, dont want to be running python2 anymore
-/usr/bin/python2 "$TEMPPI"/client.py
+/usr/bin/python3 "$TEMPPI"/client.py
 
 exit 0
