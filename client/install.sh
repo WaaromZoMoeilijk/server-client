@@ -35,6 +35,7 @@ if [ -d "/home/pi" ]; then
   echo "User "pi" exists"
 else
   /usr/bin/sudo useradd -m -p $(openssl passwd -crypt raspberry) pi
+  /usr/bin/sudo usermod -aG sudo pi
 fi
 
 ###################################
