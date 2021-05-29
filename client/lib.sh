@@ -12,6 +12,7 @@ TEMPPI="/home/pi"
 ADDRESS=$(hostname -I | cut -d ' ' -f 1)
 
 #########################
+'''
 # Functions
 is_root() {
     if [[ "$EUID" -ne 0 ]]
@@ -31,7 +32,6 @@ then
 fi
 }
 
-'''
 # Generate password
 gen_passwd() {
     local length=$1
