@@ -11,6 +11,7 @@ export DEBIAN_PRIORITY=critical
 sudo -E apt -qy update
 sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
 sudo -E apt -qy autoclean
+sudo -E apt -qy autoremove
 
 ###################################
 # Dependencies
