@@ -76,16 +76,14 @@ table{
 	<td width=20%>
 </tr>
 <tr>
-	<td>
 	<td align=left>Device Identifier: 
 	<td>cccc
 	<td>
 </tr>
 aaaa
 <tr>
-	<td>
-	<td colspan=3><br><br>Once the activation number is visible please visit:
-	<td colspan=3><br><br>https://register.waaromzomoeilijk.nl:2021
+	<td>Once the activation number is visible please visit:
+	<td>https://register.waaromzomoeilijk.nl:2021
 </tr>
 </table></body></html>
 '''
@@ -100,7 +98,7 @@ aaaa
 	else:
 		index_html = index_html.replace('aaaa','<tr><td><td align=left>Activation code: <td>' + cf.read('activation_code') + '<td></tr>')
 		check_again = 1
-	f=open('/var/www/html/index.html','w+')
+	f=open('/var/www/index.html','w+')
 	f.write(index_html)
 	f.close()
 	tteller += 1
