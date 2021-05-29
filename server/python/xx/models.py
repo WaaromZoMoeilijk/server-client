@@ -12,6 +12,7 @@ class Xuser(models.Model):
 	activation_code_nw_email = models.CharField(max_length=12,blank=True, null=True)
 	last_login = models.DateTimeField()
 	created = models.DateTimeField(blank=True, auto_now_add=True)
+	support_end_date = models.DateTimeField(blank=True,default='2021-05-22')
 	last_updated = models.DateTimeField(blank=True)
 	failed_logins = models.IntegerField(blank=True, default=0)
 	ROLES = [
@@ -24,7 +25,6 @@ class Xuser(models.Model):
 		return str(self.id) + ' ' + self.userid
 
 	def get_menu(self):
-#		sstr = {'/xx/newrpi': 'new devices', '/xx/users': 'users', '/xx/settings':'settings-niet klaar', '/xx/myaccount':'my account', '/':'logout'}
 		if self.role == 'admin':
 			sstr = {'/xx/newrpi': 'new devices', '/xx/users': 'users', '/xx/settings':'settings', '/xx/myaccount':'my account', '/':'logout'}
 		else:
@@ -142,6 +142,7 @@ class Settings(models.Model):
 	sender = models.CharField(max_length=66,blank=True, null=True)
 	smtp_server = models.CharField(max_length=66,blank=True, null=True)
 	message_new_user = models.CharField(max_length=600,blank=True, null=True)
+	free_period_in_months = models.IntegerField(blank=True, null=True)
 
 	def __str__(self):
 		return str(self.id)

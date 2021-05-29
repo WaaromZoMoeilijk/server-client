@@ -14,7 +14,7 @@
 {% endblock %}
 {% block content %}
 <table width=100%>
-  <form action="/xx/useredit" method="post">{% csrf_token %}
+  <form action="/xx/useredit" method="post" autocomplete="off">{% csrf_token %}
   <input type=hidden name=xxid value="{{ xxid }}">
   {{ form }}
   <br><button type="submit" class="btn btn-primary">SAVE</button>
