@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% block message %}
+{{ message }}
+{% endblock %}
+{% block menu %}
+<table width=100%>
+  {% for key,value in menu.items %}
+    <tr>
+      <td><a href="{{ key }}" class="menu">{{ value }}</a></td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+{% block content %}
+<table>
+  <tr><td colspan=3>Home
+    {% for k,v in breadcrumb.items  %}
+       > <a href="/xx/{{ k }}edit/{{ v }}"> {{ k }}</a>&nbsp;&nbsp;
+    {% endfor %}<br>&nbsp;
+  <tr><td>
+    <form action="/xx/rpilogline" method="post">{% csrf_token %}
+    <button type="submit" class="btn btn-primary">General Log</button>&nbsp;&nbsp;&nbsp;
+    </form>
+  <td>
+    <form action="/xx/rpiclicommand" method="post">{% csrf_token %}
+    <button type="submit" class="btn btn-primary">CLI log</button>&nbsp;&nbsp;&nbsp;
+    </form>
+    <td>
+    <form action="/xx/newnetworks" method="post">{% csrf_token %}
+      <input type=hidden name=xxid value="{{ xxid }}">
+      <button type="submit" class="btn btn-primary">Network</button>&nbsp;&nbsp;&nbsp;
+    </form>
+</table>
+<table width=100%>
+  {{ form }}
+</table>
+{% endblock %}
