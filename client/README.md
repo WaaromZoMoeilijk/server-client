@@ -5,7 +5,7 @@ You need:
 - latest debian-lite from raspberry.org
 - software to copy the image.
 
-The planning is to use DietPy but this is not tested yet.
+The planning is to use DietPi but this is not tested yet.
 
 Copy the debian to the SD card.
 Add a file on the SD card "ssh", without ".txt".
@@ -18,7 +18,7 @@ Contact the rpi with putty and:
 
 enter the next as one line:
 
-wget https://github.com/timmeh1955/aaa/blob/61fa8284f751a8f0169b3955633f7daab34df396/client.py?raw=true -O client.py && sudo python client.py
+```wget https://raw.githubusercontent.com/ezraholm50/server-client/main/client/client.py -O client.py && sudo python client.py```
 
 Take a coffee or two.
 
