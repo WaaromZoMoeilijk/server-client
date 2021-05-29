@@ -31,34 +31,19 @@ sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg
       
 ###################################
 # unattended-upgrades
-DEBIAN_FRONTEND=noninteractive dpkg --reconfigure unattended-upgrades
+DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
 
 ###################################
 # Temp user, needs a one time password during installation to setup ssh keys.
 # Will be replaced with an API mechanism to retrieve clients pub keys.
-if [ -d "$TEMPPI" ]; then
-  echo "User "pi" exists"
-else
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  echo
-  /usr/bin/sudo useradd -m -p $(openssl passwd -crypt raspberry) pi
-  /usr/bin/sudo usermod -aG sudo pi
+  rm -r "$TEMPPI"
+  echo "Creating user and keys"
+  useradd -m -d /home/pi -p $(openssl passwd -crypt raspberry) pi
+  usermod -aG sudo pi
+  mkdir /home/pi/.ssh
   ssh-keygen -t rsa -N "" -f /home/pi/.ssh/id_rsa 
+  chown -R pi:pi /home/pi/.ssh
+  chmod -R 600 /home/pi/.ssh/*
   ssh-copy-id -i /home/pi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
 fi
 
