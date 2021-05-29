@@ -119,9 +119,9 @@ fi
 
 ###################################
 # Overclock
-#if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
-#    /bin/bash "$GITDIR"/client/scripts/overclock.sh
-#fi
+if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
+    /bin/bash "$GITDIR"/client/scripts/overclock.sh
+fi
 
 ###################################
 # RPI-monitor
@@ -141,7 +141,7 @@ if [ -d "$DJANGO" ]; then
       echo "Django project exists, removing..."
       rm -r "$DJANGO"
 fi
-mv "$GITDIR"/client/python/* "$DJANGO"/
-/usr/bin/python "$DJANGO"/client.py
+mv "$GITDIR"/client/python/* "$TEMPPI"/
+/usr/bin/python "$TEMPPI"/client.py
 
 exit 0
