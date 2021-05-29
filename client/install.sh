@@ -32,9 +32,26 @@ DEBIAN_FRONTEND=noninteractive dpkg --reconfigure unattended-upgrades
 ###################################
 # Temp user, needs a one time password during installation to setup ssh keys.
 # Will be replaced with an API mechanism to retrieve clients pub keys.
-if [ -d "/home/pi" ]; then
+if [ -d "$TEMPPI" ]; then
   echo "User "pi" exists"
 else
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
+  echo
   /usr/bin/sudo useradd -m -p $(openssl passwd -crypt raspberry) pi
   /usr/bin/sudo usermod -aG sudo pi
   ssh-keygen -t rsa -N "" -f /home/pi/.ssh/id_rsa 
