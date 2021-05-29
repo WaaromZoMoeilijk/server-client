@@ -3,6 +3,8 @@
 # https://www.raspberrypi.org/documentation/configuration/config-txt/overclocking.md
 # https://elinux.org/RPiconfig
 
+CONFIG="/boot/config.txt"
+
 sed -i '/arm_freq=/d' "$CONFIG"
 sed -i '/arm_freq_min=/d' "$CONFIG"
 sed -i '/over_voltage=/d' "$CONFIG"
