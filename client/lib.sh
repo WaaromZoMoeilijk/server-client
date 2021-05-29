@@ -9,5 +9,3 @@ TEMPPI="/home/pi"
 #GATEWAY=$(ip route | grep default | awk '{print $3}')
 #IFACE=$(ip r | grep "default via" | awk '{print $5}')
 #ADDRESS=$(hostname -I | cut -d ' ' -f 1)
-
-exit 0
