@@ -30,12 +30,15 @@ sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg
 DEBIAN_FRONTEND=noninteractive dpkg --reconfigure unattended-upgrades
 
 ###################################
-# Temp user
+# Temp user, needs a one time password during installation to setup ssh keys.
+# Will be replaced with an API mechanism to retrieve clients pub keys.
 if [ -d "/home/pi" ]; then
   echo "User "pi" exists"
 else
   /usr/bin/sudo useradd -m -p $(openssl passwd -crypt raspberry) pi
   /usr/bin/sudo usermod -aG sudo pi
+  ssh-keygen -t rsa -N "" -f /home/pi/.ssh/id_rsa 
+  ssh-copy-id -i /home/pi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
 fi
 
 ###################################
@@ -104,33 +107,33 @@ fi
 
 ###################################
 # Hardening
-#/bin/bash "$GITDIR"/rpi/scripts/hardening.sh
+#/bin/bash "$GITDIR"/client/scripts/hardening.sh
 
 ###################################
 # SSH
-#/bin/bash "$GITDIR"/rpi/scripts/ssh.sh
+#/bin/bash "$GITDIR"/client/scripts/ssh.sh
 
 ###################################
 # Docker
-#/bin/bash "$GITDIR"/rpi/scripts/docker.sh
+#/bin/bash "$GITDIR"/client/scripts/docker.sh
 
 ###################################
 # Overclock
 #if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
-#    /bin/bash "$GITDIR"/rpi/scripts/overclock.sh
+#    /bin/bash "$GITDIR"/client/scripts/overclock.sh
 #fi
 
 ###################################
 # RPI-monitor
-#/bin/bash "$GITDIR"/rpi/scripts/rpi_monitor.sh
+#/bin/bash "$GITDIR"/client/scripts/rpi_monitor.sh
 
 ###################################
 # Nextcloud
-#/bin/bash "$GITDIR"/rpi/scripts/nextcloud.sh
+#/bin/bash "$GITDIR"/client/scripts/nextcloud.sh
 
 ###################################
 # SMTP
-#/bin/bash "$GITDIR"/rpi/scripts/smtp.sh
+#/bin/bash "$GITDIR"/client/scripts/smtp.sh
 
 ###################################
 # Client setup
