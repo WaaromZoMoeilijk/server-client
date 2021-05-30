@@ -25,7 +25,7 @@ def writelog(sstr):
 	f = open('/home/pi/l', 'a')
 	f.write(now.strftime("%Y %m %d %H:%M ") + sstr + "\n")
 	f.close()
-	print sstr
+	print (sstr)
 
 if True:
 	f = open("/home/pi/log.txt", 'w')
