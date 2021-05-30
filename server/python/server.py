@@ -74,7 +74,6 @@ if True:
 	ossystem('mkdir -p /home/pi/pidjango/static/admin')
 	ossystem('mkdir -p /home/pi/pidjango/static/admin/css')
 	ossystem('mkdir -p /home/pi/pidjango/static/xx')
-	ossystem('cd /home/pi/pidjango/static/xx && wget www.kurkshop.nl/kurk.jpg')
 if False:
 	ossystem('cd /home/pi/pidjango && python3 -m venv djenv')
 	ossystem('cd /home/pi/pidjango && source djenv/bin/activate') # if manual: from here you get (djenv) on the command line left from the prompt.
