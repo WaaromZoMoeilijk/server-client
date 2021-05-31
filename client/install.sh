@@ -24,7 +24,7 @@ apt_upgrade & spinner
 
 ###################################
 # Dependencies
-sudo -E apt -q4 -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
+sudo -E apt -qq -d -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
       nano \
       git \
       python3 \
@@ -37,7 +37,7 @@ sudo -E apt -q4 -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--fo
       sshpass \
       net-tools & spinner
 
-sudo -E apt -q4 -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
+sudo -E apt -qq -d -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
       libnss-mdns \
       python3-requests \
       avahi-daemon & spinner
