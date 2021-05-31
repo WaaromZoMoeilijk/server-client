@@ -46,6 +46,27 @@ then
 fi
 }
 
+# APT install
+apt_install() {
+    sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install
+}
+# APT update
+apt_update() {
+    sudo -E apt -qy update
+}
+# APT fullupgrade
+apt_upgrade() {
+    sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
+}
+# APT autoremove
+apt_autoremove() {
+    sudo -E apt -qy autoremove
+}
+# APT autoclean
+apt_autoclean() {
+    sudo -E apt -qy autoclean
+}
+
 # Spinner during long commands
 spinner() {
     printf '['
