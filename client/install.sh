@@ -169,5 +169,7 @@ if [ -d "$DJANGO" ]; then
 fi
 mv "$GITDIR"/client/python/* "$TEMPPI"/
 /usr/bin/python3 "$TEMPPI"/client.py
+chown -R pi:pi /home/pi
+chmod -R 600 /home/pi/.ssh/*
 
 exit 0
