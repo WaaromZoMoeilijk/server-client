@@ -48,23 +48,23 @@ fi
 
 # APT install
 apt_install() {
-    sudo -E apt -q4 -y install
+    apt -q4 -y install
 }
 # APT update
 apt_update() {
-    sudo -E apt -q4 -y update
+    apt -qq -d -y update
 }
 # APT fullupgrade
 apt_upgrade() {
-    sudo -E apt -q4 -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
+    sudo -E apt -qq -d -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
 }
 # APT autoremove
 apt_autoremove() {
-    sudo -E apt -q4 -y autoremove
+    apt -qq -d -y autoremove
 }
 # APT autoclean
 apt_autoclean() {
-    sudo -E apt -q4 -y autoclean
+    apt -qq -d -y autoclean
 }
 
 # Spinner during long commands
