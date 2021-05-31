@@ -48,23 +48,23 @@ fi
 
 # APT install
 apt_install() {
-    sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install
+    sudo -E apt -q4 -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install
 }
 # APT update
 apt_update() {
-    sudo -E apt -qy update
+    sudo -E apt -q4 -y update
 }
 # APT fullupgrade
 apt_upgrade() {
-    sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
+    sudo -E apt -q4 -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
 }
 # APT autoremove
 apt_autoremove() {
-    sudo -E apt -qy autoremove
+    sudo -E apt -q4 -y autoremove
 }
 # APT autoclean
 apt_autoclean() {
-    sudo -E apt -qy autoclean
+    sudo -E apt -q4 -y autoclean
 }
 
 # Spinner during long commands
