@@ -1,22 +1,18 @@
 #!/bin/bash
 # info@waaromzomoeilijk.nl
 # login root/raspberry, dietpi/raspberry, pi/raspberry
+
 ###################################
 # Variables & functions
-#source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
-# Check if script runs as root
-#root_check
+source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
 
-CONFIG="/boot/config.txt"
-GITDIR="/var/opt/wzm"
-REPO="https://github.com/ezraholm50/server-client" 
-DJANGO="/home/pi/pidjango"
-TEMPPI="/home/pi"
+# Check if script runs as root
+root_check
 
 ###################################
 # Update
-export DEBIAN_FRONTEND=noninteractive
-export DEBIAN_PRIORITY=critical
+export "$DEBIAN_FRONTEND"
+export "$DEBIAN_PRIORITY"
 sudo -E apt -qy update
 sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
 sudo -E apt -qy autoclean
@@ -43,7 +39,7 @@ sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg
       
 ###################################
 # unattended-upgrades
-DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
+"$DEBIAN_FRONTEND" dpkg-reconfigure unattended-upgrades
 
 ###################################
 # Temp user, needs a one time password during installation to setup ssh keys.
