@@ -102,7 +102,7 @@ if now.hour == 6 and now.minute == 0:
 
 ourserver = cf.read('ourserver')
 if ourserver == '':
-	ourserver = 'https://www.waaromzomoeilijk.nl'
+	ourserver = 'https://henk.waaromzomoeilijk.nl:2021'
 if ourserver[:4] != 'http':
 	ourserver = 'https://' + ourserver
 
