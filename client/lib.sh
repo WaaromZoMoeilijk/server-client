@@ -7,8 +7,8 @@ DJANGO="/home/pi/pidjango"
 TEMPPI="/home/pi"
 
 # System
-DEBIAN_FRONTEND=noninteractive 
-DEBIAN_PRIORITY=critical
+DEBIAN_FRONTEND="DEBIAN_FRONTEND=noninteractive"
+DEBIAN_PRIORITY="DEBIAN_PRIORITY=critical"
 
 # Network
 WANIP4=$(curl -s -k -m 5 https://ipv4bot.whatismyipaddress.com)
@@ -41,7 +41,7 @@ is_root() {
 root_check() {
 if ! is_root
 then
-    msg_box "Failed, script needs sudo permission
+    msg_box "Failed, script needs sudo permission"
     exit 1
 fi
 }
