@@ -30,6 +30,34 @@ def emptyy(sstr):
     except:
         return 0
 
+class CliCommandForm(forms.Form):
+    def clean(self):
+        baviaan = 'aap'
+
+    code = forms.CharField(required=True,max_length=18)
+    command = forms.CharField(required=True,widget=forms.Textarea,max_length=500)
+    remark = forms.CharField(required=False,widget=forms.Textarea,max_length=500)
+    last_updated = forms.DateTimeField(required=False,disabled=True)
+    created = forms.DateTimeField(required=False,disabled=True)
+
+class CliCommandNewForm(forms.Form):
+    def clean(self):
+        code = self.cleaned_data.get('code')
+        try:
+            code_exists = True
+            clicommand = CliCommand.objects.get(code=code)
+        except:
+            code_exists = False
+        if code_exists:
+            raise forms.ValidationError("This code exists already.")
+            return code
+
+    code = forms.CharField(max_length=18)
+    command = forms.CharField(required=True,widget=forms.Textarea,max_length=500)
+    remark = forms.CharField(required=False,widget=forms.Textarea,max_length=500)
+    last_updated = forms.DateTimeField(required=False,disabled=True)
+    created = forms.DateTimeField(required=False,disabled=True)
+
 class MyAccountForm(forms.Form):
     class Meta:
         model = Xuser

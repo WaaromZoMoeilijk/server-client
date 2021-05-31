@@ -26,50 +26,17 @@ class Xuser(models.Model):
 
 	def get_menu(self):
 		if self.role == 'admin':
-			sstr = {'/xx/newrpi': 'new devices', '/xx/users': 'users', '/xx/settings':'settings', '/xx/myaccount':'my account', '/':'logout'}
+			sstr = {'/xx/newrpi': 'new devices', '/xx/users': 'users', '/xx/settings':'settings', '/xx/clicommands':'cli commands', '/xx/myaccount':'my account', '/':'logout'}
 		else:
 			sstr = {'/xx/xrpis': 'my devices', '/xx/xnewrpi': 'new device', '/xx/myaccount':'my account', '/':'logout'}
 		return sstr
 
-class Customer(models.Model):
-	xuser = models.ForeignKey('Xuser', on_delete=models.CASCADE)
-	name = models.CharField(max_length=50)
-	address1 = models.CharField(max_length=50,blank=True)
-	address2 = models.CharField(max_length=50,blank=True)
-	address3 = models.CharField(max_length=50,blank=True)
-	zipcode = models.CharField(max_length=10,blank=True)
-	city = models.CharField(max_length=50,blank=True)
-	COUNTRIES = [
-		('nl', 'Netherlands'),
-		('be','Belgium'),
-		('ae','United Arabic Emirates'),
-		('uk', 'United Kingdom'),
-		('us', 'United States'),
-		]
-	country = models.CharField(max_length=2,choices=COUNTRIES,default='nl')
-	email = models.EmailField(max_length=50,blank=True)
-	btw_number = models.CharField(max_length=50,blank=True)
-	coc_number = models.CharField(max_length=50,blank=True)
-	language = models.CharField(max_length=2,choices=[('nl', 'Dutch'),('en', 'English')])
+class CliCommand(models.Model):
+	code = models.CharField(max_length=18)
+	command = models.CharField(max_length=500)
+	remark = models.CharField(max_length=500,blank=True, null=True)
 	created = models.DateTimeField(auto_now_add=True)
-	last_updated = models.DateTimeField(auto_now=True)
-
-class Invoice(models.Model):
-	customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
-	name = models.CharField(max_length=50)
-	STATI = [('initial', 'initial'),('sent','sent'),('paid','paid'),('canceled','canceled'),]
-	status = models.CharField(max_length=10,choices=STATI,default='initial')
-	bill_number = models.IntegerField(blank=True, null=True)
-	sent_date = models.DateTimeField(blank=True, null=True)
-	paid_date = models.DateTimeField(blank=True, null=True)
-	created = models.DateTimeField(auto_now_add=True)
-	last_updated = models.DateTimeField(auto_now=True)
-
-class InvoiceLine(models.Model):
-	invoice = models.ForeignKey('Invoice', on_delete=models.CASCADE)
-	name = models.CharField(max_length=500)
-	amount = models.FloatField()
-	btw = models.FloatField(choices=[(0, '0'),(21, '21')],default=0)
+	last_updated = models.DateTimeField(blank=True, null=True)
 
 class NewNetwork(models.Model):
 	rpi = models.ForeignKey('Rpi', on_delete=models.CASCADE)
@@ -114,6 +81,7 @@ class Rpi(models.Model):
 	ipAddressWAN = models.CharField(max_length=36,blank=True, null=True)
 	ping_response_time = models.CharField(max_length=50,blank=True, null=True) # server/client
 	sd_card = models.CharField(max_length=36,blank=True, null=True) # size and free space
+	id_rsa_pub = models.CharField(max_length=400,default='',blank=True)
 	last_reboot = models.DateTimeField(max_length=24,blank=True, null=True)
 	STATI = [
 	('active','active'),

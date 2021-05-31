@@ -27,14 +27,6 @@ class sendtoserver:
 	def empty(self):
 		cf.check_update_config('sendtoserver','')
 
-	# def job_open(self,jobname,id):
-		# sendtoserver = cf.read('sendtoserver')
-		# done = True
-		# for s in senttoserver:
-			# if s['jobname'] == jobname and s['id'] == id:
-				# done = False
-		# return done
-
 	def len(self):
 		return len(cf.read('sendtoserver'))
 
@@ -102,7 +94,7 @@ if now.hour == 6 and now.minute == 0:
 
 ourserver = cf.read('ourserver')
 if ourserver == '':
-	ourserver = 'https://henk.waaromzomoeilijk.nl:2021'
+	ourserver = 'https://www.waaromzomoeilijk.nl'
 if ourserver[:4] != 'http':
 	ourserver = 'https://' + ourserver
 
@@ -329,6 +321,10 @@ else:
 		cf.check_update_config('rpiclicommands', api_answer['rpiclicommands'])
 	if 'reverse_ssh_server' in api_answer: 
 		cf.check_update_config('reverse_ssh_server', api_answer['reverse_ssh_server'])
+	if 'id_rsa_pub' in api_answer and os.path.isfile('/home/pi/.ssh/id_rsa.pub'):
+		f = open('/home/pi/.ssh/id_rsa.pub','r')
+		contents = f.read()
+		sts.add('id_rsa_pub',0,contents.rstrip())
 
 commands = cf.read('rpiclicommands')
 # lets see if there is a command not yet done. We will perform the one with the lowest id but 

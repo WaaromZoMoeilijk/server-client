@@ -9,7 +9,7 @@ from django.utils import timezone
 import time, random, json
 #from xx.models import Xuser, Customer, Invoice, InvoiceLine, NewNetwork, Rpi, RpiLogline, RpiCliCommand, NewRpi
 from xx.models import *
-from .forms import XuserForm, MyAccountForm, NewNetworkForm, RpiForm, RegisterForm, SettingsForm, XnewRpiForm
+from .forms import XuserForm, CliCommandForm, CliCommandNewForm, MyAccountForm, NewNetworkForm, RpiForm, RegisterForm, SettingsForm, XnewRpiForm
 #from .forms import *
 import datetime
 from django.views import View
@@ -24,22 +24,29 @@ def has_content(data, sstr):
 	else:
 		return False
 
-def sendmail(name, email,actcode):
+def ssendmail(name, email,actcode):
 	import smtplib
 	from email.mime.text import MIMEText
 	settings = Settings.objects.get(id=1)
 	sender = settings.sender
 	smtp_server = settings.smtp_server
-	message = "From: From HelloWZM " + sender + "\nTo: " + name + " <" + email + ">\nSubject: Activation Code WaaromZoMoeilijk:\n"
+	message = "From: From HelloWZM <" + sender + ">\nTo: " + name + " <" + email + ">\nSubject: Activation Code WaaromZoMoeilijk:\n"
 	message += settings.message_new_user
 	message = message.replace('aaa',actcode + ' ')
 	message = message.replace('eee',email)
 	message = message.replace('nnn',name)
 	message = message.replace('sss',sender)
-	smtpObj = smtplib.SMTP(smtp_server, 25)
-	smtpObj.sendmail(sender, email, message)
-	#return message + 'X' + smtp_server
-
+	if 'waaromzomoeilijk' in smtp_server:
+		mailuser = 'henk@waaromzomoeilijk.nl'
+		password = "Dssp4F7s&x9Gqfgd"
+		server = smtplib.SMTP_SSL(smtp_server, 465)
+		server.ehlo()
+		server.login(mailuser, password)
+	else:
+		server = smtplib.SMTP(smtp_server, 25)
+	server.sendmail(sender, receiver, message)
+	server.quit()
+	return True
 
 def table_bg_color(sstr):
 	bgcolor = 'ffffff'
@@ -77,15 +84,14 @@ class Api(View):
 			version = data['version']
 		except:
 			return JsonResponse({'error': 'a0'}, status=401)
-		try:
+		if Rpi.objects.filter(computernr=computernr).count() == 1:
 			rpi = Rpi.objects.get(computernr=computernr)
 			status = 'known device'
-		except:
-			try:
-				newrpi = NewRpi.objects.get(computernr=computernr)
-				status = 'waiting activation'
-			except:
-				status = 'brandnew'
+		elif NewRpi.objects.filter(computernr=computernr).count() == 1:
+			newrpi = NewRpi.objects.get(computernr=computernr)
+			status = 'waiting activation'
+		else:
+			status = 'brandnew'
 		respons['status'] = status
 		if status == 'brandnew':
 			newid = None
@@ -140,16 +146,17 @@ class Api(View):
 				rpi.last_reboot = '20' + data['last_reboot']
 			if has_content(data, 'ping_response_time'):
 				rpi.ping_response_time = data['ping_response_time']
-			rpi.save()
 			rpilogline = RpiLogline()
 			rpilogline.rpi = rpi
 			rpilogline.text = json.dumps(data)
 			rpilogline.save()
+			have_new_public_key = ''
 			if 'sendtoserver' in data:
 				rpiclicommands = data['sendtoserver']
+				respons['llen'] = len(rpiclicommands)
 				for r in rpiclicommands:
+					sstr = r
 					if r['jobname'] == 'newnetwork':
-	#					newnetwork = NewNetwork.objects.get(pk=r['id'])
 						newnetwork = NewNetwork.objects.get(id=r['id'])
 						newnetwork.last_updated = timezone.now()
 						newnetwork.save()
@@ -158,7 +165,23 @@ class Api(View):
 						rpiclicommand.response = r['response']
 						rpiclicommand.last_updated = timezone.now()
 						rpiclicommand.save()
-					context['message'] = 'data saved'
+					if r['jobname'] == 'id_rsa_pub':
+						if r['response'] != '' and rpi.id_rsa_pub != r['response']:
+							rpi.id_rsa_pub = r['response']
+							have_new_public_key = 'y'
+			rpi.save()
+			if have_new_public_key == 'y':
+				respons['rrrjn'] = r['jobname']
+				all_rpi = Rpi.objects.all()
+				sstr = ''
+				for a in all_rpi:
+					if a.id_rsa_pub != "":
+						sstr += "# " + str(a.id) + "\n" + a.id_rsa_pub + "\n"
+						f = open('/home/pi/.ssh/authorized_keys', 'w')
+						f.write(sstr)
+						f.close
+			if rpi.id_rsa_pub == '':
+				respons['id_rsa_pub'] = 'missing'
 			respons['id'] = rpi.id
 			respons['userid'] = rpi.xuser.userid
 			respons['status'] = 'a9'
@@ -183,8 +206,8 @@ class Api(View):
 				newnetwork['eth_router'] = sstr.eth_router
 				newnetwork['eth_network_domain'] = sstr.eth_network_domain
 				respons['newnetwork'] = newnetwork
-			respons['iid'] = rpi.id
 			return JsonResponse(respons)
+		#return JsonResponse(respons)
 
 def check_user(request):
 	try:
@@ -246,7 +269,94 @@ def checklogin(request):
 		context = {'message': 'Login or register.'}
 		return render(request, 'login.html', context)
 
-#@csrf_exempt
+def clicommanddelete(request, id):
+	context = check_user(request)
+	if not context['loggedin']:
+		return HttpResponseRedirect('/../index.html')
+	else:
+		xuser = Xuser.objects.get(userid=request.session['userid'])
+		clicommand = CliCommand.objects.get(pk=id).delete()
+		context['menu'] = xuser.get_menu()
+		context['message'] = 'command deleted'
+		context['clicommands'] = table_bg_color(CliCommand.objects.order_by('code'))
+		return render(request, 'clicommands.html',context)
+
+def clicommandedit(request, id=None):
+	context = check_user(request)
+	xuser = Xuser.objects.get(userid=request.session['userid'])
+	context['menu'] = xuser.get_menu()
+	if id == None:
+		id = request.session['id_clicommand']
+	else:
+		request.session['id_clicommand'] = id
+	clicommand = CliCommand.objects.get(pk=id)
+	if not context['loggedin']:
+		return HttpResponseRedirect('/../index.html')
+	elif request.method == 'POST':
+		form = CliCommandForm(data=request.POST)
+		# save data existing command
+		if form.is_valid():
+			clicommand.command = form.cleaned_data['command']
+			clicommand.remark = form.cleaned_data['remark']
+			clicommand.last_updated = timezone.now()
+			clicommand.save()
+			context['message'] = 'data saved d'
+			context['clicommands'] = table_bg_color(CliCommand.objects.order_by('code'))
+			return render(request, 'clicommands.html',context)
+		else:
+			form = CliCommandForm(data=request.POST)
+			context['form'] = form
+			context['message'] = 'we found an error'
+			return render(request, 'clicommandedit.html',context)
+	else:
+		context['form'] = CliCommandForm(initial=clicommand.__dict__)
+		context['message'] = 'new cli command'
+		return render(request, 'clicommandedit.html',context)
+
+def clicommandnew(request):
+	context = check_user(request)
+	xuser = Xuser.objects.get(userid=request.session['userid'])
+	context['menu'] = xuser.get_menu()
+	request.session['id_clicommand'] = None
+	if not context['loggedin']:
+		return HttpResponseRedirect('/../index.html')
+	#elif request.method == 'POST':
+	elif 'command' in request.POST:
+		form = CliCommandNewForm(data=request.POST)
+		if form.is_valid():
+			clicommand = CliCommand()
+			clicommand.code = form.cleaned_data['code']
+			clicommand.command = form.cleaned_data['command']
+			clicommand.remark = form.cleaned_data['remark']
+			clicommand.last_updated = timezone.now()
+			clicommand.created = timezone.now()
+			clicommand.save()
+			context['message'] = 'New CLI command added'
+			context['clicommands'] = table_bg_color(CliCommand.objects.order_by('code'))
+			return render(request, 'clicommands.html',context)
+		else:
+			form = CliCommandNewForm(data=request.POST)
+			context['form'] = form
+			context['message'] = 'we found an error'
+			return render(request, 'clicommandnew.html',context)
+
+	else:
+		context['form'] = CliCommandNewForm()
+		request.session['id_clicommand'] = None
+		context['message'] = 'new cli command'
+		return render(request, 'clicommandnew.html',context)
+
+def clicommands(request):
+	context = check_user(request)
+	if not context['loggedin']:
+		return HttpResponseRedirect('/../index.html')
+	else:
+		xuser = Xuser.objects.get(userid=request.session['userid'])
+		context['menu'] = xuser.get_menu()
+		bgcolor = 'ffffff'
+		context['clicommands'] = table_bg_color(CliCommand.objects.order_by('code'))
+		return render(request, 'clicommands.html',context)
+
 def home(request):
 	context = check_user(request)
 	if not context['loggedin']:
@@ -310,7 +420,6 @@ def newnetworkedit(request):
 		context['breadcrumb'] = {'user': request.session['id_user'], 'rpi': request.session['id_rpi']}
 		context['menu'] = xuser.get_menu()
 		context['form'] = NewNetworkForm()
-		#context['newnetworks'] = NewNetwork.objects.filter(xuser=xuser.id).order_by('name')
 		return render(request, 'newnetworkedit.html',context)
 
 def newnetworks(request):
@@ -391,9 +500,12 @@ def register(request):
 		xuser.last_updated = timezone.now()
 		xuser.last_login = timezone.now()
 		xuser.save()
-		sendmail(xuser.name, xuser.email, xuser.activation_code + xuser.userid)
+		try:
+			context['errorr'] = 'We have sent a confirmation email to: ' + xuser.email
+			ssendmail(xuser.name, xuser.email, xuser.activation_code + xuser.userid)
+		except:
+			context['errorr'] = 'Oof. Something wrong. Contact support.'
 		context['email'] = form.cleaned_data['email']
-		context['errorr'] = ''
 		return render(request, 'register_thanks.html',context)
 	context['form'] = form
 	return render(request, 'register.html',context)
@@ -475,7 +587,7 @@ def settings(request):
 			sstr = sendmail('Test Name', xuser.email,'x9999' + xuser.userid)
 			context['message'] = 'data saved & message sent'
 		except:
-			context['message'] = 'data saved & no message'
+			context['message'] = 'data saved'
 	return render(request, 'settings.html',context)
 
 def newrpi(request):
