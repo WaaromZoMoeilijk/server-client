@@ -13,3 +13,5 @@ After this install, this is needed:
 4. python manage.py makemigrtions
 5. python manage.py migrate
 6. s = systemctl restart apache2
+
+end

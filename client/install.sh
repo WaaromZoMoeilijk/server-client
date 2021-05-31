@@ -54,7 +54,7 @@ DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
   usermod -aG sudo pi
   mkdir /home/pi/.ssh
   ssh-keygen -t rsa -N "" -f /home/pi/.ssh/id_rsa 
-  chown -R pi:pi /home/pi/.ssh
+  chown -R pi:pi /home/pi
   chmod -R 600 /home/pi/.ssh/*
   ssh-copy-id -i /home/pi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
 

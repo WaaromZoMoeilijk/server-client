@@ -30,14 +30,16 @@ def sendmail(name, email,actcode):
 	settings = Settings.objects.get(id=1)
 	sender = settings.sender
 	smtp_server = settings.smtp_server
-	message = settings.message_new_user
-	message = message.replace('aaa',actcode)
+	message = "From: From HelloWZM " + sender + "\nTo: " + name + " <" + email + ">\nSubject: Activation Code WaaromZoMoeilijk:\n"
+	message += settings.message_new_user
+	message = message.replace('aaa',actcode + ' ')
 	message = message.replace('eee',email)
 	message = message.replace('nnn',name)
 	message = message.replace('sss',sender)
 	smtpObj = smtplib.SMTP(smtp_server, 25)
 	smtpObj.sendmail(sender, email, message)
 	#return message + 'X' + smtp_server
+
 
 def table_bg_color(sstr):
 	bgcolor = 'ffffff'
@@ -51,14 +53,16 @@ def table_bg_color(sstr):
 
 def activate(request, a):
 	context = {}
-	try:
+	if True:
 		xuser = Xuser.objects.get(userid=a[4:], activation_code=a[:4])
 		xuser.activation_code = ''
 		xuser.last_updated = timezone.now()
+		settings = Settings.objects.get(id=1)
+		xuser.support_end_date = timezone.now() + timezone.timedelta(days=31*settings.free_period_in_months)
 		xuser.save()
 		context['errorr'] = 'Thanks. You can now use your account.'
 		return render(request, 'activate.html',context)
-	except:
+	else:
 		context['errorr'] = 'Contact support.'
 		return render(request, 'activate.html',context)
 
@@ -462,6 +466,10 @@ def settings(request):
 		settings.sender = request.POST['sender']
 		settings.smtp_server = request.POST['smtp_server']
 		settings.message_new_user = request.POST['message_new_user']
+		#try:
+		settings.free_period_in_months = int(request.POST['free_period_in_months'])
+		#except:
+			#void
 		settings.save()
 		try:
 			sstr = sendmail('Test Name', xuser.email,'x9999' + xuser.userid)

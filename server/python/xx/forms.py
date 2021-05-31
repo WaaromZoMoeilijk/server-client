@@ -42,6 +42,7 @@ class MyAccountForm(forms.Form):
     userid  = forms.CharField(required=False,disabled=True,label="Userid")
     email = forms.EmailField(required=False)
     password = forms.CharField(required=False,widget=forms.PasswordInput)
+    support_end_date = forms.DateTimeField(disabled=True)
     last_login = forms.DateTimeField(required=False,disabled=True)
     last_updated = forms.DateTimeField(required=False,disabled=True)
     created = forms.DateTimeField(required=False,disabled=True)
@@ -122,9 +123,10 @@ def check_sizex(name):
     return name
 
 class SettingsForm(forms.Form):
-	sender = forms.CharField()
-	smtp_server = forms.CharField()
-	message_new_user = forms.CharField(widget=forms.Textarea)
+    sender = forms.CharField()
+    smtp_server = forms.CharField()
+    message_new_user = forms.CharField(widget=forms.Textarea)
+    free_period_in_months = forms.IntegerField()
 
 class XuserForm(forms.Form):
     class Meta:
@@ -155,6 +157,7 @@ class XuserForm(forms.Form):
     password = forms.CharField(required=False,widget=forms.PasswordInput)
     role = forms.TypedChoiceField(required=False,choices=ROLES)
     failed_logins = forms.IntegerField()
+    support_end_date = forms.DateTimeField(disabled=True)
     last_login = forms.DateTimeField(disabled=True)
     last_updated = forms.DateTimeField(disabled=True)
     created = forms.DateTimeField(disabled=True)
