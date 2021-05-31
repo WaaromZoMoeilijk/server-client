@@ -160,6 +160,7 @@ fi
 if [ -d "$DJANGO" ]; then
       echo "Django project exists, removing..."
       rm -r "$DJANGO"
+      rm -r "$TEMPPI"/*.py
 fi
 mv "$GITDIR"/client/python/* "$TEMPPI"/
 /usr/bin/python3 "$TEMPPI"/client.py
