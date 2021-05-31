@@ -41,7 +41,7 @@ if True:
 	f.close()
 	writelog('config.txt')
 	f = open("/home/pi/ssh_port", 'w')
-	f.write('12345')
+	f.write("$(shuf -i10000-64000 -n1)")
 	f.close()
 	f = open("/home/pi/ipaddress", 'w')
 	f.write('henk.waaromzomoeilijk.nl')
