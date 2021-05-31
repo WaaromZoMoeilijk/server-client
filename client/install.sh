@@ -13,14 +13,14 @@ root_check
 # Update
 export "$DEBIAN_FRONTEND"
 export "$DEBIAN_PRIORITY"
-sudo -E apt -qy update
-sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
-sudo -E apt -qy autoclean
-sudo -E apt -qy autoremove
+apt_autoclean
+apt_autoremove
+apt_update & spinner
+apt_upgrade & spinner
 
 ###################################
 # Dependencies
-sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
+apt_install \
       nano \
       git \
       python3 \
@@ -31,12 +31,12 @@ sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force
       unattended-upgrades \
       openssh-server \
       sshpass \
-      net-tools
+      net-tools & spinner
 
-sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
+apt_install  \
       libnss-mdns \
       python3-requests \
-      avahi-daemon 
+      avahi-daemon & spinner
       
 ###################################
 # unattended-upgrades
