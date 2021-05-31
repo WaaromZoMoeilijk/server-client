@@ -48,7 +48,7 @@ fi
 
 # APT install
 apt_install() {
-    sudo -E apt -q4 -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install
+    sudo -E apt -q4 -y install
 }
 # APT update
 apt_update() {
