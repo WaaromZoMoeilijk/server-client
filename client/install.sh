@@ -30,6 +30,7 @@ sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force
       python3-setuptools \
       unattended-upgrades \
       openssh-server \
+      sshpass \
       net-tools
 
 sudo -E apt --install-suggests -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
