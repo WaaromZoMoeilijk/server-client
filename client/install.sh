@@ -13,9 +13,13 @@ root_check
 # Update
 export "$DEBIAN_FRONTEND"
 export "$DEBIAN_PRIORITY"
-apt_autoclean
-apt_autoremove
+clear ; echo "Auto clean"
+apt_autoclean & spinner
+clear ; echo "Auto remove"
+apt_autoremove & spinner
+clear ; echo "Update"
 apt_update & spinner
+clear ; echo "Upgrade"
 apt_upgrade & spinner
 
 ###################################
@@ -49,6 +53,7 @@ sudo -E apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-
   echo "Creating user and keys"
   useradd -m -d /home/pi -p $(openssl passwd -crypt raspberry) pi
   usermod -aG sudo pi
+  mkdir /home/pi
   mkdir /home/pi/.ssh
   ssh-keygen -t rsa -N "" -f /home/pi/.ssh/id_rsa 
   chown -R pi:pi /home/pi
