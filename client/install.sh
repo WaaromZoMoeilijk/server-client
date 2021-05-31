@@ -50,7 +50,7 @@ sudo -E apt -q4 -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--fo
 # Temp user, needs a one time password during installation to setup ssh keys.
 # Will be replaced with an API mechanism to retrieve clients pub keys.
   rm -r "$TEMPPI"
-  echo "Creating user and keys"
+  clear ; echo "Creating user and keys"
   useradd -m -d /home/pi -p $(openssl passwd -crypt raspberry) pi
   usermod -aG sudo pi
   mkdir /home/pi
@@ -67,6 +67,8 @@ sudo -E apt -q4 -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--fo
 
 ###################################
 # Clone git repo
+clear
+echo "Cloning Git Repo"
 if [ -d "$GITDIR" ]; then
   rm -r "$GITDIR"
 fi
@@ -76,6 +78,9 @@ git clone "$REPO" "$GITDIR"
 ###################################
 # Add rc.local
 # Add systemd service
+clear
+echo "Adding RC.local"
+
 if [ -f "/etc/rc.local" ]; then
       echo "RC.local exists"
 else  
@@ -127,22 +132,32 @@ fi
 
 ###################################
 # Set webserver
+#clear
+#echo "Installing Nginx"
 # Nginx
 
 ###################################
 # Hardening
+#clear
+#echo "Hardening server"
 #/bin/bash "$GITDIR"/client/scripts/hardening.sh
 
 ###################################
 # SSH
+#clear
+#echo "Securing SSH"
 #/bin/bash "$GITDIR"/client/scripts/ssh.sh
 
 ###################################
 # Docker
+#clear
+#echo "Installing Docker, compose and Portainer"
 #/bin/bash "$GITDIR"/client/scripts/docker.sh
 
 ###################################
 # Overclock
+#clear
+#echo "Overclocking"
 #if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
 #     dos2unix "$GITDIR"/client/scripts/overclock.sh
 #    /bin/bash "$GITDIR"/client/scripts/overclock.sh
@@ -150,18 +165,26 @@ fi
 
 ###################################
 # RPI-monitor
+#clear
+#echo "Installing RPI-Monitor"
 #/bin/bash "$GITDIR"/client/scripts/rpi_monitor.sh
 
 ###################################
 # Nextcloud
+#clear
+#echo "Installing Nextcloud"
 #/bin/bash "$GITDIR"/client/scripts/nextcloud.sh
 
 ###################################
 # SMTP
+#clear
+#echo "Setting up email"
 #/bin/bash "$GITDIR"/client/scripts/smtp.sh
 
 ###################################
 # Client setup
+clear
+echo "Setup client"
 if [ -d "$DJANGO" ]; then
       echo "Django project exists, removing..."
       rm -r "$DJANGO"
