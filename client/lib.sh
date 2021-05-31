@@ -49,7 +49,6 @@ fi
 # Spinner during long commands
 spinner() {
     printf '['
-    #while ps "$!" > /dev/null; do for X in "-" "/" "|" "\"; do echo -en "\b$X"; sleep 0.1; done; done
     while ps "$!" > /dev/null; do
         echo -n '⣾⣽⣻'
         sleep '.7'
