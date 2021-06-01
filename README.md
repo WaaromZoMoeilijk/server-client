@@ -44,10 +44,12 @@ In order for this to work please execute the following before doing anything els
 - The green activity LED will blink with a steady pattern and the HDMI display will be green on success.
 - Power off the Raspberry Pi and remove the SD card.
 
-## Flash base image to SSD
+## Flash base image to SSD / SDCard
 - [Download](https://www.balena.io/etcher/) Balena Etcher
-- Flash the base image to a proper SSD like a 1TB+ Samsung EVO/WD green with a STA3 to USB3 adapter.
-- Attach SSD adapter, ethernet and power (optionally a monitor) wait 15 minutes.
+- Flash the base image to a proper SSD like a 1TB+ Samsung EVO/WD green with a STA3 to USB3 adapter. Or an SDCard reader.
+
+## First boot
+- Attach SSD adapter / SDCard, ethernet and power (optionally a monitor) wait 15 minutes (SDCard will take up to an hour).
 - Open a browser (Mobile/Desktop) and go to http://wzm.local or attatch a monitor and watch the initial installation. 
 - A setup screen appears with an activation code once the installation is complete. Could take 30 minutes depending on your network connection.
 - Follow instructions
