@@ -177,7 +177,7 @@ class Api(View):
 				for a in all_rpi:
 					if a.id_rsa_pub != "":
 						sstr += "# " + str(a.id) + "\n" + a.id_rsa_pub + "\n"
-						f = open('/home/pi/.ssh/authorized_keys', 'w')
+						f = open('/home/dietpi/.ssh/authorized_keys', 'w')
 						f.write(sstr)
 						f.close
 			if rpi.id_rsa_pub == '':

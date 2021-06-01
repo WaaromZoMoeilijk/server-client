@@ -25,4 +25,4 @@ Take a coffee or two.
 end.
 
 Probable change:
-- In /home/pi/config.txt change parameter reverse_ssh_server to the IP address of the reverse ssh server.
+- In /home/dietpi/config.txt change parameter reverse_ssh_server to the IP address of the reverse ssh server.

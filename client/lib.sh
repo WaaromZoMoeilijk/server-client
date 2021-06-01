@@ -3,8 +3,8 @@
 CONFIG="/boot/config.txt"
 GITDIR="/var/opt/server-client"
 REPO="https://github.com/ezraholm50/server-client" 
-DJANGO="/home/pi/pidjango"
-TEMPPI="/home/pi"
+DJANGO="/home/dietpi/pidjango"
+TEMPPI="/home/dietpi"
 
 # System
 DEBIAN_FRONTEND="DEBIAN_FRONTEND=noninteractive"
