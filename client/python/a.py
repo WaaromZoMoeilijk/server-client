@@ -76,7 +76,7 @@ table{
 </tr>
 aaaa
 <tr>
-	<td align=list>>Please activate:
+	<td align=list>Please activate:
 	<td>https://register.waaromzomoeilijk.nl:2021
 </tr>
 </table></body></html>
