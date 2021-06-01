@@ -35,12 +35,12 @@ sudo -E apt -qq -d -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=-
       unattended-upgrades \
       openssh-server \
       sshpass \
-      net-tools & spinner
+      net-tools # & spinner
 
 sudo -E apt -qq -d -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
       libnss-mdns \
       python3-requests \
-      avahi-daemon & spinner
+      avahi-daemon # & spinner
       
 ###################################
 # unattended-upgrades
