@@ -60,8 +60,8 @@ In order for this to work please execute the following before doing anything els
 - Follow instructions
 
 ## Optional installation options
-- On any debian based RaspberryPI4 you could do: `wget https://github.com/ezraholm50/davidcloudserver/blob/main/client/install.sh && sudo bash install.sh`
-- If you are using DietPI you can add this [dietpi.txt](https://github.com/ezraholm50/davidcloudserver/blob/main/client/dietpi.txt) file to your /boot/ directory (This is how the base image works)
+- On any debian based RaspberryPI4 you could do: `wget https://raw.githubusercontent.com/ezraholm50/server-client/main/client/install.sh && sudo bash install.sh`
+- If you are using DietPI you can add this [dietpi.txt](https://raw.githubusercontent.com/ezraholm50/server-client/main/client/dietpi.txt) file to your /boot/ directory (This is how the base image works)
 
 ## Functionalities user management panel:
 
