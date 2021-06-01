@@ -52,6 +52,10 @@ In order for this to work please execute the following before doing anything els
 - A setup screen appears with an activation code once the installation is complete. Could take 30 minutes depending on your network connection.
 - Follow instructions
 
+## Optional installation options
+- On any debian based RaspberryPI4 you could do: `wget https://github.com/ezraholm50/davidcloudserver/blob/main/client/install.sh && sudo bash install.sh`
+- If you are using DietPI you can add this [dietpi.txt](https://github.com/ezraholm50/davidcloudserver/blob/main/client/dietpi.txt) file to your /boot/ directory (This is how the base image works)
+
 ## Functionalities user management panel:
 
 Users can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can manage and monitor their new Cloud RPI.
