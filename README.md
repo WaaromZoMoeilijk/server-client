@@ -1,7 +1,7 @@
 ![Project layout](/media/projectlayout.png)
 
 ## Timeline
-- End May Base image ready
+- [ ] End May Base image (BETA) ready
 - End May / Early June POC server/client
 - July Beta 0.1
 - ? 1.0
@@ -69,7 +69,7 @@ Users can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can 
 
 ## Functionalities admin management users:
 
-Administrators can visit https://register.waaromzomoeilijk.nl:2021 where they can manage and monitor all online/offline registered devices.
+Administrators can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can manage and monitor all online/offline registered devices.
 
 * Monitor: Resources, LAN/WAN IP, Health, Device ID, Uptime, Ping response server/client, Ports used for reverse SSH of all devices
 * Individual system config (milestone 2)
