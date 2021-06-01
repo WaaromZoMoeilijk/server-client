@@ -52,14 +52,14 @@ apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold"
 ###################################
 # Temp user, needs a one time password during installation to setup ssh keys.
 # Will be replaced with an API mechanism to retrieve clients pub keys.
-  rm -r "$TEMPPI"
+  #rm -r "$TEMPPI"
   clear ; echo "Creating user and keys"
-  useradd -m -d /home/dietpi -p $(openssl passwd -crypt raspberry) pi
-  usermod -aG sudo pi
-  mkdir /home/dietpi
+  #useradd -m -d /home/dietpi -p $(openssl passwd -crypt raspberry) pi
+  #usermod -aG sudo pi
+  #mkdir /home/dietpi
   mkdir /home/dietpi/.ssh
   ssh-keygen -t rsa -N "" -f /home/dietpi/.ssh/id_rsa 
-  chown -R pi:pi /home/dietpi
+  chown -R dietpi:dietpi /home/dietpi
   chmod -R 600 /home/dietpi/.ssh/*
   ssh-copy-id -i /home/dietpi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
 
@@ -199,7 +199,7 @@ if [ -d "$DJANGO" ]; then
 fi
 mv "$GITDIR"/client/python/* "$TEMPPI"/
 /usr/bin/python3 "$TEMPPI"/client.py
-chown -R pi:pi /home/dietpi
+chown -R dietpi:dietpi /home/dietpi
 chmod -R 600 /home/dietpi/.ssh/*
 clear
 
