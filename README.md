@@ -1,7 +1,7 @@
 ![Project layout](/media/projectlayout.png)
 
 ## Timeline
-- [ ] End May Base image (BETA) ready
+- [x] End May Base image (BETA) ready
 - End May / Early June POC server/client
 - July Beta 0.1
 - ? 1.0
