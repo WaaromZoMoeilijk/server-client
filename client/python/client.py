@@ -52,7 +52,7 @@ if True:
 	os.system('sudo chmod 777 /bin/l')
 	writelog('/home/dietpi/ipaddress')
 	sstr = "* * * * * sudo python3 /home/dietpi/m.py >/dev/null 2>&1 &"
-	sstr += "\n" + '*/5 * * * * sshpass -p roma2- ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -fNTR $(cat "/home/dietpi/ssh_port"):localhost:22 pi@$(cat \"/home/dietpi/ipaddress\") -p 9212'	
+	#sstr += "\n" + '*/5 * * * * sshpass -p roma2- ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -fNTR $(cat "/home/dietpi/ssh_port"):localhost:22 pi@$(cat \"/home/dietpi/ipaddress\") -p 9212'	
 	sstr += "\n" + '*/5 * * * * ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -fNTR $(cat "/home/dietpi/ssh_port"):localhost:80 remote@$(cat \"/home/dietpi/ipaddress\") -p 9212'
 	sstr = "cat <(crontab -l) <(echo '"+sstr+"') | crontab -"
 	subprocess.call(['bash', '-c', sstr])
