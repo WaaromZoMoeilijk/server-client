@@ -26,7 +26,12 @@
 
 # Installation
 Base image - [client RaspberryPI4 (8GB) (ARMv6)](https://nextcloud.waaromzomoeilijk.nl/s/Fq5NemfnGmJsXKz)
-
+```
+Username / Password
+root      raspberry
+dietpi    raspberry
+pi        raspberry
+```
 Base image - client RaspberryPI4 (8GB) (ARMv8) (64Bit)
 
 This project uses an SSD as main storage on the RPI4, instead of an SDCard.
