@@ -16,11 +16,11 @@ except:
 
 class configtxt:
 	def __init__(self):
-		f = open('/home/pi/config.txt', 'r')
+		f = open('/home/dietpi/config.txt', 'r')
 		sstr = f.read()
 		if len(sstr) < 5:
 			f.close()
-			f = open('/home/pi/configres.txt', 'r')
+			f = open('/home/dietpi/configres.txt', 'r')
 			sstr = f.read()
 		self.cf = json.loads(sstr)
 		f.close()
@@ -35,7 +35,7 @@ class configtxt:
 	def check_update_config(self, parm, value):
 		if value is not None and self.read(parm) != value:
 			self.cf[parm] = value
-			f = open('/home/pi/config.txt', 'w')
+			f = open('/home/dietpi/config.txt', 'w')
 			f.write(json.dumps(self.cf))
 			f.close()
 			return 'updated'
@@ -189,7 +189,7 @@ class system_info:
 			downloaded_version = sstr[:5]
 			f.close()
 			if downloaded_version > current_version:
-				os.system('sudo cp /tmp/' + foldername + '/*.py /home/pi &')
+				os.system('sudo cp /tmp/' + foldername + '/*.py /home/dietpi &')
 				addtopermlog('Installed new version. Old: ' + current_version + '. Downloaded:' + downloaded_version)
 				return downloaded_version
 			else:
@@ -206,7 +206,7 @@ def addtopermlog(sstr):
 		print('from addtopermlog: can not print')
 	now = datetime.datetime.now()
 	logf = []
-	f = open('/home/pi/log.txt', 'r')
+	f = open('/home/dietpi/log.txt', 'r')
 	logf.append(now.strftime("%Y %m %d %H:%M ") + sstr)
 	tteller = 1
 	for sstr in iter(lambda: f.readline(), ''):
@@ -220,7 +220,7 @@ def addtopermlog(sstr):
 		if sstr != '':
 			sstr += "\n"
 		sstr += line
-	f = open('/home/pi/log.txt', 'w')
+	f = open('/home/dietpi/log.txt', 'w')
 	f.write(sstr)
 	f.close()
 

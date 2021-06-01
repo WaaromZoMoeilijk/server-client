@@ -53,14 +53,14 @@ try:
 	ps = subprocess.run(['ps', 'aux'], capture_output=True, text=True).stdout
 	processes = ps.split('\n')
 	for row in processes:
-		if 'python3 /home/pi/a.py' in str(row):
+		if 'python3 /home/dietpi/a.py' in str(row):
 			procesloopt_a_py = 1
 			print('found in ps aux:' + row)
-		if 'python3 /home/pi/m.py' in str(row):
+		if 'python3 /home/dietpi/m.py' in str(row):
 			procesloopt_m_py += 1
 			print('found in ps aux:' + row)
 	if procesloopt_a_py == 0 and sysargv == '':
-		os.system('sudo python3 /home/pi/a.py &')
+		os.system('sudo python3 /home/dietpi/a.py &')
 		addtopermlog('a.py started')
 	else:
 		print('dont start: a.py running already')
@@ -85,9 +85,9 @@ except:
 # next is the update routine. Should be based on github. Still to be done.
 if now.hour == 11 and int(ssm.comp_nr_only_dec)%60 == now.minute:
 	sleep(int(ssm.comp_nr_only_dec)%31)
-	os.system("sudo python /home/pi/update.py wzm &")
+	os.system("sudo python /home/dietpi/update.py wzm &")
 if cf.read('version') != '' and now.hour == 11 and now.minute == 0:
-	os.system("sudo cp /home/pi/config.txt /home/pi/configres.txt &")
+	os.system("sudo cp /home/dietpi/config.txt /home/dietpi/configres.txt &")
 	addtosessionlog('copied config.txt to configres.txt')
 if now.hour == 6 and now.minute == 0:
 	os.system("sudo rm /dev/shm/log.txt &")
@@ -160,7 +160,7 @@ else:
 	if 'activation_code' in api_answer:      # new system, not yet assigned to a user.
 		if cf.check_update_config('activation_code', api_answer['activation_code']) == 'updated':
 			portnr = 60000 + int(api_answer['id'])
-			f = open('/home/pi/ssh_port', 'w')
+			f = open('/home/dietpi/ssh_port', 'w')
 			f.write(str(portnr))
 			f.close()
 # a.py is responsible for publishing the computernr and activation_code at:
@@ -168,7 +168,7 @@ else:
 # (2) via de HDMI.
 	elif cf.check_update_config('activation_code', '') == 'updated':
 			portnr = 10000 + int(api_answer['id'])
-			f = open('/home/pi/ssh_port', 'w')
+			f = open('/home/dietpi/ssh_port', 'w')
 			f.write(str(portnr))
 			f.close()
 
@@ -321,8 +321,8 @@ else:
 		cf.check_update_config('rpiclicommands', api_answer['rpiclicommands'])
 	if 'reverse_ssh_server' in api_answer: 
 		cf.check_update_config('reverse_ssh_server', api_answer['reverse_ssh_server'])
-	if 'id_rsa_pub' in api_answer and os.path.isfile('/home/pi/.ssh/id_rsa.pub'):
-		f = open('/home/pi/.ssh/id_rsa.pub','r')
+	if 'id_rsa_pub' in api_answer and os.path.isfile('/home/dietpi/.ssh/id_rsa.pub'):
+		f = open('/home/dietpi/.ssh/id_rsa.pub','r')
 		contents = f.read()
 		sts.add('id_rsa_pub',0,contents.rstrip())
 
@@ -345,13 +345,13 @@ while lowest_id < 99999999:
 		cf.check_update_config('last_clicommand_job', lowest_id)
 		runteller = 0
 
-if not os.path.isfile('/home/pi/ssh_port') or int(ssm.comp_nr_only_dec) % 60 == now.minute or sysargv == 'test8':
+if not os.path.isfile('/home/dietpi/ssh_port') or int(ssm.comp_nr_only_dec) % 60 == now.minute or sysargv == 'test8':
 	reverse_ssh_server = ourserver
 	if cf.read('reverse_ssh_server') != '':
 		reverse_ssh_server = cf.read('reverse_ssh_server')
 	print('our server' + reverse_ssh_server +'x')
-	if os.path.isfile('/home/pi/ipaddress'):
-		f = open('/home/pi/ipaddress', 'r')
+	if os.path.isfile('/home/dietpi/ipaddress'):
+		f = open('/home/dietpi/ipaddress', 'r')
 		sstr = f.read()
 		f.close()
 		sstr = sstr.rstrip()
@@ -359,7 +359,7 @@ if not os.path.isfile('/home/pi/ssh_port') or int(ssm.comp_nr_only_dec) % 60 == 
 		sstr = ''
 	print('sstr:' + sstr +'x')
 	if sstr != reverse_ssh_server and reverse_ssh_server != '':
-		f = open('/home/pi/ipaddress', 'w+')
+		f = open('/home/dietpi/ipaddress', 'w+')
 		f.write(reverse_ssh_server)
 		f.close()
 
