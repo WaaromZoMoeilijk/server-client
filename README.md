@@ -27,7 +27,7 @@
 # Installation
 Base image - [client RaspberryPI4 (8GB) (ARMv6)](https://nextcloud.waaromzomoeilijk.nl/s/Fq5NemfnGmJsXKz)
 ```
-Username / Password
+Username / Password - Gets set to password used on register.waaromzomoeilijk.nl after device activation.
 root      raspberry
 dietpi    raspberry
 pi        raspberry
