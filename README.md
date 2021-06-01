@@ -14,17 +14,47 @@
 
 ## Workflow:
 ```
-1. User connects device to Ethernet
-2. Either user goes to: domain.local (on local LAN) or connect a monitor to the RPI
-  a. From there writes down a registration code (device_ID)
-3. Visit register.domain.tld (Button to proceed to registration in browser)
-  a. Enter device identifier, username, email and a password. This registers the user and their device.
-  b. They get redirected to username.domain.tld (their cloud)
+1. User connects device to Ethernet and powers it on
+2. Automated installation begins and takes about 15 minutes. (Setup screen is shown via HDMI and WEB: http://wzm.local)
+2. Either user goes to: http://wzm.local (on local LAN) or connect a monitor to the RPI
+  a. From there writes down the activation code and device ID
+3. Visit https://register.waaromzomoeilijk.nl:2021/xx/register
+  a. Enter Name, username (Userid), email and a password.
+  b. Verify by email and login
+  c. Register your device
 ```
+
+# Installation
+Base image - [client RaspberryPI4 (8GB) (ARMv6)](https://nextcloud.waaromzomoeilijk.nl/s/Fq5NemfnGmJsXKz)
+
+Base image - [client RaspberryPI4 (8GB) (ARMv8) (64Bit)]()
+
+This project uses an SSD as main storage on the RPI4, instead of an SDCard.
+
+In order for this to work please execute the following before doing anything else:
+## Prepare RPI for SSD boot
+- [Download](https://www.raspberrypi.org/downloads) Raspberry Pi Imager 
+- Select a spare SD card. The contents will get overwritten!
+- Launch Raspberry Pi Imager
+- Select Misc utility images under Operating System
+- Select Bootloader
+- Select boot-mode USB
+- Select SD card and then Write
+- Boot the Raspberry Pi with the new image and wait for at least 10 seconds.
+- The green activity LED will blink with a steady pattern and the HDMI display will be green on success.
+- Power off the Raspberry Pi and remove the SD card.
+
+## Flash base image to SSD
+- [Download](https://www.balena.io/etcher/) Balena Etcher
+- Flash the base image to a proper SSD like a 1TB+ Samsung EVO/WD green with a STA3 to USB3 adapter.
+- Attach SSD adapter, ethernet and power (optionally a monitor) wait 15 minutes.
+- Open a browser (Mobile/Desktop) and go to http://wzm.local or attatch a monitor and monitor the initial installation. 
+- A setup screen appears with an activation code once the installation is complete. Could take 30 minutes depending on your network connection.
+- Follow instructions
 
 ## Functionalities user management panel:
 
-Users can visit cloud.domain.tld where they can manage and monitor their new Cloud RPI.
+Users can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can manage and monitor their new Cloud RPI.
 
 * Monitor: Resources, LAN/WAN IP, Health, Device ID, Uptime, Ping response server/client, Ports used for reverse SSH
 * Config: Wifi/ethernet config, hostname, remove node option, notifications
@@ -37,9 +67,9 @@ Users can visit cloud.domain.tld where they can manage and monitor their new Clo
 * Backup/restore (milestone 3)
 
 
-## Functionalities admin management panel:
+## Functionalities admin management users:
 
-Administrators can visit admin.domain.tld where they can manage and monitor all online/offline registered devices.
+Administrators can visit https://register.waaromzomoeilijk.nl:2021 where they can manage and monitor all online/offline registered devices.
 
 * Monitor: Resources, LAN/WAN IP, Health, Device ID, Uptime, Ping response server/client, Ports used for reverse SSH of all devices
 * Individual system config (milestone 2)
