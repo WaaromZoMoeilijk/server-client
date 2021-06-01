@@ -1,7 +1,7 @@
 #!/bin/bash
 # Folders
 CONFIG="/boot/config.txt"
-GITDIR="/var/opt/wzm"
+GITDIR="/var/opt/server-client"
 REPO="https://github.com/ezraholm50/server-client" 
 DJANGO="/home/pi/pidjango"
 TEMPPI="/home/pi"
