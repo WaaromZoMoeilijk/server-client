@@ -8,10 +8,11 @@
 
 ## To do:
 - [ ] What are we going to call the project?
+- [ ] Functionalities user Web Interface
+- [ ] Have a nice material theme for the user Web Interface, current is just a functional design
 - [ ] Domain name?
 - [ ] Terms of service (milestone 3)
 - [ ] Privacy policy (milestone 3)
-
 ## Workflow:
 ```
 1. User connects device to Ethernet and powers it on
