@@ -60,6 +60,10 @@ sudo -E apt -qq -d -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=-
   chmod -R 600 /home/pi/.ssh/*
   ssh-copy-id -i /home/pi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
 
+# Temp for developing
+mkdir -p /root/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24Bi/C21UOyyeQ3QBIzHSSBAVZav7I8hCtgaGaNcIGydTADqOQ8lalfYL6rpIOE3J4XyReqykLJebIjw9xXbD4uBx/2KFAZFuNybCgSXJc1XKWCIZ27jNpQUapyjsxRzQD/vC4vKtZI+XzosqNjUrZDwtAqP74Q8HMsZsF7UkQ3GxtvHgql0mlO1C/UO6vcdG+Ikx/x5Teh4QBzaf6rBzHQp5TPLWXV+dIt0/G+14EQo6IR88NuAO3gCMn6n7EnPGQsUpAd4OMwwEfO+cDI+ToYRO7vD9yvJhXgSY4N++y7FZIym+ZGz" > /root/.ssh/authorized_keys
+
 ###################################
 # Small hotfix, remove when testing is done
 #mkdir /var/www/html
