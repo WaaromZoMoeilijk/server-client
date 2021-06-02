@@ -1,5 +1,8 @@
 # Server Client
 This project enables us to setup a client-server connection and automatic proxy (after registering) to access your personal cloud storage from anywhere without portforwarding. This system is modular and can be extended with anything later on.
+Prebuild software repo's:
+- [DietPI](https://dietpi.com/docs/software/)
+- [Linuxserver.io](https://docs.linuxserver.io/)
 
 ## Timeline
 - [x] End May Base image (BETA) ready
