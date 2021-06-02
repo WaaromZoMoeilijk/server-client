@@ -26,14 +26,6 @@
 ```
 
 # Installation
-Base image - [client RaspberryPI4 (8GB) (ARMv6)](https://nextcloud.waaromzomoeilijk.nl/s/Fq5NemfnGmJsXKz)
-```
-Username / Password - Gets set to password used on register.waaromzomoeilijk.nl after device activation.
-root      raspberry
-dietpi    raspberry
-pi        raspberry
-```
-Base image - client RaspberryPI4 (8GB) (ARMv8) (64Bit)
 
 This project uses an SSD as main storage on the RPI4, instead of an SDCard.
 
@@ -51,7 +43,8 @@ In order for this to work please execute the following before doing anything els
 - Power off the Raspberry Pi and remove the SD card.
 
 ## Flash base image to SSD / SDCard
-- [Download](https://www.balena.io/etcher/) Balena Etcher
+- [Download](https://www.balena.io/etcher/) and install Balena Etcher
+- [Download client RaspberryPI4 (8GB) (ARMv6)](https://nextcloud.waaromzomoeilijk.nl/s/Fq5NemfnGmJsXKz) | Download client RaspberryPI4 (8GB) (ARMv8) (64Bit)
 - Flash the base image to a proper SSD like a 1TB+ Samsung EVO/WD green with a STA3 to USB3 adapter. Or an SDCard reader.
 
 ## First boot
@@ -59,6 +52,13 @@ In order for this to work please execute the following before doing anything els
 - Open a browser (Mobile/Desktop) and go to http://wzm.local or attatch a monitor and watch the initial installation. 
 - A setup screen appears with an activation code once the installation is complete. Could take 30 minutes depending on your network connection.
 - Follow instructions
+
+```
+Username / Password - Gets set to password used on register.waaromzomoeilijk.nl after device activation.
+root      raspberry
+dietpi    raspberry
+pi        raspberry
+```
 
 ## Optional installation options
 - On any debian based RaspberryPI4 you could do: `wget https://raw.githubusercontent.com/ezraholm50/server-client/main/client/install.sh && sudo bash install.sh`
