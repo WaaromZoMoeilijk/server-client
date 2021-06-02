@@ -79,7 +79,7 @@ Users can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can 
 * Backup/restore (milestone 3)
 
 
-## Functionalities admin management users:
+## Functionalities admin management role:
 
 Administrators can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can manage and monitor all online/offline registered devices.
 
