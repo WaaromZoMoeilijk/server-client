@@ -58,7 +58,6 @@ In order for this to work please execute the following before doing anything els
 Username / Password - Gets set to password used on register.waaromzomoeilijk.nl after device activation.
 root      raspberry
 dietpi    raspberry
-pi        raspberry
 ```
 
 ## Optional installation options
