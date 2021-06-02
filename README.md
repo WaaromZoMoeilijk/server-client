@@ -1,4 +1,5 @@
-![Project layout](/media/projectlayout.png)
+# Server Client
+This project enables us to setup a client-server connection and automatic proxy (after registering) to access your personal cloud storage from anywhere without portforwarding.
 
 ## Timeline
 - [x] End May Base image (BETA) ready
@@ -96,5 +97,5 @@ Upon registering and email validation on above webui, the client raspberry autom
 
 In the background the initial user registration procedure also creates a Nextcloud user with the same credentials. Which for now is an admin (role) for nextcloud until I've found how to integrate usermanagement in the webui. So right after registering the device they can right away use the file storage nextcloud offers. I aim to have these credentials reused by any application we install later on.
 
-
+![Project layout](/media/projectlayout.png)
 
