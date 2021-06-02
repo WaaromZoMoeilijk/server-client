@@ -1,7 +1,6 @@
 # Server Client
 This project enables us to setup a client-server connection and automatic proxy (after registering) to access your personal cloud storage from anywhere without portforwarding. 
 
-## network drive published easy automated
 This system is modular and can be extended with anything later on. Prebuild software repo's:
 
 [DietPI](https://dietpi.com/docs/software/) | [Linuxserver.io](https://docs.linuxserver.io/) | [Awesome Selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
@@ -14,6 +13,8 @@ This system is modular and can be extended with anything later on. Prebuild soft
 
 ## To do:
 - [ ] What are we going to call the project?
+- [ ] network drive published (easy & automated)
+- [ ] Prefer local connections over proxied connections
 - [ ] Functionalities user Web Interface
 - [ ] Have a nice material theme for the user Web Interface, current is just a functional design
 - [ ] Domain name?
