@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block message %}
+{{ message }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+<div class="col">
+<form action="checklogin" method="post">{% csrf_token %}
+<table width=50%><tr><!--td width=33%><td width=33% -->
+  <td width=33%>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">user id</label>
+    <input type="text" class="form-control col-sm-2" name="userid" autofocus>
+    <div id="emailHelp" class="form-text">&nbsp;</div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">password</label>
+    <input type="password" class="form-control" name="password">
+  </div>
+  <button type="submit" class="btn btn-primary">Login</button>
+  <div class="mb-3"><br><br><br>
+    <a href="{% url 'register' %}">Register, make a new account</a>
+  </div>
+
+</table>
+</form>
+</div></div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% block message %}
+{{ message }}
+{% endblock %}
+{% block menu %}
+<table width=100%>
+  {% for key,value in menu.items %}
+    <tr>
+      <td><a href="{{ key }}" class="menu">{{ value }}</a></td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+{% block content %}
+<table width=100%>
+  <form action="/xx/useredit" method="post" autocomplete="off">{% csrf_token %}
+  <input type=hidden name=xxid value="{{ xxid }}">
+  {{ form }}
+  <br><button type="submit" class="btn btn-primary">SAVE</button>
+</table>
+<h3><br>Current Devices:</h3>
+<table width=100%>
+  <tr style="font-weight: bold;">
+    <td>Action
+    <td>Computernr
+    <td>Last seen
+    <td>IP wifi
+    <td>IP fixed
+    <td>Created
+  {% for value in rpis %}
+    <tr style="background-color: {{ value.bgcolor }};">
+      <td><a href="/xx/rpiedit/{{ value.id }}">Details</a></td>
+      <td>{{ value.computernr }}
+      <td>{{ value.last_seen }}
+      <td>{{ value.ipAddressWlan }}
+      <td>{{ value.ipAddressEth }}
+      <td>{{ value.created }}
+    </tr>
+  {% endfor %}
+<tr style="font-weight: bold;">
+  <td>
+  <td><br>Add device
+  <td  rowspan=2 valign=bottom>
+    <input type=submit value=ADD class="btn btn-primary">
+<tr>
+  <td>
+  <td><!-- form action="/xx/useredit" method="post" -->
+    <select name=addnewrpi>
+      <option value=0>Choose one
+  {% for value in newrpis %}
+      <option value={{ value.id }}>{{ value.id }} {{ value.computernr}}
+  {% endfor %}
+    </select>
+  <td>
+</table>
+{% endblock %}
+</form>
