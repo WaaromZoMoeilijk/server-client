@@ -38,6 +38,7 @@ apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold"
       unattended-upgrades \
       openssh-server \
       sshpass \
+      jq \
       net-tools
 
 apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
@@ -46,6 +47,9 @@ apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold"
       avahi-daemon
       
 ###################################
+# Set timezone based upon WAN ip 
+curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
+
 # unattended-upgrades
 "$DEBIAN_FRONTEND" dpkg-reconfigure unattended-upgrades
 
