@@ -33,8 +33,6 @@ if True:
 	f.close()
 	writelog('/home/dietpi/log.txt')
 if True:
-	os.system('sudo cp /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime')
-	writelog('time zone')
 	f = open("/home/dietpi/config.txt", 'w')
 	sstr = '{"reverse_ssh_server": "henk.waaromzomoeilijk.nl", "version":"00000"}'
 	f.write(sstr)
