@@ -203,6 +203,7 @@ chown -R dietpi:dietpi /home/dietpi
 chmod -R 600 /home/dietpi/.ssh/*
 clear
 
-sleep 25
+#sleep 25
+#reboot
 
-reboot
+exit 0
