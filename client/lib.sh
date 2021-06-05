@@ -141,3 +141,23 @@ input_box_flow() {
     done
     echo "$RESULT"
 }
+
+# Use like this: open_port 443 TCP
+# or e.g. open_port 3478 UDP
+open_port() {
+    install_if_not miniupnpc
+    print_text_in_color "$ICyan" "Trying to open port $1 automatically..."
+    if ! upnpc -a "$ADDRESS" "$1" "$1" "$2" &>/dev/null
+    then
+        msg_box "Failed to open port $1 $2 automatically. You have to do this manually."
+        FAIL=1
+    fi
+}
+
+cleanup_open_port() {
+    if [ -n "$FAIL" ]
+    then
+        apt-get purge miniupnpc -y
+        apt autoremove -y
+    fi
+}
