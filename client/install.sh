@@ -202,6 +202,7 @@ if [ -d "$DJANGO" ]; then
       rm -r "$TEMPPI"/*.py
 fi
 mv "$GITDIR"/client/python/* "$TEMPPI"/
+mv "$GITDIR"/media/bg.jpg "$TEMPPI"/
 /usr/bin/python3 "$TEMPPI"/client.py
 chown -R dietpi:dietpi /home/dietpi
 chmod -R 600 /home/dietpi/.ssh/*
