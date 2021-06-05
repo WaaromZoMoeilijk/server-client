@@ -149,7 +149,7 @@ open_port() {
     print_text_in_color "$ICyan" "Trying to open port $1 automatically..."
     if ! upnpc -a "$ADDRESS" "$1" "$1" "$2" &>/dev/null
     then
-        msg_box "Failed to open port $1 $2 automatically. You have to do this manually."
+        msg_box "Failed to open port $1 $2 automatically. We'll continue with a proxied setup."
         FAIL=1
     fi
 }
