@@ -143,6 +143,16 @@ EOF
 fi
 
 ###################################
+# Open ports 80 and 443 if possible
+#unset FAIL
+#open_port 80 TCP
+#open_port 443 TCP
+#cleanup_open_port
+
+#check_open_port 80 "$WANIP"
+#check_open_port 443 "$WANIP"
+
+###################################
 # Set webserver
 #clear
 #echo "Installing Nginx"
