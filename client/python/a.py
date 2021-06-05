@@ -9,10 +9,17 @@ import requests
 from ffunctions import *
 import pygame
 
+BLACK = ( 0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = ( 255, 0, 0)
+
 pygame.init()
 pygame.mouse.set_visible(0)
 screen = pygame.display.set_mode((0,0),pygame.RESIZABLE)
 tteller = 0
+
+bg = pygame.image.load("bg.jpg")
 
 try:
 	sysargv = sys.argv[1]
@@ -28,29 +35,54 @@ while True:
 	except:
 		sstr = 'do nothing'
 	if cf.read('activation_code') == '':
-		lable_id = 'User:'
+		lable_id = 'Username:'
 		lable_act_code = ''
 	else:
-		lable_id = 'Temporary User ID'
-		lable_act_code = 'Activation code:'
-	screen.fill((0,0,0))
-#	label = myfont.render(lable_id, 1, (255, 255, 0))
-#	screen.blit(label, (210, 110))
-#	label = myfont.render(str(cf.read('id')), 1, (255, 255, 0))
-#	screen.blit(label, (230, 160))
-	label = myfont.render("Device Identifier: ", 1, (255, 255, 0))
-	screen.blit(label, (210, 260))
-	label = myfont.render(str(ssm.computernr), 1, (255, 255, 0))
-	screen.blit(label, (230, 310))
+		lable_id = 'Temporary ID: '
+		lable_act_code = 'Activation code: '
+	screen.blit(bg, (0, 0))
+#	screen.fill((0,0,0))
+	label = myfont.render(lable_id, 1, WHITE)
+	screen.blit(label, (50, 50))
+	label = myfont.render(str(cf.read('id')), 1, GREEN)
+	screen.blit(label, (500, 50))
+
+	label = myfont.render("Device ID:", 1, WHITE)
+	screen.blit(label, (50, 100))
+	label = myfont.render(str(ssm.computernr), 1, GREEN)
+	screen.blit(label, (500, 100))
+
+#	label = myfont.render("WAN (outside) IP:", 1, WHITE)
+#	screen.blit(label, (50, 200))
+#    label = myfont.render(str(ssm.ethIPaddress), 1, GREEN)
+#	screen.blit(label, (500, 200))
+
+	label = myfont.render("LAN (inside) IP:", 1, WHITE)
+	screen.blit(label, (50, 150))
+	label = myfont.render(str(ssm.ethIPaddress), 1, GREEN)
+	screen.blit(label, (500, 150))
+	if cf.read('activation_code') == '':
+		label = myfont.render("Remote url:", 1, WHITE)
+		screen.blit(label, (50, 250))
+		label = myfont.render(str(cf.read('id')), 1, GREEN)
+		screen.blit(label, (500, 250))
+		label = myfont.render(".waaromzomoeilijk.nl", 1, GREEN)
+		screen.blit(label, (525, 250))
 	if cf.read('activation_code') != '':
-		label = myfont.render(lable_act_code, 1, (255, 255, 0))
-		screen.blit(label, (210, 410))
-		label = myfont.render(cf.read('activation_code'), 1, (255, 255, 0))
-		screen.blit(label, (230, 460))
-	label = myfont.render("Please register:", 1, (255, 255, 0))
-	screen.blit(label, (210, 560))
-	label = myfont.render("https://register.waaromzomoeilijk.nl:2021", 1, (255, 255, 0))
-	screen.blit(label, (230, 610))
+		label = myfont.render(lable_act_code, 1, WHITE)
+		screen.blit(label, (50, 400))
+		label = myfont.render(cf.read('activation_code'), 1, GREEN)
+		screen.blit(label, (500, 400))
+	if cf.read('activation_code') != '':
+		label = myfont.render("Please register:", 1, WHITE)
+		screen.blit(label, (50, 450))
+		label = myfont.render("register.waaromzomoeilijk.nl:2021", 1, GREEN)
+		screen.blit(label, (500, 450))
+	if cf.read('activation_code') == '':
+		label = myfont.render("Manage your device:", 1, WHITE)
+		screen.blit(label, (50, 500))
+		label = myfont.render("henk.waaromzomoeilijk.nl:2021", 1, GREEN)
+		screen.blit(label, (500, 500))
 	# show the whole thing
 	pygame.display.flip()
 
