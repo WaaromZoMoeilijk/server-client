@@ -16,6 +16,9 @@ GATEWAY=$(ip route | grep default | awk '{print $3}')
 IFACE=$(ip r | grep "default via" | awk '{print $5}')
 ADDRESS=$(hostname -I | cut -d ' ' -f 1)
 
+# Misc
+ISSUES="https://github.com/ezraholm50/server-client"
+
 # Functions
 # If script is running as root?
 #
@@ -205,7 +208,17 @@ else
     msg_box "It seems like the port ${1} is closed. This could happened when your
 ISP has blocked the port, or the port isn't open.
 We'll continue setting up a proxy hosted by WaaromZoMoeilijk that enables you
-to access your device from anywhere.
+to access your device from anywhere."
+fi
+}
+
+check_command() {
+if ! "$@";
+then
+    print_text_in_color "$ICyan" "Sorry but something went wrong. Please report \
+this issue to $ISSUES and include the output of the error message. Thank you!"
+    print_text_in_color "$IRed" "$* failed"
+    exit 1
 fi
 }
 
