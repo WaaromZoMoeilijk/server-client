@@ -37,6 +37,7 @@ apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold"
       python3-setuptools \
       unattended-upgrades \
       openssh-server \
+      miniupnpc \      
       sshpass \
       jq \
       net-tools
