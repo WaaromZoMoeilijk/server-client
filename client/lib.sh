@@ -184,7 +184,7 @@ fi
 stop_if_installed() {
 if [ "$(dpkg-query -W -f='${Status}' "${1}" 2>/dev/null | grep -c "ok installed")" == "1" ]
 then
-    print_text_in_color "$IRed" "${1} is installed, it must be a clean server."
+    print_text_in_color "$IRed" "${1} is installed, stopping."
     exit 1
 fi
 }
@@ -204,16 +204,8 @@ then
 else
     msg_box "It seems like the port ${1} is closed. This could happened when your
 ISP has blocked the port, or the port isn't open.
-If you are 100% sure the port ${1} is open, you can choose to
-continue. There are no guarantees that it will work though,
-since the service depends on port ${1} being open and
-accessible from outside your network."
-    if ! yesno_box_no "Are you 100% sure the port ${1} is open?"
-    then
-        msg_box "Port $1 is not open on either ${WANIP4} or ${2}."
-        any_key "Press any key to exit..."
-        exit 1
-    fi
+We'll continue setting up a proxy hosted by WaaromZoMoeilijk that enables you
+to access your device from anywhere.
 fi
 }
 
