@@ -23,8 +23,8 @@ root_check
 echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99force-ipv4
 
 # Update
-export "$DEBIAN_FRONTEND"
-export "$DEBIAN_PRIORITY"
+export "DEBIAN_FRONTEND=noninteractive"
+export "DEBIAN_PRIORITY=critical"
 #clear ; echo "Auto clean"
 apt_autoclean #& spinner
 #clear ; echo "Auto remove"
@@ -60,9 +60,10 @@ apt install -y \
 curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
 
 # unattended-upgrades
-"$DEBIAN_FRONTEND" dpkg-reconfigure unattended-upgrades
+dpkg-reconfigure unattended-upgrades
 
 ###################################
+# Temp for developing
 # Temp user, needs a one time password during installation to setup ssh keys.
 # Will be replaced with an API mechanism to retrieve clients pub keys.
 #  clear ; echo "Creating user and keys"
@@ -70,18 +71,15 @@ curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
   #useradd -m -d /home/dietpi -p $(openssl passwd -crypt raspberry) pi
   #usermod -aG sudo pi
   #mkdir /home/dietpi
-  rm -r /home/dietpi/.ssh
-  mkdir /home/dietpi/.ssh
-  ssh-keygen -t rsa -N "" -f /home/dietpi/.ssh/id_rsa 
-  chown -R dietpi:dietpi /home/dietpi
-  chmod -R 600 /home/dietpi/.ssh/*
-  ssh-copy-id -i /home/dietpi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
-
-# Temp for developing
+rm -r /home/dietpi/.ssh
+mkdir /home/dietpi/.ssh
+ssh-keygen -t rsa -N "" -f /home/dietpi/.ssh/id_rsa 
+chown -R dietpi:dietpi /home/dietpi
+chmod -R 600 /home/dietpi/.ssh/*
+ssh-copy-id -i /home/dietpi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
 mkdir -p /root/.ssh
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24Bi/C21UOyyeQ3QBIzHSSBAVZav7I8hCtgaGaNcIGydTADqOQ8lalfYL6rpIOE3J4XyReqykLJebIjw9xXbD4uBx/2KFAZFuNybCgSXJc1XKWCIZ27jNpQUapyjsxRzQD/vC4vKtZI+XzosqNjUrZDwtAqP74Q8HMsZsF7UkQ3GxtvHgql0mlO1C/UO6vcdG+Ikx/x5Teh4QBzaf6rBzHQp5TPLWXV+dIt0/G+14EQo6IR88NuAO3gCMn6n7EnPGQsUpAd4OMwwEfO+cDI+ToYRO7vD9yvJhXgSY4N++y7FZIym+ZGz" > /root/.ssh/authorized_keys
 
-###################################
 # Small hotfix, remove when testing is done
 #mkdir /var/www/html
 #cp /var/www/index.html /var/www/html/index.html
