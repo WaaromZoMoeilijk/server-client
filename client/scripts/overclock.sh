@@ -20,7 +20,7 @@ cat >> "$CONFIG" <<EOF
 
 #-------Overclock-------
 # Dynamically overclock
-arm_freq=2100
+arm_freq=2000
 arm_freq_min=600
 
 # Dynamically overvolt
