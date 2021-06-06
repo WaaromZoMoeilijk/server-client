@@ -84,16 +84,6 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24
 #cp /var/www/index.html /var/www/html/index.html
 
 ###################################
-# Clone git repo
-#clear
-echo "Cloning Git Repo"
-if [ -d "$GITDIR" ]; then
-  rm -r "$GITDIR"
-fi
-
-git clone "$REPO" "$GITDIR"
-
-###################################
 # Add rc.local
 # Add systemd service
 #clear
@@ -215,19 +205,34 @@ fi
 #/bin/bash "$GITDIR"/client/scripts/smtp.sh
 
 ###################################
+# Clone git repo
+#clear
+echo "Cloning Git Repo"
+if [ -d "$GITDIR" ]; then
+  rm -r "$GITDIR"
+fi
+
+git clone "$REPO" "$GITDIR"
+
 # Client setup
 #clear
 echo "Setup client"
 if [ -d "$DJANGO" ]; then
       echo "Django project exists, removing..."
       rm -r "$DJANGO"
-      rm -r "$TEMPPI"/*.py
+      rm -r "$HOME"/*.py
 fi
-mv "$GITDIR"/client/python/* "$TEMPPI"/
-mv "$GITDIR"/media/bg.jpg "$TEMPPI"/
-/usr/bin/python3 "$TEMPPI"/client.py
-chown -R dietpi:dietpi /home/dietpi
-chmod -R 600 /home/dietpi/.ssh/*
+
+mv "$GITDIR"/client/python/* "$HOME"/
+mv "$GITDIR"/media/bg.jpg "$HOME"/
+
+# Init python setup
+/usr/bin/python3 "$HOME"/client.py
+
+# Correct permissions
+chown -R "$USER":"$USER" "$HOME"
+chmod -R 600 "$HOME"/.ssh/*
+
 #clear
 
 #sleep 25
