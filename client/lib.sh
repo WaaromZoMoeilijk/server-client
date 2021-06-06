@@ -49,6 +49,14 @@ then
 fi
 }
 
+# Debug mode
+debug_mode() {
+if [ "$DEBUG" -eq 1 ]
+then
+    set -ex
+fi
+}
+
 # APT install
 apt_install() {
     apt -y install
