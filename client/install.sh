@@ -19,6 +19,9 @@ debug_mode
 root_check
 
 ###################################
+# Prefer IPv4 for apt
+echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99force-ipv4
+
 # Update
 export "$DEBIAN_FRONTEND"
 export "$DEBIAN_PRIORITY"
@@ -34,8 +37,9 @@ apt_upgrade & spinner
 ###################################
 # Dependencies
 apt_install \
-      nano \
+      jq \
       git \
+      nano \
       curl \
       python3 \
       python3-pip \
@@ -43,21 +47,15 @@ apt_install \
       python3-requests \
       python3-setuptools \
       unattended-upgrades \
-      openssh-server \
-      miniupnpc \
-      sshpass \
-      jq \
-      net-tools
-
-apt_install \
-      libnss-mdns \
       python3-requests \
-      avahi-daemon
-      
+      openssh-server \
+      avahi-daemon \
+      libnss-mdns \
+      miniupnpc \
+      net-tools \
+      sshpass
+     
 ###################################
-# Prefer IPv4 for apt
-echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99force-ipv4
-
 # Set timezone based upon WAN ip 
 curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
 
@@ -67,11 +65,12 @@ curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
 ###################################
 # Temp user, needs a one time password during installation to setup ssh keys.
 # Will be replaced with an API mechanism to retrieve clients pub keys.
-  #rm -r "$TEMPPI"
   clear ; echo "Creating user and keys"
+  #rm -r "$TEMPPI"
   #useradd -m -d /home/dietpi -p $(openssl passwd -crypt raspberry) pi
   #usermod -aG sudo pi
   #mkdir /home/dietpi
+  rm -r /home/dietpi/.ssh
   mkdir /home/dietpi/.ssh
   ssh-keygen -t rsa -N "" -f /home/dietpi/.ssh/id_rsa 
   chown -R dietpi:dietpi /home/dietpi
