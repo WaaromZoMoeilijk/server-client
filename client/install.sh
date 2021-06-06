@@ -1,6 +1,6 @@
 #!/bin/bash
 # info@waaromzomoeilijk.nl
-# login root/raspberry, dietpi/raspberry, pi/raspberry
+# login root/raspberry, dietpi/raspberry
 
 # Version
 # v0.1
