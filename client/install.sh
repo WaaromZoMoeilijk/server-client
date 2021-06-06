@@ -107,7 +107,6 @@ cat > /etc/systemd/system/rc-local.service <<EOF
 [Unit]
 Description=/etc/rc.local
 ConditionPathExists=/etc/rc.local
-
 [Service]
 Type=forking
 ExecStart=/etc/rc.local start
@@ -115,22 +114,9 @@ TimeoutSec=0
 StandardOutput=tty
 RemainAfterExit=yes
 SysVStartPriority=99
-
 [Install]
 WantedBy=multi-user.target
 EOF
-
-# Touch for now
-touch /etc/rc.local
-
-# Set execute permission
-chmod +x /etc/rc.local
-
-# Enable service
-systemctl enable rc-local
-
-# Start service
-systemctl start rc-local
 
 # Add rc.local file
 cat > /etc/rc.local <<EOF
@@ -146,14 +132,24 @@ cat > /etc/rc.local <<EOF
 # bits.
 #
 # By default this script does nothing.
-
 # Run info screen on HDMI and Web
-
 # Start info screen on HDMI and Web
 /usr/bin/python3 /home/dietpi/a.py &
-
 exit 0
 EOF
+
+# Set execute permission
+chmod +x /etc/rc.local
+
+# Enable service
+systemctl enable rc-local
+
+# Start service
+systemctl start rc-local
+
+sed -i 's|exit 0|/usr/bin/python3 /home/dietpi/a.py &|g' /etc/rc.local
+echo >> /etc/rc.local
+echo "exit 0" >> /etc/rc.local
 
 fi
 
