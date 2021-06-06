@@ -25,36 +25,36 @@ echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99force-ipv4
 # Update
 export "$DEBIAN_FRONTEND"
 export "$DEBIAN_PRIORITY"
-clear ; echo "Auto clean"
-apt_autoclean & spinner
-clear ; echo "Auto remove"
-apt_autoremove & spinner
-clear ; echo "Update"
-apt_update & spinner
-clear ; echo "Upgrade"
-apt_upgrade & spinner
+#clear ; echo "Auto clean"
+apt_autoclean #& spinner
+#clear ; echo "Auto remove"
+apt_autoremove #& spinner
+#clear ; echo "Update"
+apt_update #& spinner
+#clear ; echo "Upgrade"
+apt_upgrade #& spinner
 
 ###################################
 # Dependencies
-apt_install \
-      jq \
-      git \
-      nano \
-      curl \
-      python3 \
-      python3-pip \
-      python3-pygame \
-      python3-requests \
-      python3-setuptools \
-      unattended-upgrades \
-      python3-requests \
-      openssh-server \
-      avahi-daemon \
-      libnss-mdns \
-      miniupnpc \
-      net-tools \
-      sshpass
-     
+apt install -y \
+	jq \
+	git \
+	nano \
+	curl \
+	python3 \
+	python3-pip \
+	python3-pygame \
+	python3-requests \
+	python3-setuptools \
+	unattended-upgrades \
+	python3-requests \
+	openssh-server \
+	avahi-daemon \
+	libnss-mdns \
+	miniupnpc \
+	net-tools \
+	sshpass
+
 ###################################
 # Set timezone based upon WAN ip 
 curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
@@ -65,7 +65,7 @@ curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
 ###################################
 # Temp user, needs a one time password during installation to setup ssh keys.
 # Will be replaced with an API mechanism to retrieve clients pub keys.
-  clear ; echo "Creating user and keys"
+#  clear ; echo "Creating user and keys"
   #rm -r "$TEMPPI"
   #useradd -m -d /home/dietpi -p $(openssl passwd -crypt raspberry) pi
   #usermod -aG sudo pi
@@ -88,7 +88,7 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24
 
 ###################################
 # Clone git repo
-clear
+#clear
 echo "Cloning Git Repo"
 if [ -d "$GITDIR" ]; then
   rm -r "$GITDIR"
@@ -99,7 +99,7 @@ git clone "$REPO" "$GITDIR"
 ###################################
 # Add rc.local
 # Add systemd service
-clear
+#clear
 echo "Adding RC.local"
 
 if [ -f "/etc/rc.local" ]; then
@@ -214,7 +214,7 @@ fi
 
 ###################################
 # Client setup
-clear
+#clear
 echo "Setup client"
 if [ -d "$DJANGO" ]; then
       echo "Django project exists, removing..."
@@ -226,7 +226,7 @@ mv "$GITDIR"/media/bg.jpg "$TEMPPI"/
 /usr/bin/python3 "$TEMPPI"/client.py
 chown -R dietpi:dietpi /home/dietpi
 chmod -R 600 /home/dietpi/.ssh/*
-clear
+#clear
 
 #sleep 25
 #reboot
