@@ -2,7 +2,6 @@
 # Folders
 CONFIG="/boot/config.txt"
 GITDIR="/var/opt/server-client"
-REPO="https://github.com/ezraholm50/server-client" 
 DJANGO="/home/dietpi/pidjango"
 HOME="/home/dietpi"
 
@@ -15,8 +14,9 @@ GATEWAY=$(ip route | grep default | awk '{print $3}')
 IFACE=$(ip r | grep "default via" | awk '{print $5}')
 ADDRESS=$(hostname -I | cut -d ' ' -f 1)
 
-# Misc
+# Links
 ISSUES="https://github.com/ezraholm50/server-client"
+REPO="https://github.com/ezraholm50/server-client" 
 
 # Functions
 # If script is running as root?
