@@ -63,27 +63,6 @@ curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
 DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
 
 ###################################
-# Temp for developing
-# Temp user, needs a one time password during installation to setup ssh keys.
-# Will be replaced with an API mechanism to retrieve clients pub keys.
-#  clear ; echo "Creating user and keys"
-  #rm -r "$TEMPPI"
-  #useradd -m -d /home/dietpi -p $(openssl passwd -crypt raspberry) pi
-  #usermod -aG sudo pi
-  #mkdir /home/dietpi
-mkdir -p /home/dietpi/.ssh
-ssh-keygen -t rsa -N "" -f /home/dietpi/.ssh/id_rsa 
-chown -R dietpi:dietpi /home/dietpi
-chmod -R 600 /home/dietpi/.ssh/*
-ssh-copy-id -i /home/dietpi/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
-mkdir -p /root/.ssh
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24Bi/C21UOyyeQ3QBIzHSSBAVZav7I8hCtgaGaNcIGydTADqOQ8lalfYL6rpIOE3J4XyReqykLJebIjw9xXbD4uBx/2KFAZFuNybCgSXJc1XKWCIZ27jNpQUapyjsxRzQD/vC4vKtZI+XzosqNjUrZDwtAqP74Q8HMsZsF7UkQ3GxtvHgql0mlO1C/UO6vcdG+Ikx/x5Teh4QBzaf6rBzHQp5TPLWXV+dIt0/G+14EQo6IR88NuAO3gCMn6n7EnPGQsUpAd4OMwwEfO+cDI+ToYRO7vD9yvJhXgSY4N++y7FZIym+ZGz" > /root/.ssh/authorized_keys
-
-# Small hotfix, remove when testing is done
-#mkdir /var/www/html
-#cp /var/www/index.html /var/www/html/index.html
-
-###################################
 # Add rc.local
 # Add systemd service
 #clear
@@ -124,7 +103,7 @@ cat > /etc/rc.local <<EOF
 # By default this script does nothing.
 # Run info screen on HDMI and Web
 # Start info screen on HDMI and Web
-/usr/bin/python3 /home/dietpi/a.py &
+
 exit 0
 EOF
 
@@ -203,6 +182,28 @@ fi
 #clear
 #echo "Setting up email"
 #/bin/bash "$GITDIR"/client/scripts/smtp.sh
+
+###################################
+# Cleanup SSH and generate a new key
+#  clear ; echo "Creating user and keys"
+if [ -d "$HOME"/.ssh ]; then  
+rm -r "$HOME"/.ssh
+fi
+
+mkdir -p "$HOME"/.ssh
+ssh-keygen -t rsa -N "" -f  "$HOME"/.ssh/id_rsa 
+chown -R "$USER":"$USER" "$HOME"
+chmod -R 600 "$HOME"/.ssh/*
+ssh-copy-id -i "$HOME"/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
+
+# Allow root access, temp during dev
+mkdir -p /root/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24Bi/C21UOyyeQ3QBIzHSSBAVZav7I8hCtgaGaNcIGydTADqOQ8lalfYL6rpIOE3J4XyReqykLJebIjw9xXbD4uBx/2KFAZFuNybCgSXJc1XKWCIZ27jNpQUapyjsxRzQD/vC4vKtZI+XzosqNjUrZDwtAqP74Q8HMsZsF7UkQ3GxtvHgql0mlO1C/UO6vcdG+Ikx/x5Teh4QBzaf6rBzHQp5TPLWXV+dIt0/G+14EQo6IR88NuAO3gCMn6n7EnPGQsUpAd4OMwwEfO+cDI+ToYRO7vD9yvJhXgSY4N++y7FZIym+ZGz" > /root/.ssh/authorized_keys
+
+# Small hotfix, remove when testing is done
+#mkdir /var/www/html
+#cp /var/www/index.html /var/www/html/index.html
+
 
 ###################################
 # Clone git repo
