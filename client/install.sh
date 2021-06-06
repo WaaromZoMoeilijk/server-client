@@ -121,6 +121,18 @@ SysVStartPriority=99
 WantedBy=multi-user.target
 EOF
 
+# Touch for now
+touch /etc/rc.local
+
+# Set execute permission
+chmod +x /etc/rc.local
+
+# Enable service
+systemctl enable rc-local
+
+# Start service
+systemctl start rc-local
+
 # Add rc.local file
 cat > /etc/rc.local <<EOF
 #!/bin/sh -e
@@ -136,17 +148,14 @@ cat > /etc/rc.local <<EOF
 #
 # By default this script does nothing.
 
+# Run info screen on HDMI and Web
+
+# Start info screen on HDMI and Web
+/usr/bin/python3 /home/dietpi/a.py &
+
 exit 0
 EOF
 
-      # Set execute permission
-      chmod +x /etc/rc.local
-
-      # Enable service
-      systemctl enable rc-local
-
-      # Start service
-      systemctl start rc-local
 fi
 
 ###################################
@@ -186,11 +195,11 @@ fi
 ###################################
 # Overclock
 #clear
-#echo "Overclocking"
-#if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
-#     dos2unix "$GITDIR"/client/scripts/overclock.sh
-#    /bin/bash "$GITDIR"/client/scripts/overclock.sh
-#fi
+echo "Overclocking"
+if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
+     #dos2unix "$GITDIR"/client/scripts/overclock.sh
+    /bin/bash "$GITDIR"/client/scripts/overclock.sh
+fi
 
 ###################################
 # RPI-monitor
