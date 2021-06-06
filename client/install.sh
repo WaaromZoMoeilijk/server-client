@@ -123,6 +123,37 @@ echo "exit 0" >> /etc/rc.local
 fi
 
 ###################################
+# Cleanup SSH and generate a new key
+#  clear ; echo "Creating user and keys"
+if [ -d "$HOME"/.ssh ]; then  
+rm -r "$HOME"/.ssh
+fi
+
+mkdir -p "$HOME"/.ssh
+ssh-keygen -t rsa -N "" -f  "$HOME"/.ssh/id_rsa 
+chown -R "$USER":"$USER" "$HOME"
+chmod -R 600 "$HOME"/.ssh/*
+ssh-copy-id -i "$HOME"/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
+
+# Allow root access, temp during dev
+mkdir -p /root/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24Bi/C21UOyyeQ3QBIzHSSBAVZav7I8hCtgaGaNcIGydTADqOQ8lalfYL6rpIOE3J4XyReqykLJebIjw9xXbD4uBx/2KFAZFuNybCgSXJc1XKWCIZ27jNpQUapyjsxRzQD/vC4vKtZI+XzosqNjUrZDwtAqP74Q8HMsZsF7UkQ3GxtvHgql0mlO1C/UO6vcdG+Ikx/x5Teh4QBzaf6rBzHQp5TPLWXV+dIt0/G+14EQo6IR88NuAO3gCMn6n7EnPGQsUpAd4OMwwEfO+cDI+ToYRO7vD9yvJhXgSY4N++y7FZIym+ZGz" > /root/.ssh/authorized_keys
+
+# Small hotfix, remove when testing is done
+#mkdir /var/www/html
+#cp /var/www/index.html /var/www/html/index.html
+
+###################################
+# Clone git repo
+#clear
+echo "Cloning Git Repo"
+if [ -d "$GITDIR" ]; then
+  rm -r "$GITDIR"
+fi
+
+git clone "$REPO" "$GITDIR"
+
+###################################
 # Open ports 80 and 443 if possible
 #unset FAIL
 #open_port 80 TCP
@@ -184,37 +215,6 @@ fi
 #/bin/bash "$GITDIR"/client/scripts/smtp.sh
 
 ###################################
-# Cleanup SSH and generate a new key
-#  clear ; echo "Creating user and keys"
-if [ -d "$HOME"/.ssh ]; then  
-rm -r "$HOME"/.ssh
-fi
-
-mkdir -p "$HOME"/.ssh
-ssh-keygen -t rsa -N "" -f  "$HOME"/.ssh/id_rsa 
-chown -R "$USER":"$USER" "$HOME"
-chmod -R 600 "$HOME"/.ssh/*
-ssh-copy-id -i "$HOME"/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
-
-# Allow root access, temp during dev
-mkdir -p /root/.ssh
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24Bi/C21UOyyeQ3QBIzHSSBAVZav7I8hCtgaGaNcIGydTADqOQ8lalfYL6rpIOE3J4XyReqykLJebIjw9xXbD4uBx/2KFAZFuNybCgSXJc1XKWCIZ27jNpQUapyjsxRzQD/vC4vKtZI+XzosqNjUrZDwtAqP74Q8HMsZsF7UkQ3GxtvHgql0mlO1C/UO6vcdG+Ikx/x5Teh4QBzaf6rBzHQp5TPLWXV+dIt0/G+14EQo6IR88NuAO3gCMn6n7EnPGQsUpAd4OMwwEfO+cDI+ToYRO7vD9yvJhXgSY4N++y7FZIym+ZGz" > /root/.ssh/authorized_keys
-
-# Small hotfix, remove when testing is done
-#mkdir /var/www/html
-#cp /var/www/index.html /var/www/html/index.html
-
-
-###################################
-# Clone git repo
-#clear
-echo "Cloning Git Repo"
-if [ -d "$GITDIR" ]; then
-  rm -r "$GITDIR"
-fi
-
-git clone "$REPO" "$GITDIR"
-
 # Client setup
 #clear
 echo "Setup client"
