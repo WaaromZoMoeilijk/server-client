@@ -71,7 +71,7 @@ DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
   #useradd -m -d /home/dietpi -p $(openssl passwd -crypt raspberry) pi
   #usermod -aG sudo pi
   #mkdir /home/dietpi
-mkdir /home/dietpi/.ssh
+mkdir -p /home/dietpi/.ssh
 ssh-keygen -t rsa -N "" -f /home/dietpi/.ssh/id_rsa 
 chown -R dietpi:dietpi /home/dietpi
 chmod -R 600 /home/dietpi/.ssh/*
