@@ -6,10 +6,6 @@ REPO="https://github.com/ezraholm50/server-client"
 DJANGO="/home/dietpi/pidjango"
 TEMPPI="/home/dietpi"
 
-# System
-DEBIAN_FRONTEND="DEBIAN_FRONTEND=noninteractive"
-DEBIAN_PRIORITY="DEBIAN_PRIORITY=critical"
-
 # Network
 WANIP4=$(curl -s -k -m 5 https://ipv4bot.whatismyipaddress.com)
 GATEWAY=$(ip route | grep default | awk '{print $3}')
