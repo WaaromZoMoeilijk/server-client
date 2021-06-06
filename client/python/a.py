@@ -114,7 +114,7 @@ aaaa
 </table></body></html>
 '''
 
-#	index_html = index_html.replace('iiii',str(cf.read('id')))
+	index_html = index_html.replace('iiii',str(cf.read('id')))
 	index_html = index_html.replace('cccc',ssm.computernr)
 	if cf.read('activation_code') == '':
 		index_html = index_html.replace('Temporary ','')
