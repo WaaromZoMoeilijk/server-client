@@ -19,7 +19,7 @@ pygame.mouse.set_visible(0)
 screen = pygame.display.set_mode((0,0),pygame.RESIZABLE)
 tteller = 0
 
-bg = pygame.image.load("bg.jpg")
+bg = pygame.image.load("/home/dietpi/bg.jpg")
 
 try:
 	sysargv = sys.argv[1]
@@ -52,10 +52,10 @@ while True:
 	label = myfont.render(str(ssm.computernr), 1, GREEN)
 	screen.blit(label, (500, 100))
 
-#	label = myfont.render("WAN (outside) IP:", 1, WHITE)
-#	screen.blit(label, (50, 200))
-#    label = myfont.render(str(ssm.ethIPaddress), 1, GREEN)
-#	screen.blit(label, (500, 200))
+	label = myfont.render("WAN (outside) IP:", 1, WHITE)
+	screen.blit(label, (50, 200))
+	label = myfont.render(str(ssm.ethIPaddress), 1, GREEN)
+	screen.blit(label, (500, 200))
 
 	label = myfont.render("LAN (inside) IP:", 1, WHITE)
 	screen.blit(label, (50, 150))
