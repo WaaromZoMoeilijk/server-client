@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# SSH keys
-/bin/rm /etc/ssh/ssh_host_*
-/bin/rm /root/.ssh/id_rsa
-/bin/rm /root/.ssh/id_rsa.pub
-/bin/rm /home/dietpi/.ssh/id_rsa
-/bin/rm /home/dietpi/.ssh/id_rsa.pub
-
-dpkg-reconfigure openssh-server
-
 # Setup maintenance/support user
 adduser maintenance
 usermod -aG sudo maintenance
