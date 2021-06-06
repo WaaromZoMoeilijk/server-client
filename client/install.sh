@@ -60,7 +60,7 @@ apt install -y \
 curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
 
 # unattended-upgrades
-dpkg-reconfigure unattended-upgrades
+DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
 
 ###################################
 # Temp for developing
@@ -71,7 +71,6 @@ dpkg-reconfigure unattended-upgrades
   #useradd -m -d /home/dietpi -p $(openssl passwd -crypt raspberry) pi
   #usermod -aG sudo pi
   #mkdir /home/dietpi
-rm -r /home/dietpi/.ssh
 mkdir /home/dietpi/.ssh
 ssh-keygen -t rsa -N "" -f /home/dietpi/.ssh/id_rsa 
 chown -R dietpi:dietpi /home/dietpi
