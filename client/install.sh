@@ -9,6 +9,12 @@
 # Variables & functions
 source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
 
+# Check for errors + debug code and abort if something isn't right
+# 1 = ON
+# 0 = OFF
+DEBUG=1
+debug_mode
+
 # Check if script runs as root
 root_check
 
@@ -27,9 +33,10 @@ apt_upgrade & spinner
 
 ###################################
 # Dependencies
-apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
+apt_install \
       nano \
       git \
+      curl \
       python3 \
       python3-pip \
       python3-pygame \
@@ -37,17 +44,20 @@ apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold"
       python3-setuptools \
       unattended-upgrades \
       openssh-server \
-      miniupnpc \      
+      miniupnpc \
       sshpass \
       jq \
       net-tools
 
-apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install \
+apt_install \
       libnss-mdns \
       python3-requests \
       avahi-daemon
       
 ###################################
+# Prefer IPv4 for apt
+echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99force-ipv4
+
 # Set timezone based upon WAN ip 
 curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
 
