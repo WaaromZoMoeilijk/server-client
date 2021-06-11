@@ -64,17 +64,31 @@ class MyAccountForm(forms.Form):
         fields = ('__all__')
 
     def clean(self):
-        baviaan = 'aap'
+        baviaan = self.cleaned_data.get('name')
 
-    name = forms.CharField()
+    name = forms.CharField(required=False)
     userid  = forms.CharField(required=False,disabled=True,label="Userid")
     email = forms.EmailField(required=False)
-    password = forms.CharField(required=False,widget=forms.PasswordInput)
-    support_end_date = forms.DateTimeField(disabled=True)
+    support_end_date = forms.DateTimeField(required=False,disabled=True)
     last_login = forms.DateTimeField(required=False,disabled=True)
     last_updated = forms.DateTimeField(required=False,disabled=True)
     created = forms.DateTimeField(required=False,disabled=True)
     id = forms.IntegerField(required=False,disabled=True)
+
+class PasswordForm(forms.Form):
+    class Meta:
+        model = Xuser
+        fields = ('__all__')
+
+    def clean(self):
+        password = self.cleaned_data.get('password')
+        confirm = self.data.get('confirm')
+        if password != confirm:
+            raise forms.ValidationError("Passwords dont match")
+            return password
+
+    password = forms.CharField(required=True,widget=forms.PasswordInput)
+    confirm = forms.CharField(required = True,widget=forms.PasswordInput)
 
 class NewNetworkForm(forms.Form):
     class Meta:
@@ -124,11 +138,22 @@ class NewNetworkForm(forms.Form):
     eth_network_domain = forms.GenericIPAddressField(required=False)
 
 class RegisterForm(forms.Form):
+    class Meta:
+        model = Xuser
+        fields = ('__all__')
+
+    def clean(self):
+        password = self.cleaned_data.get('password')
+        confirm = self.data.get('confirm')
+        if password != confirm:
+            raise forms.ValidationError("Passwords dont match")
+            return password
     name = forms.CharField(required=True,min_length=5)
     userid = forms.CharField(required=True,min_length=5)
     email = forms.EmailField(required=True)
     password = forms.CharField(required=True,widget=forms.PasswordInput,min_length=8)
-    #password2 = forms.CharField(required=True,widget=forms.PasswordInput,min_length=8)
+    confirm = forms.CharField(required=True,widget=forms.PasswordInput)
+
 
 class RpiForm(forms.Form):
     computernr = forms.CharField(disabled=True)

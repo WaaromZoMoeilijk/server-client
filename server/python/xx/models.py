@@ -5,7 +5,8 @@ from django.db import models
 class Xuser(models.Model):
 	name = models.CharField(max_length=50, null=True)
 	userid  = models.CharField(max_length=12,blank=False, null=True)
-	password = models.CharField(max_length=12,blank=False, null=True)
+	password = models.CharField(max_length=12,blank=True, null=True, help_text="at least 8 long, one capital, one special character")
+	password2 = models.CharField(max_length=12,blank=True, null=True)
 	email = models.EmailField(blank=True, null=True)
 	new_email = models.EmailField(blank=True, null=True)
 	activation_code = models.CharField(max_length=4,blank=True, null=True)
@@ -26,9 +27,12 @@ class Xuser(models.Model):
 
 	def get_menu(self):
 		if self.role == 'admin':
-			sstr = {'/xx/newrpi': 'new devices', '/xx/users': 'users', '/xx/settings':'settings', '/xx/clicommands':'cli commands', '/xx/myaccount':'my account', '/':'logout'}
+			sstr = {'/xx/newrpi': 'new devices', '/xx/users': 'users', '/xx/settings':'settings', '/xx/clicommands':'cli commands'}
 		else:
-			sstr = {'/xx/xrpis': 'my devices', '/xx/xnewrpi': 'new device', '/xx/myaccount':'my account', '/':'logout'}
+			sstr = {'/xx/xrpis': 'my devices', '/xx/xnewrpi': 'new device'}
+		sstr['/xx/myaccount'] = 'my account'
+		sstr['/xx/password'] = 'reset password'
+		sstr['/'] = 'logout'
 		return sstr
 
 class CliCommand(models.Model):
@@ -93,6 +97,25 @@ class Rpi(models.Model):
 
 	def __str__(self):
 		return str(self.id) + ' ' + self.computernr
+	def asdict(self):
+		respons = {}
+		respons['id'] = self.id
+		respons['computernr'] = self.computernr
+		respons['version'] = self.version
+		respons['wifiAvailableNetworks'] = self.wifiAvailableNetworks
+		respons['wifiCurrentNetwork'] = self.wifiCurrentNetwork
+		respons['wifiKnownNetworks'] = self.wifiKnownNetworks
+		respons['ipAddressWlan'] = self.ipAddressWlan
+		respons['ipAddressEth'] = self.ipAddressEth
+		respons['ipAddressWAN'] = self.ipAddressWAN
+		respons['ping_response_time'] = self.ping_response_time
+		respons['sd_card'] = self.sd_card
+		respons['id_rsa_pub'] = self.id_rsa_pub
+		respons['last_reboot'] = self.last_reboot
+		respons['created'] = self.created
+		respons['last_seen'] = self.last_seen
+		respons['userid'] = self.xuser.userid
+		return respons
 
 class RpiLogline(models.Model):
 	rpi = models.ForeignKey('Rpi', on_delete=models.CASCADE)

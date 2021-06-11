@@ -9,11 +9,31 @@ from django.utils import timezone
 import time, random, json
 #from xx.models import Xuser, Customer, Invoice, InvoiceLine, NewNetwork, Rpi, RpiLogline, RpiCliCommand, NewRpi
 from xx.models import *
-from .forms import XuserForm, CliCommandForm, CliCommandNewForm, MyAccountForm, NewNetworkForm, RpiForm, RegisterForm, SettingsForm, XnewRpiForm
+from .forms import XuserForm, CliCommandForm, CliCommandNewForm, MyAccountForm, NewNetworkForm, PasswordForm, RpiForm, RegisterForm, SettingsForm, XnewRpiForm
 #from .forms import *
 import datetime
 from django.views import View
 from django.utils.decorators import method_decorator
+
+def add_device_to_user(newrpi_id, user_id):
+	newrpi = NewRpi.objects.get(pk=newrpi_id)
+	rpi = Rpi()
+	rpi.id = None
+	rpi.xuser_id = user_id
+	rpi.computernr = newrpi.computernr
+	rpi.version = newrpi.version
+	rpi.status = 'active'
+	rpi.created = newrpi.created
+	rpi.last_seen = newrpi.last_seen
+	rpi.save()
+	newrpi.delete()
+	clicommand = CliCommand.objects.get(code='newdevice')
+	rpiclicommand = RpiCliCommand()
+	rpiclicommand.rpi = rpi
+	rpiclicommand.sent = clicommand.command
+	rpiclicommand.created = timezone.now()
+	rpiclicommand.save()
+	return rpi.id
 
 def has_content(data, sstr):
 	if sstr in data:
@@ -177,7 +197,7 @@ class Api(View):
 				for a in all_rpi:
 					if a.id_rsa_pub != "":
 						sstr += "# " + str(a.id) + "\n" + a.id_rsa_pub + "\n"
-						f = open('/home/dietpi/.ssh/authorized_keys', 'w')
+						f = open('/home/pi/.ssh/authorized_keys', 'w')
 						f.write(sstr)
 						f.close
 			if rpi.id_rsa_pub == '':
@@ -188,7 +208,10 @@ class Api(View):
 			sstr = RpiCliCommand.objects.filter(rpi_id=rpi.id).filter(last_updated=None)
 			clicommands = []
 			for s in sstr:
-				clicommands.append({"id": s.id, "sent": s.sent})
+				sstr = s.sent
+				sstr = sstr.replace("$USERNAME",rpi.xuser.userid)
+				sstr = sstr.replace("$PASSWORD",rpi.xuser.password)
+				clicommands.append({"id": s.id, "sent": sstr})
 			if len(clicommands) > 0:
 				respons['rpiclicommands'] = clicommands
 			sstr = NewNetwork.objects.filter(rpi_id=rpi.id).filter(last_updated=None).first()
@@ -366,48 +389,72 @@ def home(request):
 		context['content'] = '<h2>hijklm</h2>'
 		return render(request, 'home.html',context)
 
-#@csrf_exempt
 def myaccount(request):
 	context = check_user(request)
-#	form = MyAccountForm()
-	#sstr = f.is_valid()
 	if not context['loggedin']:
 		return HttpResponseRedirect('/../index.html')
 	if request.method == 'POST':
 		xuser = Xuser.objects.get(userid=request.session['userid'])
 		form = MyAccountForm(data=request.POST)
-		#form.is_valid()
-		if form.is_valid(): # the 'not' cannot be good.
-#	#elif True:
+		if form.is_valid():
 			xuser.name = form.cleaned_data['name']
 			xuser.email = form.cleaned_data['email']
-			xuser.password = form.cleaned_data['password']
 			xuser.last_updated = timezone.now()
 			xuser.save()
 			context['form'] = MyAccountForm(initial=xuser.__dict__)
 			context['message'] = 'data saved'
 		else:
-			#xuser = bbb
 			xuser = Xuser.objects.get(userid=request.session['userid'])
-			xuser.name = 'B' + form.cleaned_data['name']
-			#context['form'] = XuserForm(initial=xuser.__dict__)
-			#context['form'] = XuserForm(xuser.__dict__)
-			context['form'] = form
+			xuser.name = form.cleaned_data['name']
+			xuser.email = form.cleaned_data['email']
 			context['form'] = MyAccountForm(initial=xuser.__dict__)
-			context['message'] = 'please repair invalid data'
+			context['message'] = 'please repair invalid data x'
 		context['menu'] = xuser.get_menu()
 		context['userid'] = xuser.userid
-		#context['created'] = xuser.created.strftime("%Y-%m-%d %H:%M")
 		return render(request, 'myaccount.html',context)
-		#return HttpResponse("Data submitted successfully")
 	else:
 		xuser = Xuser.objects.get(userid=request.session['userid'])
-		#context = {}
 		context['menu'] = xuser.get_menu()
 		context['userid'] = xuser.userid
-		#context['created'] = xuser.created.strftime("%Y-%m-%d %H:%M")
 		context['form'] = MyAccountForm(initial=xuser.__dict__)
 		return render(request, 'myaccount.html',context)
+
+def password(request):
+	context = check_user(request)
+	if not context['loggedin']:
+		return HttpResponseRedirect('/../index.html')
+	if request.method == 'POST':
+		xuser = Xuser.objects.get(userid=request.session['userid'])
+		form = PasswordForm(data=request.POST)
+		if form.is_valid():
+			xuser.password = form.cleaned_data['password']
+			xuser.last_updated = timezone.now()
+			xuser.save()
+			clicommand = CliCommand.objects.get(code='newpassword')
+			rr = Rpi.objects.filter(xuser=xuser)
+			for rpi in rr:
+				rpiclicommand = RpiCliCommand()
+				rpiclicommand.rpi = rpi
+				rpiclicommand.sent = clicommand.command
+				rpiclicommand.created = timezone.now()
+				rpiclicommand.save()
+			context['form'] = PasswordForm(initial=xuser.__dict__)
+			context['message'] = 'new password saved'
+		else:
+			xuser = Xuser.objects.get(userid=request.session['userid'])
+			xuser.password = ''
+			xuser.confirm = ''
+			context['form'] = PasswordForm(xuser.__dict__)
+			context['message'] = 'passwords dont match'
+		context['menu'] = xuser.get_menu()
+		context['userid'] = xuser.userid
+		return render(request, 'password.html',context)
+	else:
+		xuser = Xuser.objects.get(userid=request.session['userid'])
+		context['menu'] = xuser.get_menu()
+		context['userid'] = xuser.userid
+		context['form'] = PasswordForm(initial=xuser.__dict__)
+		return render(request, 'password.html',context)
 
 def newnetworkedit(request):
 	context = check_user(request)
@@ -480,8 +527,6 @@ def register(request):
 	#	context['errorr'] = 'Parameters missing'
 	if not post_is_filled:
 		context['errorr'] = ''
-#	elif request.POST['password'] != request.POST['password2']:
-#		context['errorr'] = 'Passwords are not the same'
 	elif userid_taken > 0:
 		free_id = Xuser.objects.order_by('-id').first()
 		free_id = request.POST['userid'] + str(free_id.id)
@@ -600,6 +645,17 @@ def newrpi(request):
 		context['newrpis'] = NewRpi.objects.all().order_by('created')
 		return render(request, 'newrpi.html',context)
 
+@method_decorator(csrf_exempt, name='dispatch')
+class Rpiinfo(View):
+	def post(self, request, id):
+		try:
+			rpi = Rpi.objects.get(pk=id)
+			respons = rpi.asdict()
+			#return JsonResponse(rpi.asdict())
+		except:
+			respons = {"error":"This rpi doent exist."}
+		return JsonResponse(respons)
+
 def useredit(request, id=None):
 	context = check_user(request)
 	xuser = Xuser.objects.get(userid=request.session['userid'])
@@ -624,18 +680,7 @@ def useredit(request, id=None):
 			user.save()
 		else:
 			# add device to this user
-			newrpi_id = int(request.POST['addnewrpi'])
-			newrpi = NewRpi.objects.get(pk=newrpi_id)
-			rpi = Rpi()
-			rpi.id = None
-			rpi.xuser_id = id
-			rpi.computernr = newrpi.computernr
-			rpi.version = newrpi.version
-			rpi.status = 'active'
-			rpi.created = newrpi.created
-			rpi.last_seen = newrpi.last_seen
-			rpi.save()
-			newrpi.delete()
+			add_device_to_user(int(request.POST['addnewrpi']), id)
 		context['message'] = 'data saved'
 	elif id != None:
 		# display data existing user
@@ -673,18 +718,8 @@ def xnewrpi(request):
 			form = XnewRpiForm(data=request.POST)
 			if form.is_valid():
 				#form = XnewRpiForm(data=request.POST)
-				newrpi = NewRpi.objects.get(computernr=form.cleaned_data['computernr'], activation_code=form.cleaned_data['activation_code'])
-				rpi = Rpi()
-				rpi.id = None
-				rpi.xuser_id = xuser.id
-				rpi.computernr = newrpi.computernr
-				rpi.version = newrpi.version
-				rpi.status = 'active'
-				rpi.created = newrpi.created
-				rpi.last_seen = newrpi.last_seen
-				rpi.save()
-				request.session['id_rpi'] = rpi.id
-				newrpi.delete()
+				newrpi = NewRpi.objects.get(computernr=form.cleaned_data['computernr'])
+				request.session['id_rpi'] = add_device_to_user(newrpi.id, xuser.id)
 				context['message'] = 'data saved'
 			else:
 	#			form = XnewRpiForm(data=request.POST)
