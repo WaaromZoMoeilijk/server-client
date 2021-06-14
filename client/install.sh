@@ -41,19 +41,26 @@ apt install -y \
 	git \
 	nano \
 	curl \
+	unattended-upgrades \	
+	sshpass \
+	net-tools \	
+#	SMB
+	samba \
+	smbclient \
+	samba-common-bin \
+#	PY
 	python3 \
 	python3-pip \
 	python3-pygame \
 	python3-requests \
 	python3-setuptools \
-	unattended-upgrades \
 	python3-requests \
+#	SSH
 	openssh-server \
+#	DNS	
 	avahi-daemon \
 	libnss-mdns \
-	miniupnpc \
-	net-tools \
-	sshpass
+	miniupnpc 
 
 ###################################
 # Set timezone based upon WAN ip 
