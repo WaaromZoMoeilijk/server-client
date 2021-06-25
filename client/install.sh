@@ -256,6 +256,8 @@ chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/SAMBA/"$USERNAME"
 
 # Restart smbd
 service smbd restart
+
+# Config smb
 cat > /root/smb.json <<EOF
 [
     {
@@ -295,8 +297,9 @@ EOF
 #sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD"
 sudo -u www-data php /var/www/nextcloud/occ files_external:import /root/smb.json && rm -rf /root/smb.json
 
-# cronjob to check for files. also checkout smb inotify
-crontab -l | { cat; echo "*/15 0 0 0 0 sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
+# cronjob to check for files
+crontab -l | { cat; echo "2 0 0 0 sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
+crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 2"; } | crontab -
 
 ###################################
 # SMTP
