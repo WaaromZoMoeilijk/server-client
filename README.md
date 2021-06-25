@@ -60,7 +60,10 @@ In order for this to work please execute the following before doing anything els
 - Attach SSD & adapter / SDCard, ethernet and power (optionally a monitor) wait about 25 minutes (SDCard will take a lot longer).
 - Open a browser (Mobile/Desktop) and go to http://wzm.local or attatch a monitor and watch the initial installation. 
 - A setup screen appears with an activation code once the installation is complete. Could take more then the stated 25 minutes depending on your network connection.
-- Follow instructions
+- Follow instructions and on screen urls
+- After you have registered you can access your files via 
+* USERNAME.waaromzomoeilijk.nl
+* Windows network share (Use [option 1](https://www.tenforums.com/tutorials/112017-view-all-network-shares-windows-pc.html) Or use [this](https://www.onmsft.com/how-to/how-to-connect-to-a-network-share-in-windows-10) guide.)
 
 ```
 Username / Password - Gets set to password used on register.waaromzomoeilijk.nl after device activation.
@@ -82,7 +85,7 @@ Users can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can 
 * System config (milestone 2)
 * RAID (milestone 2)
 * User management (milestone 2)
-* Samba/NFS (milestone 3)
+* Samba 
 * Install various applications to extend functionality (milestone 3)
 * Backup/restore (milestone 3)
 
