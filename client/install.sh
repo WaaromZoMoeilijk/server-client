@@ -3,7 +3,7 @@
 # login root/raspberry, dietpi/raspberry
 
 # Version
-# v0.1
+# v0.2
 
 ###################################
 # Variables & functions
@@ -56,6 +56,7 @@ apt_install \
 	openssh-server \
 	avahi-daemon \
 	libnss-mdns \
+	php-pear \
 	miniupnpc
 
 ###################################
@@ -210,11 +211,11 @@ fi
 #clear
 #echo "Installing Nextcloud"
 #/bin/bash "$GITDIR"/client/scripts/nextcloud.sh
+
+# Enable external files app
 sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
 
-# Samba
-
-# Add samba share
+# Add samba config
 if [ -f "/etc/samba/smb.conf" ]; then
 cat >> /etc/samba/smb.conf <<EOF
 ["$USERNAME"]
@@ -227,8 +228,8 @@ directory mask = 0770
 Public = no
 EOF
 else  
-	echo "smb.conf doesn't exists, is it installed?"
-	apt_install -y samba samba-common-bin smbclient
+echo "smb.conf doesn't exists, is it installed?"
+apt_install samba samba-common-bin smbclient
 	
 cat >> /etc/samba/smb.conf <<EOF
 ["$USERNAME"]
@@ -245,12 +246,13 @@ fi
 # Create dirs
 mkdir -p /mnt/dietpi_userdata/SAMBA 
 mkdir -p /mnt/dietpi_userdata/SAMBA/"$USERNAME"
+
 # Permissions
 chown dietpi:dietpi /mnt/dietpi_userdata/SAMBA
 chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/SAMBA/"$USERNAME"
 
-# Add smb user
-(echo "$PASSWORD"; echo "$PASSWORD") | smbpasswd -a "$USERNAME"
+# Add smb user ; done in python upon registering
+#(echo "$PASSWORD"; echo "$PASSWORD") | smbpasswd -a "$USERNAME"
 
 # Restart smbd
 service smbd restart
