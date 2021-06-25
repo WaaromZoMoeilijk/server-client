@@ -210,7 +210,33 @@ fi
 #clear
 #echo "Installing Nextcloud"
 #/bin/bash "$GITDIR"/client/scripts/nextcloud.sh
+sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
 
+# Samba
+mkdir -p /mnt/dietpi_userdata/SAMBA
+
+# Add samba share
+if [ -f "/etc/samba/smb.conf" ]; then
+cat >> /etc/samba/smb.conf <<EOF
+["$USERNAME"]
+valid users = "$USERNAME"
+Path = /mnt/dietpi_userdata/SAMBA/"$USERNAME"
+Browseable = yes
+Writeable = Yes
+create mask = 0770
+directory mask = 0770
+Public = no
+EOF
+
+else  
+	echo "smb.conf doesn't exists, is it installed?"
+fi
+
+
+# Add rc.local file
+cat > /etc/rc.local <<EOF
+
+EOF
 ###################################
 # SMTP
 #clear
