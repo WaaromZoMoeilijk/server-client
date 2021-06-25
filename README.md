@@ -57,9 +57,9 @@ In order for this to work please execute the following before doing anything els
 - Flash the base image to a proper SSD like a [2TB Samsung EVO](https://www.amazon.com/SAMSUNG-Inch-Internal-MZ-77E2T0B-AM/dp/B08QB93S6R/ref=sr_1_1?dchild=1&keywords=samsung+evo+2tb&qid=1622628534&sr=8-1)/[WD RED](https://www.amazon.com/Red-SA500-NAS-NAND-Internal/dp/B07YFGG261/ref=sr_1_3?dchild=1&keywords=wd+nas+2tb+ssd&qid=1622628747&s=electronics&sr=1-3) with a [SATA3 to USB3 adapter](https://www.amazon.com/dp/B00XLAZODE/ref=twister_B07X6JDCVM?_encoding=UTF8&th=1). Or an SDCard reader.
 
 ## First boot
-- Attach SSD & adapter / SDCard, ethernet and power (optionally a monitor) wait 15 minutes (SDCard will take up to an hour).
+- Attach SSD & adapter / SDCard, ethernet and power (optionally a monitor) wait about 25 minutes (SDCard will take a lot longer).
 - Open a browser (Mobile/Desktop) and go to http://wzm.local or attatch a monitor and watch the initial installation. 
-- A setup screen appears with an activation code once the installation is complete. Could take 30 minutes depending on your network connection.
+- A setup screen appears with an activation code once the installation is complete. Could take more then the stated 25 minutes depending on your network connection.
 - Follow instructions
 
 ```
@@ -70,7 +70,7 @@ dietpi    raspberry
 
 ## Optional installation options
 - On any debian based RaspberryPI4 you could do: `wget https://raw.githubusercontent.com/ezraholm50/server-client/main/client/install.sh && sudo bash install.sh`
-- If you are using DietPI you can add this [dietpi.txt](https://raw.githubusercontent.com/ezraholm50/server-client/main/client/dietpi.txt) file to your /boot/ directory (This is how the base image works)
+- If you are using DietPI you can add this [dietpi.txt](https://raw.githubusercontent.com/ezraholm50/server-client/main/client/dietpi.txt) file to your /boot/ directory
 
 ## Functionalities user management panel:
 
