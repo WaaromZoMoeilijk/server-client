@@ -6,4 +6,5 @@
 /usr/bin/sudo -u www-data php /var/www/nextcloud/occ user:add --password-from-env --GROUP="admin" "$USERNAME" 
 /usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME" 
 (echo "$PASSWORD"; echo "$PASSWORD") | /usr/bin/sudo smbpasswd -as "$USERNAME"
+sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD"
 /usr/bin/sudo -u www-data export OC_PASS=""
