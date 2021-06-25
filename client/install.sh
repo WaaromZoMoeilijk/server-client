@@ -36,31 +36,27 @@ apt_upgrade #& spinner
 
 ###################################
 # Dependencies
-apt install -y \
+apt_install \
 	jq \
 	git \
 	nano \
 	curl \
-	unattended-upgrades \	
+	unattended-upgrades \
 	sshpass \
-	net-tools \	
-#	SMB
+	net-tools \
 	samba \
 	smbclient \
 	samba-common-bin \
-#	PY
 	python3 \
 	python3-pip \
 	python3-pygame \
 	python3-requests \
 	python3-setuptools \
 	python3-requests \
-#	SSH
 	openssh-server \
-#	DNS	
 	avahi-daemon \
 	libnss-mdns \
-	miniupnpc 
+	miniupnpc
 
 ###################################
 # Set timezone based upon WAN ip 
