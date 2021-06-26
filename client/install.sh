@@ -240,7 +240,7 @@ chmod -R 600 "$HOME"/.ssh/*
 
 #clear
 
-"$REBOOT" &
-#reboot
+sleep 10
+reboot &
 
 exit 0
