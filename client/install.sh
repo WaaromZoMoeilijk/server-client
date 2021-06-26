@@ -36,7 +36,7 @@ apt_upgrade #& spinner
 
 ###################################
 # Dependencies
-apt_install \
+apt install -y \
 	jq \
 	git \
 	nano \
