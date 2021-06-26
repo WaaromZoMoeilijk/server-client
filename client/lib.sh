@@ -58,19 +58,19 @@ fi
 
 # APT install
 apt_install() {
-    apt -y install
+    apt install -y
 }
 # APT update
 apt_update() {
-    apt -y update
+    apt update
 }
 # APT fullupgrade
 apt_upgrade() {
-    sudo -E apt -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade
+    sudo -E apt -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" full-upgrade -y 
 }
 # APT autoremove
 apt_autoremove() {
-    apt -y autoremove
+    apt autoremove -y
 }
 # APT autoclean
 apt_autoclean() {
