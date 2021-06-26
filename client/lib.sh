@@ -18,6 +18,9 @@ ADDRESS=$(hostname -I | cut -d ' ' -f 1)
 ISSUES="https://github.com/ezraholm50/server-client"
 REPO="https://github.com/ezraholm50/server-client" 
 
+# Misc
+REBOOT="sleep 40 && reboot"
+
 # Functions
 # If script is running as root?
 #
