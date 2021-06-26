@@ -241,6 +241,10 @@ chmod -R 600 "$HOME"/.ssh/*
 #clear
 
 sleep 10
-reboot &
+
+if yesno_box_yes "Reboot now! This is a temp fix, just hit ok"
+then
+reboot
+fi
 
 exit 0
