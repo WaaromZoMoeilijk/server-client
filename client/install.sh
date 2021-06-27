@@ -138,7 +138,7 @@ mkdir -p "$HOME"/.ssh
 ssh-keygen -t rsa -N "" -f  "$HOME"/.ssh/id_rsa 
 chown -R "$USER":"$USER" "$HOME"
 chmod -R 600 "$HOME"/.ssh/*
-ssh-copy-id -i "$HOME"/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
+#ssh-copy-id -i "$HOME"/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
 
 # Allow root access, temp during dev
 mkdir -p /root/.ssh
@@ -214,6 +214,12 @@ fi
 #/bin/bash "$GITDIR"/client/scripts/nextcloud.sh
 
 ###################################
+# Samba
+#clear
+#echo "Installing Samba share"
+#/bin/bash "$GITDIR"/client/scripts/smb.sh
+
+###################################
 # SMTP
 #clear
 #echo "Setting up email"
@@ -243,9 +249,9 @@ chmod -R 600 "$HOME"/.ssh/*
 
 sleep 10
 
-if yesno_box_yes "Reboot now! This is a temp fix, just hit ok"
+if yesno_box_yes "Installation done, please reboot..."
 then
-reboot
+	reboot
 fi
 
 exit 0
