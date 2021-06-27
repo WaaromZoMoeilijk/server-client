@@ -85,6 +85,11 @@ class Rpi(models.Model):
 	ipAddressWAN = models.CharField(max_length=36,blank=True, null=True)
 	ping_response_time = models.CharField(max_length=50,blank=True, null=True) # server/client
 	sd_card = models.CharField(max_length=36,blank=True, null=True) # size and free space
+	gateway = models.CharField(max_length=36,blank=True, null=True)
+	subnetWlan = models.CharField(max_length=36,blank=True, null=True)
+	subnetEth = models.CharField(max_length=36,blank=True, null=True)
+	nameserver = models.CharField(max_length=36,blank=True, null=True)
+	ssh_port = models.CharField(max_length=36,blank=True, null=True)
 	id_rsa_pub = models.CharField(max_length=400,default='',blank=True)
 	last_reboot = models.DateTimeField(max_length=24,blank=True, null=True)
 	STATI = [

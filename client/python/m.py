@@ -98,6 +98,45 @@ if ourserver == '':
 if ourserver[:4] != 'http':
 	ourserver = 'https://' + ourserver
 
+cf.check_update_config('ipAddressWlan', ssm.wlanIPaddress)
+cf.check_update_config('ipAddressEth', ssm.ethIPaddress)
+cf.check_update_config('wifiCurrentNetwork', ssm.wifiCurrentNetwork)
+ps = subprocess.run(["route","-n"], capture_output=True, text=True).stdout
+ps = ps.split("\n")
+gateway = ''
+for sstr in ps:
+	print('sstr:' + sstr + 'x')
+	while sstr.replace("  "," ") != sstr:
+		sstr = sstr.replace("  "," ")
+	sstr = sstr.split(" ")
+	if len(sstr) > 1:
+		sstr = sstr[1]
+		if sstr != '0.0.0.0' and len(sstr.replace('.','')) + 3 == len(sstr):
+			gateway = sstr
+cf.check_update_config('gateway', gateway) 
+if ssm.ethIPaddress == '':
+	subnetEth = ''
+else:
+	subnetEth = ssm.ethIPaddress
+	subnetEth = subnetEth.split('.')
+	subnetEth = subnetEth[0] + '.' + subnetEth[1] + '.' + subnetEth[2] + '.0'
+cf.check_update_config('subnetEth', subnetEth)
+if ssm.wlanIPaddress == '':
+	subnetWlan = ''
+else:
+	subnetWlan = ssm.wlanIPaddress
+	subnetWlan = subnetWlan.split('.')
+	subnetWlan = subnetWlan[0] + '.' + subnetWlan[1] + '.' + subnetWlan[2] + '.0' 
+cf.check_update_config('subnetWlan', subnetWlan)
+nameserver = ''
+f = open('/etc/resolv.conf', 'r')
+f = f.readlines()
+for sstr in f:
+	if sstr[:10] == 'nameserver':
+		nameserver = sstr[11:]
+	nameserver = nameserver.replace("\n","")
+cf.check_update_config('nameserver', nameserver)
+
 netwerkdata = {}
 netwerkdata['wifiAvailableNetworks'] = ssm.wifilist
 netwerkdata['wifiCurrentNetwork'] = ssm.wifiCurrentNetwork
@@ -105,6 +144,11 @@ netwerkdata['wifiKnownNetworks'] = ssm.wifiKnownNetworks
 netwerkdata['ipAddressWlan'] = ssm.wlanIPaddress
 netwerkdata['ipAddressEth'] = ssm.ethIPaddress
 netwerkdata['sd_card'] = ssm.sd_info
+netwerkdata['gateway'] = gateway
+netwerkdata['subnetEth'] = subnetEth
+netwerkdata['subnetWlan'] = subnetWlan
+netwerkdata['nameserver'] = nameserver
+netwerkdata['ssh_port'] = cf.read('ssh_port')
 
 # send only if something has changed:
 if os.path.isfile('/dev/shm/data_str'):
@@ -121,7 +165,7 @@ if networkstring_old != networkstring_new:
 
 # get date-time of last reboot
 	ps = subprocess.run(['uptime','-s'], capture_output=True, text=True).stdout
-	netwerkdata['last_reboot'] = str(ps)[2:].replace("\\n'","")
+	netwerkdata['last_reboot'] = str(ps)[2:].replace("\\n'","").replace("\n","")
 # get statistics about ping
 	sstr = ourserver.replace('http://','')
 	sstr = sstr.replace('https://','')
@@ -157,23 +201,23 @@ if response.status_code != 200:
 else:
 	sts.empty()
 	api_answer = json.loads(response.content.decode('utf-8'))
+	ssh_port = 12347
 	if 'activation_code' in api_answer:      # new system, not yet assigned to a user.
 		if cf.check_update_config('activation_code', api_answer['activation_code']) == 'updated':
-			portnr = 60000 + int(api_answer['id'])
+			ssh_port = 60000 + int(api_answer['id'])
 			f = open('/home/dietpi/ssh_port', 'w')
-			f.write(str(portnr))
+			f.write(str(ssh_port))
 			f.close()
+			cf.check_update_config('ssh_port', str(ssh_port))
 # a.py is responsible for publishing the computernr and activation_code at:
 # (1) /var/www/html/index.html/index
 # (2) via de HDMI.
 	elif cf.check_update_config('activation_code', '') == 'updated':
-			portnr = 10000 + int(api_answer['id'])
-			f = open('/home/dietpi/ssh_port', 'w')
-			f.write(str(portnr))
-			f.close()
-
-		#example:
-		#api_answer = {'newnetwork': {"id":34,"newssid": "s94", "psk": "", wlan_dhcp_fixed": "fixed", "wlan_static_IP": "192.123.123.1", "wlan_router": "19.9.9.0", "wlan_network_domain": "8.8.8.8", "eth_dhcp_fixed": "dhcp", "eth_static_IP": "192.168.178.44", "eth_router": "10.0.0.4", "eth_network_domain": "4.4.4.4"}}
+		ssh_port = 10000 + int(api_answer['id'])
+		f = open('/home/dietpi/ssh_port', 'w')
+		f.write(str(ssh_port))
+		f.close()
+		cf.check_update_config('ssh_port', str(ssh_port))
 
 	# next: check the job is done or open:
 	if 'newnetwork' in api_answer and api_answer['newnetwork']['id'] > int('0' + str(cf.read('last_newnetwork_job'))):
@@ -283,7 +327,6 @@ else:
 				new_content += "static domain_name_servers=" + api_answer['newnetwork']['wlan_network_domain'] + "\n"
 				content = new_content.split('\n')
 			tteller = 0
-			new_content = ''
 
 			new_content = ''
 			for row in content:
@@ -362,6 +405,7 @@ if not os.path.isfile('/home/dietpi/ssh_port') or int(ssm.comp_nr_only_dec) % 60
 		f = open('/home/dietpi/ipaddress', 'w+')
 		f.write(reverse_ssh_server)
 		f.close()
+
 
 if cf.read('activation_code') != '':
 	runteller = 0

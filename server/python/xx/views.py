@@ -156,10 +156,20 @@ class Api(View):
 				rpi.wifiCurrentNetwork = data['wifiCurrentNetwork']
 			if has_content(data, 'wifiKnownNetworks'):
 				rpi.wifiKnownNetworks = data['wifiKnownNetworks']
-			if has_content(data, 'ipAddressWlan'):
+			if 'ipAddressWlan' in data:
 				rpi.ipAddressWlan = data['ipAddressWlan']
-			if has_content(data, 'ipAddressEth'):
+			if 'ipAddressEth' in data:
 				rpi.ipAddressEth = data['ipAddressEth']
+			if 'gateway' in data:
+				rpi.gateway = data['gateway']
+			if 'subnetWlan' in data:
+				rpi.subnetWlan = data['subnetWlan']
+			if 'subnetEth' in data:
+				rpi.subnetEth = data['subnetEth']
+			if 'nameserver' in data:
+				rpi.nameserver = data['nameserver']
+			if 'ssh_port' in data:
+				rpi.ssh_port = data['ssh_port']
 			if has_content(data, 'sd_card'):
 				rpi.sd_card = data['sd_card']
 			if has_content(data, 'last_reboot'):
