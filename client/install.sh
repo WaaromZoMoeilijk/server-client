@@ -121,9 +121,9 @@ systemctl enable rc-local
 # Start service
 systemctl start rc-local
 
-sed -i 's|exit 0|/usr/bin/python3 /home/dietpi/a.py &|g' /etc/rc.local
-echo >> /etc/rc.local
-echo "exit 0" >> /etc/rc.local
+#sed -i 's|exit 0|/usr/bin/python3 /home/dietpi/a.py &|g' /etc/rc.local
+#echo >> /etc/rc.local
+#echo "exit 0" >> /etc/rc.local
 
 fi
 
