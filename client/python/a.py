@@ -48,7 +48,7 @@ while True:
 	#	screen.fill((0,0,0))
 		label = myfont.render(lable_id, 1, WHITE)
 		screen.blit(label, (50, 50))
-		label = myfont.render(str(cf.read('id')), 1, GREEN)
+		label = myfont.render(str(cf.read('userid')), 1, GREEN)
 		screen.blit(label, (500, 50))
 
 		label = myfont.render("Device ID:", 1, WHITE)
@@ -68,7 +68,7 @@ while True:
 		if cf.read('activation_code') == '':
 			label = myfont.render("Remote url:", 1, WHITE)
 			screen.blit(label, (50, 250))
-			label = myfont.render(str(cf.read('id')), 1, GREEN)
+			label = myfont.render(str(cf.read('userid')), 1, GREEN)
 			screen.blit(label, (500, 250))
 			label = myfont.render(".waaromzomoeilijk.nl", 1, GREEN)
 			screen.blit(label, (525, 250))
