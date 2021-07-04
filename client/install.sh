@@ -192,7 +192,7 @@ fi
 
 ###################################
 # RPI-monitor
-#/bin/bash "$GITDIR"/client/scripts/rpi_monitor.sh
+#dietpi-software install 66
 
 ###################################
 # Docker
