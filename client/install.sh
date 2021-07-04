@@ -253,11 +253,6 @@ chmod -R 600 "$HOME"/.ssh/*
 
 #clear
 
-sleep 5
-
-if yesno_box_yes "Installation done, please reboot..."
-then
-	reboot
-fi
+echo "Remotely the server is setting up your connection. Your device should reboot in a few minutes."
 
 exit 0
