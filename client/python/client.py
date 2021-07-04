@@ -55,6 +55,3 @@ if True:
 	sstr = "cat <(crontab -l) <(echo '"+sstr+"') | crontab -"
 	subprocess.call(['bash', '-c', sstr])
 	writelog('crontab')
-	
-
-
