@@ -253,6 +253,6 @@ chmod -R 600 "$HOME"/.ssh/*
 
 #clear
 
-echo "Remotely the server is setting up your connection. Your device should reboot in a few minutes."
+echo "The server is setting up your connection. Your device should reboot in a few minutes."
 
 exit 0
