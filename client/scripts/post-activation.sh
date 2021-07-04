@@ -19,8 +19,16 @@ debug_mode
 # Check if script runs as root
 root_check
 
-# Remove SMB auto setup
-rm -f /etc/profile.d/smb.sh
+# Check if device is activated
+if [ "$ACTIVATIONCODE" == '""' ]; then 
+        echo "registered"
+else
+        echo "device not registered yet."
+	exit 1
+fi
+
+# Remove post-install auto setup
+rm -f /etc/profile.d/post-install.sh
 
 # Enable external files app
 sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
