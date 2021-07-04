@@ -19,6 +19,12 @@ debug_mode
 # Check if script runs as root
 root_check
 
+# Clean install script
+rm -f /etc/profile.d/cloudserver.sh
+
+# Disable root autologin
+#
+
 ###################################
 # Prefer IPv4 for apt
 echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99force-ipv4
