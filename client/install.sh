@@ -182,10 +182,6 @@ ln -s "$GITDIR"/client/scripts/post-install.sh /etc/profile.d/post-install.sh
 #/bin/bash "$GITDIR"/client/scripts/hardening.sh
 
 ###################################
-# SSH
-#/bin/bash "$GITDIR"/client/scripts/ssh.sh
-
-###################################
 # Overclock
 #clear
 echo "Overclocking"
@@ -199,8 +195,16 @@ fi
 #/bin/bash "$GITDIR"/client/scripts/rpi_monitor.sh
 
 ###################################
+# Docker
+#dietpi-software install 162
+# Docker compose
+#dietpi-software install 134
+# Portainer
+#dietpi-software install 185
+
+###################################
 # Nextcloud
-#/bin/bash "$GITDIR"/client/scripts/nextcloud.sh
+dietpi-software install 114
 
 ###################################
 # SMTP
