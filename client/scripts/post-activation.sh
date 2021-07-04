@@ -1,4 +1,27 @@
 #!/bin/bash
+# info@waaromzomoeilijk.nl
+# login root/raspberry, dietpi/raspberry
+
+# Version
+# v0.2
+
+###################################
+# Variables & functions
+set -e
+source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
+
+# Check for errors + debug code and abort if something isn't right
+# 1 = ON
+# 0 = OFF
+DEBUG=1
+debug_mode
+
+# Check if script runs as root
+root_check
+
+# Remove SMB auto setup
+rm -f /etc/profile.d/smb.sh
+
 # Enable external files app
 sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
 
@@ -87,3 +110,13 @@ sudo -u www-data php /var/www/nextcloud/occ files_external:import /root/smb.json
 # cronjob to check for files
 crontab -l | { cat; echo "2 0 0 0 sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
 crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 2"; } | crontab -
+
+# install complete
+touch /home/dietpi/.smb_success
+
+if yesno_box_yes "Installation done, please reboot..."
+then
+	reboot
+fi
+
+exit 0
