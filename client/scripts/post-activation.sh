@@ -1,9 +1,5 @@
 #!/bin/bash
 # info@waaromzomoeilijk.nl
-# login root/raspberry, dietpi/raspberry
-
-# Version
-# v0.2
 
 ###################################
 # Variables & functions
