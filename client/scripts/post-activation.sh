@@ -43,7 +43,7 @@ Public = no
 EOF
 else  
 echo "smb.conf doesn't exists, is it installed?"
-apt_install samba samba-common-bin smbclient
+apt install -y samba samba-common-bin smbclient
 	
 cat >> /etc/samba/smb.conf <<EOF
 ["$USERNAME"]
