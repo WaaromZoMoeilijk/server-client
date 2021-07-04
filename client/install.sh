@@ -247,7 +247,7 @@ chmod -R 600 "$HOME"/.ssh/*
 
 #clear
 
-sleep 10
+sleep 5
 
 if yesno_box_yes "Installation done, please reboot..."
 then
