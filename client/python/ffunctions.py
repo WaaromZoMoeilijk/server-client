@@ -5,6 +5,7 @@ import subprocess
 import glob
 import json
 import sys
+import urllib3
 
 now = datetime.datetime.now()
 # check that this job is started with python3; not with python:
