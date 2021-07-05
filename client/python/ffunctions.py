@@ -154,7 +154,7 @@ class system_info:
 		sstr = sstr.replace('   ',' ')
 		sstr = sstr.replace('  ',' ')
 		sstr = sstr.split(' ')
-		self.sd_info = 'Size:' + str(round(float(sstr[2])/1000000,1)) + ' Gb used: ' + sstr[4]
+		self.sd_info = str(round(float(sstr[2])/1000000,1)) + 'Gb (' + sstr[4] + ') Used '
 
 	def write_wifi_networks(self):
 		wifi_list = ''
