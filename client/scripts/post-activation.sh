@@ -23,11 +23,27 @@ else
 	exit 1
 fi
 
+# Temp
+USERNAME=""
+PASSWORD=""
+
 # Remove post-install auto setup
 rm -f /etc/profile.d/post-install.sh
 
+# Create NC user
+(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c '/usr/bin/php /var/www/nextcloud/occ user:add --group "admin" "$USERNAME"'
+
+# Create PAM user
+/usr/bin/sudo /usr/sbin/useradd -m -p $(/usr/bin/openssl passwd -crypt "$PASSWORD") "$USERNAME" 
+
+# Create SMB user
+(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/sudo /usr/bin/smbpasswd -as "$USERNAME"
+
 # Enable external files app
 sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
+
+# Setup share NC
+/usr/bin/sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD" 
 
 # Add samba config
 if [ -f "/etc/samba/smb.conf" ]; then
@@ -114,6 +130,9 @@ sudo -u www-data php /var/www/nextcloud/occ files_external:import /root/smb.json
 # cronjob to check for files
 crontab -l | { cat; echo "2 0 0 0 sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
 crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 2"; } | crontab -
+
+# Clear pass var
+sed -i 's|PASSWORD=*|PASSWORD=""|g' "$GITDIR"/client/scripts/post-activation.sh
 
 # install complete
 touch /home/dietpi/.smb_success
