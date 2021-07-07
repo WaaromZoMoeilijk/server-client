@@ -20,7 +20,7 @@ debug_mode
 root_check
 
 # Clean install script
-rm -f /etc/profile.d/cloudserver.sh
+#rm -f /etc/profile.d/cloudserver.sh
 
 # Disable root autologin
 #
