@@ -82,7 +82,7 @@ chown dietpi:dietpi /mnt/dietpi_userdata/SAMBA
 chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/SAMBA/"$USERNAME"
 
 # Add smb user ; done in python upon registering
-#(echo "$PASSWORD"; echo "$PASSWORD") | smbpasswd -a "$USERNAME"
+(echo "$PASSWORD"; echo "$PASSWORD") | smbpasswd -a "$USERNAME"
 
 # Restart smbd
 service smbd restart
