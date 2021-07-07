@@ -192,19 +192,19 @@ fi
 
 ###################################
 # RPI-monitor
-#dietpi-software install 66
+#/boot/dietpi/dietpi-software install 66
 
 ###################################
 # Docker
-#dietpi-software install 162
+#/boot/dietpi/dietpi-software install 162
 # Docker compose
-#dietpi-software install 134
+#/boot/dietpi/dietpi-software install 134
 # Portainer
-#dietpi-software install 185
+#/boot/dietpi/dietpi-software install 185
 
 ###################################
 # Nextcloud
-dietpi-software install 114
+/boot/dietpi/dietpi-software install 114
 
 ###################################
 # SMTP
