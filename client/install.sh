@@ -204,7 +204,7 @@ fi
 
 ###################################
 # Nextcloud
-/boot/dietpi/dietpi-software install 114
+#/boot/dietpi/dietpi-software install 114
 
 ###################################
 # SMTP
