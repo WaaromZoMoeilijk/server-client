@@ -165,7 +165,7 @@ fi
 git clone "$REPO" "$GITDIR"
 
 # Setup SMB and misc post install configs
-ln -s "$GITDIR"/client/scripts/post-install.sh /etc/profile.d/post-install.sh
+#ln -s "$GITDIR"/client/scripts/post-install.sh /etc/profile.d/post-install.sh
 
 ###################################
 # Open ports 80 and 443 if possible
