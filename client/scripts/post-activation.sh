@@ -23,23 +23,20 @@ else
 	exit 1
 fi
 
-# Temp
-PASSWORD=
-
 # Create NC user
-#(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c '/usr/bin/php /var/www/nextcloud/occ user:add --group "admin" "$USERNAME"'
+(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:add --group admin $USERNAME"
 
 # Create PAM user
-#/usr/bin/sudo /usr/sbin/useradd -m -p $(/usr/bin/openssl passwd -crypt "$PASSWORD") "$USERNAME" 
+/usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME"  
 
 # Create SMB user
-#(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/sudo /usr/bin/smbpasswd -as "$USERNAME"
+(echo "$PASSWORD"; echo "$PASSWORD") | /usr/bin/sudo smbpasswd -as "$USERNAME" 
 
 # Enable external files app
-#sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
+sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
 
 # Setup share NC
-#/usr/bin/sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD" 
+su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:option 1 password $PASSWORD"
 
 # Add samba config
 if [ -f "/etc/samba/smb.conf" ]; then
