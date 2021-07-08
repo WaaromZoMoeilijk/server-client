@@ -79,12 +79,12 @@ chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/SAMBA/"$USERNAME"
 service smbd restart
 
 # Config smb
-cat > /root/smb.json <<EOF
+cat > /tmp/smb.json <<EOF
 [
     {
         "mount_id": 1,
         "mount_point": "\/",
-        "storage": "\\OCA\\Files_External\\Lib\\Storage\\SMB",
+        "storage": "\\\OCA\\\Files_External\\\Lib\\\Storage\\\SMB",
         "authentication_type": "password::password",
         "configuration": {
             "host": "127.0.0.1",
@@ -95,7 +95,7 @@ cat > /root/smb.json <<EOF
             "check_acl": false,
             "timeout": "",
             "user": "$USERNAME",
-            "password": "$PASSWORD"
+            "password": ""
         },
         "options": {
             "encrypt": true,
@@ -114,9 +114,12 @@ cat > /root/smb.json <<EOF
 ]
 EOF
 
+# Permissions
+chown www-data /tmp/smb.json
+
 # Import SMB config, password will get set upon activation via python
 #sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD"
-sudo -u www-data php /var/www/nextcloud/occ files_external:import /root/smb.json && rm -rf /root/smb.json
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:import /tmp/smb.json && rm -rf /tmp/smb.json
 
 # Setup share NC
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:option 1 password $PASSWORD"
@@ -126,7 +129,7 @@ crontab -l | { cat; echo "2 0 0 0 sudo -u www-data php /var/www/nextcloud/occ fi
 crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 2"; } | crontab -
 
 # Clear pass var
-sed -i 's|PASSWORD=*|PASSWORD=""|g' "$GITDIR"/client/scripts/post-activation.sh
+#sed -i 's|PASSWORD=*|PASSWORD=""|g' "$GITDIR"/client/scripts/post-activation.sh
 
 # install complete
 touch /home/dietpi/.smb_success
