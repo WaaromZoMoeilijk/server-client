@@ -16,17 +16,16 @@ debug_mode
 root_check
 
 # Check if device is activated
-if [ "$ACTIVATIONCODE" == '""' ]; then 
-        echo "registered"
-else
-        echo "device not registered yet."
-	exit 1
-fi
+#if [ "$ACTIVATIONCODE" == '""' ]; then 
+#        echo "registered"
+#else
+#        echo "device not registered yet."
+#	exit 1
+#fi
 
 # Create NC user
 (/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:add --group admin $USERNAME"
-sleep 2
-(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:resetpassword $USERNAME"
+#(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:resetpassword $USERNAME"
 
 # Create PAM user
 /usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME"  
