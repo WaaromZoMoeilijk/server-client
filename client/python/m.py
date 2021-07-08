@@ -7,6 +7,9 @@ import sys
 import requests
 from ffunctions import *
 
+# Temporary suppression of SSL warnings
+urllib3.disable_warnings()
+
 try:
 	sysargv = sys.argv[1]
 except:
