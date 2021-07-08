@@ -30,13 +30,13 @@ fi
 /usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME"  
 
 # Create SMB user
-(echo "$PASSWORD"; echo "$PASSWORD") | /usr/bin/sudo smbpasswd -as "$USERNAME" 
+(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/sudo smbpasswd -as "$USERNAME" 
 
 # Enable external files app
-sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
+/usr/bin/sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
 
 # Setup share NC
-su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:option 1 password $PASSWORD"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:option 1 password $PASSWORD"
 
 # Add samba config
 if [ -f "/etc/samba/smb.conf" ]; then
