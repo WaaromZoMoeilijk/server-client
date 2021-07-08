@@ -131,4 +131,7 @@ sed -i 's|PASSWORD=*|PASSWORD=""|g' "$GITDIR"/client/scripts/post-activation.sh
 # install complete
 touch /home/dietpi/.smb_success
 
+# Unset password var
+unset PASSWORD
+
 exit 0
