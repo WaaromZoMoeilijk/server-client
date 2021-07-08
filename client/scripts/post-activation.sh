@@ -37,9 +37,6 @@ sleep 2
 # Enable external files app
 /usr/bin/sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
 
-# Setup share NC
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:option 1 password $PASSWORD"
-
 # Add samba config
 if [ -f "/etc/samba/smb.conf" ]; then
 cat >> /etc/samba/smb.conf <<EOF
@@ -121,6 +118,9 @@ EOF
 # Import SMB config, password will get set upon activation via python
 #sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD"
 sudo -u www-data php /var/www/nextcloud/occ files_external:import /root/smb.json && rm -rf /root/smb.json
+
+# Setup share NC
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:option 1 password $PASSWORD"
 
 # cronjob to check for files
 crontab -l | { cat; echo "2 0 0 0 sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
