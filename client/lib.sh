@@ -9,7 +9,7 @@ HOME="/home/dietpi"
 USER="dietpi"
 
 # Client config
-USERNAME=$(cat /home/dietpi/config.txt | jq '.userid')
+#USERNAME=$(cat /home/dietpi/config.txt | jq '.userid')
 EMAIL=$(cat /home/dietpi/config.txt | jq '.email')
 NAMESERVER=$(cat /home/dietpi/config.txt | jq '.nameserver')
 REVERSESSHSERVER=$(cat /home/dietpi/config.txt | jq '.reverse_ssh_server')
