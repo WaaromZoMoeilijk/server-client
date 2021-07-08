@@ -7,9 +7,6 @@ import sys
 import requests
 from ffunctions import *
 
-# Temporary suppression of SSL warnings
-urllib3.disable_warnings()
-
 try:
 	sysargv = sys.argv[1]
 except:
@@ -386,8 +383,13 @@ while lowest_id < 99999999:
 		# command = lowest_command.split(' ')
 		command = lowest_command
 		print('cli:' + command)
-		ps = subprocess.run([command], capture_output=True, text=True).stdout
-		sts.add('clicommand',lowest_id, ps[:499])
+		#ps = subprocess.run([command], capture_output=True, text=True).stdout
+		os.system(command + ' > /tmp/output.txt')
+		f = open('/tmp/output.txt', 'r')
+		outputt = f.read()
+		print(outputt)
+		f.close()
+		sts.add('clicommand',lowest_id, outputt[:499])
 		cf.check_update_config('last_clicommand_job', lowest_id)
 		runteller = 0
 
