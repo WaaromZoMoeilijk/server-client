@@ -28,22 +28,22 @@ USERNAME=""
 PASSWORD=""
 
 # Remove post-install auto setup
-rm -f /etc/profile.d/post-install.sh
+#rm -f /etc/profile.d/post-install.sh
 
 # Create NC user
-(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c '/usr/bin/php /var/www/nextcloud/occ user:add --group "admin" "$USERNAME"'
+#(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c '/usr/bin/php /var/www/nextcloud/occ user:add --group "admin" "$USERNAME"'
 
 # Create PAM user
-/usr/bin/sudo /usr/sbin/useradd -m -p $(/usr/bin/openssl passwd -crypt "$PASSWORD") "$USERNAME" 
+#/usr/bin/sudo /usr/sbin/useradd -m -p $(/usr/bin/openssl passwd -crypt "$PASSWORD") "$USERNAME" 
 
 # Create SMB user
-(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/sudo /usr/bin/smbpasswd -as "$USERNAME"
+#(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/sudo /usr/bin/smbpasswd -as "$USERNAME"
 
 # Enable external files app
-sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
+#sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
 
 # Setup share NC
-/usr/bin/sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD" 
+#/usr/bin/sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD" 
 
 # Add samba config
 if [ -f "/etc/samba/smb.conf" ]; then
@@ -82,7 +82,7 @@ chown dietpi:dietpi /mnt/dietpi_userdata/SAMBA
 chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/SAMBA/"$USERNAME"
 
 # Add smb user ; done in python upon registering
-(echo "$PASSWORD"; echo "$PASSWORD") | smbpasswd -a "$USERNAME"
+#(echo "$PASSWORD"; echo "$PASSWORD") | smbpasswd -a "$USERNAME"
 
 # Restart smbd
 service smbd restart
@@ -136,10 +136,5 @@ sed -i 's|PASSWORD=*|PASSWORD=""|g' "$GITDIR"/client/scripts/post-activation.sh
 
 # install complete
 touch /home/dietpi/.smb_success
-
-if yesno_box_yes "Installation done, please reboot..."
-then
-	reboot
-fi
 
 exit 0
