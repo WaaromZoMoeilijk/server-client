@@ -24,11 +24,7 @@ else
 fi
 
 # Temp
-USERNAME=""
-PASSWORD=""
-
-# Remove post-install auto setup
-#rm -f /etc/profile.d/post-install.sh
+PASSWORD=
 
 # Create NC user
 #(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c '/usr/bin/php /var/www/nextcloud/occ user:add --group "admin" "$USERNAME"'
@@ -104,7 +100,7 @@ cat > /root/smb.json <<EOF
             "check_acl": false,
             "timeout": "",
             "user": "$USERNAME",
-            "password": "PASSWORD"
+            "password": "$PASSWORD"
         },
         "options": {
             "encrypt": true,
