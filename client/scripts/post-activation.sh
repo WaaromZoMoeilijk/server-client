@@ -29,7 +29,6 @@ root_check
 /usr/bin/sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
 
 # Add samba config
-mkdir -p /var/log/samba 
 if [ -f "/etc/samba/smb.conf" ]; then
 cat >> /etc/samba/smb.conf <<EOF
 [$USERNAME]
@@ -65,7 +64,8 @@ Public = no
 EOF
 fi
 
-# Create dir
+# Create dirs
+mkdir -p /var/log/samba 
 mkdir -p /mnt/dietpi_userdata/"$USERNAME"
 
 # Permissions
@@ -73,9 +73,6 @@ chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/"$USERNAME"
 
 # Restart smbd
 service smbd restart
-
-# Import SMB config
-#/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:import /tmp/smb.json" && rm -rf /tmp/smb.json
 
 # Create external user share
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:create --user $USERNAME / smb password::password" | awk '{print $5}' > /home/dietpi/.smbid."$USERNAME"
