@@ -45,14 +45,17 @@ echo "smb.conf doesn't exists, is it installed?"
 apt install -y samba samba-common-bin smbclient
 	
 cat >> /etc/samba/smb.conf <<EOF
-["$USERNAME"]
-valid users = "$USERNAME"
-Path = /mnt/dietpi_userdata/SAMBA/"$USERNAME"
+[$USERNAME]
+valid users = $USERNAME
+Path = /mnt/dietpi_userdata/SAMBA/$USERNAME
 Browseable = yes
 Writeable = Yes
-create mask = 0770
-directory mask = 0770
 Public = no
+force group = www-data
+create mask = 0770
+directory mask = 0771
+force create mode = 0660
+force directory mode = 0770
 EOF
 fi
 
@@ -107,14 +110,20 @@ cat > /tmp/smb.json <<EOF
 EOF
 
 # Permissions
-chown www-data /tmp/smb.json
+#chown www-data /tmp/smb.json
 
 # Import SMB config, password will get set upon activation via python
-#sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD"
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:import /tmp/smb.json" && rm -rf /tmp/smb.json
+#/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:import /tmp/smb.json" && rm -rf /tmp/smb.json
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:create --user $USERNAME / smb password::password | awk '{print $5}' > /home/dietpi/.smbid
 
 # Setup share NC
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config 1 password $PASSWORD"
+SMBID=$(cat /home/dietpi/.smbid)
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config $SMBID password $PASSWORD"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config $SMBID username $USERNAME"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config $SMBID host 127.0.0.1"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config $SMBID share $USERNAME"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config $SMBID enable_sharing true"
+
 
 # cronjob to check for files
 crontab -l | { cat; echo "2 0 0 0 sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
@@ -122,6 +131,9 @@ crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ fi
 
 # install complete
 touch /home/dietpi/.smb_success
+
+# Restart
+service smbd restart
 
 # Unset password var
 unset PASSWORD
