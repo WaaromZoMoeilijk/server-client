@@ -119,7 +119,7 @@ chown www-data /tmp/smb.json
 
 # Import SMB config, password will get set upon activation via python
 #sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD"
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:import /tmp/smb.json && rm -rf /tmp/smb.json
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:import /tmp/smb.json" && rm -rf /tmp/smb.json
 
 # Setup share NC
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:option 1 password $PASSWORD"
