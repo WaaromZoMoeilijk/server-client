@@ -126,7 +126,7 @@ chown www-data /tmp/smb.json
 
 # cronjob to check for files
 crontab -l | { cat; echo "2 0 0 0 sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
-crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 2"; } | crontab -
+crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
 
 # Clear pass var
 #sed -i 's|PASSWORD=*|PASSWORD=""|g' "$GITDIR"/client/scripts/post-activation.sh
