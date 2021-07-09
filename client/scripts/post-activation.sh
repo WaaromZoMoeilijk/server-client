@@ -72,7 +72,7 @@ mkdir -p /mnt/dietpi_userdata/"$USERNAME"
 chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/"$USERNAME"
 
 # Restart smbd
-service smbd restart
+service smbd restart && sleep 10
 
 # Create external user share
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:create --user $USERNAME / smb password::password" | awk '{print $5}' > /home/dietpi/.smbid."$USERNAME"
@@ -94,9 +94,6 @@ crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ fi
 
 # install complete
 touch /home/dietpi/.smb_success
-
-# Restart
-service smbd restart
 
 # Unset password var
 unset PASSWORD
