@@ -15,14 +15,6 @@ debug_mode
 # Check if script runs as root
 root_check
 
-# Check if device is activated
-#if [ "$ACTIVATIONCODE" == '""' ]; then 
-#        echo "registered"
-#else
-#        echo "device not registered yet."
-#	exit 1
-#fi
-
 # Create NC user
 (/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:add --group admin $USERNAME"
 #(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:resetpassword $USERNAME"
