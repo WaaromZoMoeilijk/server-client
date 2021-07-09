@@ -114,7 +114,7 @@ EOF
 
 # Import SMB config, password will get set upon activation via python
 #/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:import /tmp/smb.json" && rm -rf /tmp/smb.json
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:create --user $USERNAME / smb password::password | awk '{print $5}' > /home/dietpi/.smbid
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:create --user $USERNAME / smb password::password" | awk '{print $5}' > /home/dietpi/.smbid
 
 # Setup share NC
 SMBID=$(cat /home/dietpi/.smbid)
@@ -124,6 +124,8 @@ SMBID=$(cat /home/dietpi/.smbid)
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config $SMBID password $PASSWORD"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config $SMBID enable_sharing true"
 
+# Delete admin
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete admin"
 # cronjob to check for files smb vs nc
 crontab -l | { cat; echo "2 0 0 0 sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
 crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
