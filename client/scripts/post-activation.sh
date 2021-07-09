@@ -122,14 +122,11 @@ chown www-data /tmp/smb.json
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:import /tmp/smb.json" && rm -rf /tmp/smb.json
 
 # Setup share NC
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:option 1 password $PASSWORD"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config 1 password $PASSWORD"
 
 # cronjob to check for files
 crontab -l | { cat; echo "2 0 0 0 sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
 crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
-
-# Clear pass var
-#sed -i 's|PASSWORD=*|PASSWORD=""|g' "$GITDIR"/client/scripts/post-activation.sh
 
 # install complete
 touch /home/dietpi/.smb_success
