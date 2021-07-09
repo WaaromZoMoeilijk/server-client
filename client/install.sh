@@ -230,6 +230,4 @@ sudo python3 "$HOME"/m.py >/dev/null 2>&1 &
 
 clear
 
-echo "The server is setting up your connection. Please activate your device following the instructions and then your device should reboot in a few minutes."
-
 exit 0
