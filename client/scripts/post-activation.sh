@@ -3,7 +3,6 @@
 
 ###################################
 # Variables & functions
-set -e
 source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
 
 # Check for errors + debug code and abort if something isn't right
