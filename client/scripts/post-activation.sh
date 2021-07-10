@@ -22,8 +22,8 @@ root_check
 #/usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:enable $USERNAME"
 
 # Activate user
-#curl -vv --user "$USERNAME":"$PASSWORD" "http://127.0.0.1/nextcloud/login?clear=1"
-#echo "Curl login"
+curl -vv --user "$USERNAME":"$PASSWORD" "http://127.0.0.1/nextcloud/login?clear=1"
+echo "Curl login"
 
 # Create PAM user
 /usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME"  
@@ -81,7 +81,7 @@ echo "Created Dirs"
 
 # Permissions
 chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/"$USERNAME"
-chmod 775 /mnt/dietpi_userdata/nextcloud_data/"$USERNAME"/files
+chmod 770 /mnt/dietpi_userdata/nextcloud_data/"$USERNAME"/files
 echo "Set permission"
 
 # Restart smbd
@@ -111,7 +111,7 @@ echo "Default admin removed"
 
 # cronjob to check for files smb vs nc
 crontab -l | { cat; echo "*/10 0 0 0 0 pgrep "php" || sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
-crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
+#crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
 echo "Crontab"
 
 # install complete
