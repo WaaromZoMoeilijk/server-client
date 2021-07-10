@@ -15,6 +15,7 @@ debug_mode
 root_check
 
 # Create NC user
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete ezrawzm"
 (/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:add --group admin $USERNAME"
 #(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:resetpassword $USERNAME"
 
@@ -27,15 +28,18 @@ echo "Curl login"
 
 # Create PAM user
 /usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME"  
+echo "Pam"
 
 # Create SMB user
 (/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/sudo smbpasswd -as "$USERNAME" 
+echo "SMB"
 
 # Samba
 usermod -aG www-data "$USERNAME"
 
 # Enable external files app
 /usr/bin/sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
+echo "NC External files app"
 
 # Add samba config
 if [ -f "/etc/samba/smb.conf" ]; then
@@ -115,12 +119,11 @@ touch /home/dietpi/.smb_success
 
 # Unset password var
 unset PASSWORD
+echo "Unset pass"
 
 # Delete admin
 # Leftover fix in final image
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete admin"
 echo "Default admin removed"
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete ezrawzm"
-echo "Default nc removed"
 
 exit 0
