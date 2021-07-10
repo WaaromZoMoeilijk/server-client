@@ -81,7 +81,7 @@ echo "Created Dirs"
 
 # Permissions
 #chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/"$USERNAME"
-chmod 770 /mnt/dietpi_userdata/nextcloud_data/"$USERNAME"/files
+chmod -R 770 /mnt/dietpi_userdata/nextcloud_data/"$USERNAME"/files
 echo "Set permission"
 
 # Restart smbd
@@ -106,7 +106,7 @@ echo "SMBD restarted"
 #echo "sharing"
 
 # cronjob to check for files smb vs nc
-crontab -l | { cat; echo "*/10 * * * * pgrep "php" || sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
+crontab -l | { cat; echo "*/5 * * * * pgrep "php" || sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
 #crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
 echo "Crontab"
 
