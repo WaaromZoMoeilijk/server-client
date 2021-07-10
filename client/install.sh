@@ -203,6 +203,10 @@ fi
 #/boot/dietpi/dietpi-software install 114
 #/usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ app:install documentserver_community"
 
+#chown -R www-data:www-data nextcloud
+#find nextcloud/ -type d -exec chmod 750 {} \;
+#find nextcloud/ -type f -exec chmod 640 {} \;
+
 ###################################
 # SMTP
 #/bin/bash "$GITDIR"/client/scripts/smtp.sh
