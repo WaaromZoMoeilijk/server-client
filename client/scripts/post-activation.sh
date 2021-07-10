@@ -105,10 +105,6 @@ echo "SMBD restarted"
 #/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config $SMBID enable_sharing true"
 #echo "sharing"
 
-# Delete admin
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete admin"
-echo "Default admin removed"
-
 # cronjob to check for files smb vs nc
 crontab -l | { cat; echo "*/10 * * * * pgrep "php" || sudo -u www-data php /var/www/nextcloud/occ files:scan --all"; } | crontab -
 #crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
@@ -119,5 +115,12 @@ touch /home/dietpi/.smb_success
 
 # Unset password var
 unset PASSWORD
+
+# Delete admin
+# Leftover fix in final image
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete admin"
+echo "Default admin removed"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete ezrawzm"
+echo "Default nc removed"
 
 exit 0
