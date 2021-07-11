@@ -29,6 +29,7 @@ echo "Curl login"
 
 # Create PAM user
 /usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME"  
+(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | passwd "$USERNAME"
 echo "Pam"
 
 # Create SMB user
