@@ -15,8 +15,6 @@ debug_mode
 root_check
 
 # Create NC user
-rm -rf /mnt/dietpi_userdata/nextcloud_data/ezrawzm
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete ezrawzm"
 (/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:add --group admin $USERNAME"
 #(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:resetpassword $USERNAME"
 
@@ -28,8 +26,9 @@ curl -vv --user "$USERNAME":"$PASSWORD" "http://127.0.0.1/nextcloud/login?clear=
 echo "Curl login"
 
 # Create PAM user
-/usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME"  
-(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | passwd "$USERNAME"
+/usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME"
+# Reset pass if user exists
+#(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | passwd "$USERNAME"
 echo "Pam"
 
 # Create SMB user
@@ -128,5 +127,7 @@ echo "Unset pass"
 # Leftover fix in final image
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete admin"
 echo "Default admin removed"
+rm -rf /mnt/dietpi_userdata/nextcloud_data/ezrawzm
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete ezrawzm"
 
 exit 0
