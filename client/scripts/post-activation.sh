@@ -112,7 +112,7 @@ echo "SMBD restarted"
 #echo "sharing"
 
 # cronjob to check for files smb vs nc
-crontab -l | { cat; echo "*/1 * * * * pgrep "php" || sudo -u www-data php /var/www/nextcloud/occ files:scan $USERNAME"; } | crontab -
+crontab -l | { cat; echo "* * * * * pgrep "php" || sudo -u www-data php /var/www/nextcloud/occ files:scan $USERNAME"; } | crontab -
 #crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
 echo "Crontab"
 
