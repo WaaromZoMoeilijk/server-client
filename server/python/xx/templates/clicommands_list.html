@@ -1,0 +1,107 @@
+{% extends "home.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="page-header-title">
+                            <h5 class="m-b-10">User Table</h5>
+                        </div>
+                        <!--                        <ul class="breadcrumb">-->
+                        <!--                            <li class="breadcrumb-item"><a href="index.html"><i class="feather icon-home"></i></a></li>-->
+                        <!--                            <li class="breadcrumb-item"><a href="#!">Tables</a></li>-->
+                        <!--                            <li class="breadcrumb-item"><a href="javascript:">Basic Tables</a></li>-->
+                        <!--                        </ul>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <!-- [ basic-table ] start -->
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Basic Table </h5>
+                                <span class=D-block m-t-5>use class <code>table</code> inside table element</span>
+                            </div>
+                            <div class="card-block table-border-style " >
+                                <form class="row my-3 border-bottom border-gray" method="POST" action="/xx/clicommandnew">{% csrf_token %}
+                                <td>
+                                    <button type="submit" class="btn btn-info" style="margin-top: -40px" title="btn btn-info"
+                                            data-toggle="tooltip"
+                                            onclick="/xx/clicommandnew">Add New Device
+                                    </button>
+                                </td>
+                                </form>
+                                <!-- <div class="table-responsive"> -->
+                                    <!-- <table class="table"> -->
+                                        <!-- <thead> -->
+                                        <div class="row border-bottom border-gray my-3 font-weight-bold">
+                                            <div class="col-4">CLI Command</div>
+                                            <div class="col-4">Remark</div>
+                                            <div class="col-2">Code</div>
+                                            <div class="col-2">Delete</div>
+
+                                        </div>
+                                        <!-- </thead> -->
+                                        {% for list in clicommands %}
+                                        <!-- <tbody> -->
+
+                                        <div class="row my-3 border-bottom border-gray">
+                                            <div class="col-4">{{ list.command }}</div>
+                                            <div class="col-4">{{ list.remark }}</div>
+
+
+                                            <div class="col-2">
+                                            <button type="button" class="btn btn-info" title="btn btn-info"
+                                                    data-toggle="tooltip"
+                                                    onclick="location.href='/xx/clicommandedit/{{ list.id }}'">Update
+                                                Device
+                                            </button>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <button type="button" class="btn btn-info" title="btn btn-info"
+                                                        data-toggle="tooltip"
+
+                                                        onclick="location.href='/xx/clicommanddelete/{{ list.id }}'">Delete
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+
+
+                                        {% endfor %}
+                                        <!--                                        <button type="button" class="btn btn-danger" title="btn btn-danger" data-toggle="tooltip">Danger</button>-->
+                                        <!-- </tbody> -->
+                                    <!-- </table> -->
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ Main Content ] end -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

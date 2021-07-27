@@ -4,27 +4,71 @@
 {{ message }}
 {% endblock %}
 
-{% block content %}
-<div class="row">
-<div class="col">
-<form action="checklogin" method="post">{% csrf_token %}
-<table width=50%><tr><!--td width=33%><td width=33% -->
-  <td width=33%>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">user id</label>
-    <input type="text" class="form-control col-sm-2" name="userid" autofocus>
-    <div id="emailHelp" class="form-text">&nbsp;</div>
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">password</label>
-    <input type="password" class="form-control" name="password">
-  </div>
-  <button type="submit" class="btn btn-primary">Login</button>
-  <div class="mb-3"><br><br><br>
-    <a href="{% url 'register' %}">Register, make a new account</a>
-  </div>
 
-</table>
-</form>
-</div></div>
-{% endblock %}
+{% block content %}
+
+<div class="auth-wrapper">
+    <div class="auth-content">
+        <div class="auth-bg">
+            <span class="r"></span>
+            <span class="r s"></span>
+            <span class="r s"></span>
+            <span class="r"></span>
+        </div>
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <i class="feather icon-unlock auth-icon"></i>
+                </div>
+                <h3 class="mb-4">Login</h3>
+
+                <span class="mb-0 text-muted">
+                        {% if context %}
+                            {{ context  }}
+                        {% else %}
+                            Add your credentials
+                        {% endif %}
+                    </span>
+
+                <br/>
+                <br/>
+
+                <form role="form" method="post" action="checklogin">
+
+                    {% csrf_token %}
+
+
+                    <div class="input-group mb-3">
+<!--                        <label for="exampleInputEmail1" class="form-label">user id</label>-->
+                        <input type="text" placeholder="user id" class="form-control" name="userid" >
+<!--                        <div id="emailHelp" class="form-text">&nbsp;</div>-->
+                    </div>
+
+                    <div class="input-group mb-4">
+<!--                       <label for="exampleInputPassword1" class="form-label">password</label>-->
+                            <input type="password" placeholder="password" class="form-control " name="password">
+                    </div>
+
+                    <div class="form-group text-left">
+                        <div class="checkbox checkbox-fill d-inline">
+                            <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
+                            <label for="checkbox-fill-a1" class="cr"> Save Details</label>
+                        </div>
+                    </div>
+                    <button type="submit" name="login" class="btn btn-primary shadow-2 mb-4">Login</button>
+
+                </form>
+
+                <p class="mb-0 text-muted">Don’t have an account? <a href="{% url 'register' %}">Sign UP</a></p>
+                <!--                <br/>-->
+                <!--                <p class="mb-2 text-muted">-->
+                <!--                    &copy; <a target="_blank" href="https://bit.ly/37fF9RT">CodedThemes</a>-->
+                <!--                    - <a target="_blank" href="https://appseed.us/admin-dashboards/django-dashboard-dattaable">Django-->
+                <!--                    Datta Able</a>.-->
+                <!--                </p>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
