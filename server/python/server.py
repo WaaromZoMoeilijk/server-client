@@ -20,7 +20,7 @@ def writelog(sstr):
   f = open('/home/dietpi/l', 'a')
   f.write(now.strftime("%Y %m %d %H:%M ") + sstr + "\n")
   f.close()
-  print sstr
+  print (sstr)
 
 def ossystem(sstr):
 	os.system(sstr)
@@ -104,7 +104,7 @@ sudo chmod 777 * -R && \
 sudo chmod 777 /home/dietpi/pidjango && \
 systemctl restart apache2
 '''
-print sstr
+print (sstr)
 f = open("/home/dietpi/s.sh", 'w')
 f.write(sstr)
 f.close()
@@ -133,5 +133,3 @@ if True:
 	replaceline('/etc/hosts','raspberrypi',oursystem)
 	replaceline('/etc/hostname','raspberrypi',oursystem)
 	writelog('ready')
-
-print 'groeten uit Amsterdam'
