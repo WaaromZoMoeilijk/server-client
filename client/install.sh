@@ -136,8 +136,8 @@ if [ -d "$HOME"/.ssh ]; then
 rm -r "$HOME"/.ssh
 fi
 
-mkdir -p "$HOME"/.ssh
-ssh-keygen -t rsa -N "" -f  "$HOME"/.ssh/id_rsa 
+sudo -u "$USER" mkdir -p "$HOME"/.ssh
+sudo -u "$USER" ssh-keygen -t rsa -N "" -f  "$HOME"/.ssh/id_rsa 
 chown -R "$USER":"$USER" "$HOME"
 chmod -R 600 "$HOME"/.ssh/*
 #ssh-copy-id -i "$HOME"/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
