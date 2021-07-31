@@ -46,30 +46,28 @@ if True:
 
 # source:
 # https://pimylifeup.com/raspberry-pi-django/
-	ossystem('sudo apt-get -y install apache2')
-	ossystem('sudo apt-get -y install libapache2-mod-wsgi-py3')
+	ossystem('sudo apt-get -y install nginx')
 	ossystem('sudo apt-get -y install python3 python3-venv python3-pip')
 
 if True:
 	sstr = '''
- Alias /static /home/dietpi/pidjango/static
-    <Directory /home/dietpi/pidjango/static>
-        Require all granted
-    </Directory>
+server {
+       listen 2020;
 
-    <Directory /home/dietpi/pidjango/pidjango>
-        <Files wsgi.py>
-            Require all granted
-        </Files>
-    </Directory>
+       server_name _;
 
-    WSGIDaemonProcess django python-path=/home/dietpi/pidjango python-home=/home/dietpi/pidjango/djenv
-    WSGIProcessGroup django
-    WSGIScriptAlias / /home/dietpi/pidjango/pidjango/wsgi.py
-</VirtualHost>
+         location /static/ {
+                root /home/dietpi/pidjango;
+               # add_header Cache-Control "public, max-age=86400" always;
+        }
+       location / {
+                include proxy_params;
+                proxy_pass http://unix:/home/dietpi/pidjango/gunicorn.sock;
+        }
+}
+
 '''
-	replaceline('/etc/apache2/sites-available/000-default.conf','</VirtualHost>',sstr)
-	writelog('replaceline virutalhost')
+	replaceline('/etc/apache2/sites-available/default',sstr)
 	ossystem('mkdir -p /home/dietpi/pidjango/static')
 	ossystem('mkdir -p /home/dietpi/pidjango/static/admin')
 	ossystem('mkdir -p /home/dietpi/pidjango/static/admin/css')
@@ -77,7 +75,7 @@ if True:
 if False:
 	ossystem('cd /home/dietpi/pidjango && python3 -m venv djenv')
 	ossystem('cd /home/dietpi/pidjango && source djenv/bin/activate') # if manual: from here you get (djenv) on the command line left from the prompt.
-	ossystem('cd /home/dietpi/pidjango && python3 -m pip install django')
+	ossystem('cd /home/dietpi/pidjango && python3 -m pip install django gunicorn')
 
 sstr = '''
 cd /home/dietpi/pidjango && \
@@ -85,7 +83,7 @@ python3 -m venv djenv && \
 # if manual: from here you get (djenv) on the command line left from the prompt.
 source djenv/bin/activate && \
 # next time try withour 3
-python -m pip install django && \
+python -m pip install django gunicorn && \
 
 # werkt alleen met sudo ervoor
 django-admin startproject pidjango . && \
@@ -93,16 +91,16 @@ django-admin startproject pidjango . && \
 python manage.py makemigrations && \
 python manage.py migrate && \
 python manage.py createsuperuser && \
-DJANGO_SUPERUSER_PASSWORD=roma2- \
+DJANGO_SUPERUSER_PASSWORD=admin \
 DJANGO_SUPERUSER_USERNAME=admin \
-DJANGO_SUPERUSER_EMAIL=h.timmermans@kurkshop.nl \
+DJANGO_SUPERUSER_EMAIL=example@email.com \
 ./manage.py createsuperuser \
 --no-input && \
 #sudo cp /home/dietpi/pidjango/djenv/lib/python3.7/site-packages/django/contrib/admin/static/admin/css/base.css /home/dietpi/pidjango/static/admin/css && \
 sudo chmod 777 * -R && \
 # next line is to prevent that the database is readonly
 sudo chmod 777 /home/dietpi/pidjango && \
-systemctl restart apache2
+systemctl restart nginx
 '''
 print (sstr)
 f = open("/home/dietpi/s.sh", 'w')
