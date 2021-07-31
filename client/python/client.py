@@ -34,7 +34,7 @@ if True:
 	writelog('/home/dietpi/log.txt')
 if True:
 	f = open("/home/dietpi/config.txt", 'w')
-	sstr = '{"reverse_ssh_server": "henk.waaromzomoeilijk.nl", "version":"00000"}'
+	sstr = '{"reverse_ssh_server": "wzc.waaromzomoeilijk.nl", "version":"00000"}'
 	f.write(sstr)
 	f.close()
 	writelog('config.txt')
@@ -42,7 +42,7 @@ if True:
 	f.write("$(shuf -i10000-64000 -n1)")
 	f.close()
 	f = open("/home/dietpi/ipaddress", 'w')
-	f.write('henk.waaromzomoeilijk.nl')
+	f.write('wzc.waaromzomoeilijk.nl')
 	f.close()
 	f = open("/bin/l", 'w')
 	f.write('ls -l $1')
