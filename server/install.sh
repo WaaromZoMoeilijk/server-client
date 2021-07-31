@@ -5,25 +5,51 @@
 # Variables & functions
 source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
 
-apt install python3-virtualenv
+apt install -y \
+       python3-virtualenv \
+       apache2 \
+       libapache2-mod-wsgi-py3
+
+CAT
+<VirtualHost *:2021>
+        ServerName wzc.waaromzomoeilijk.nl
+        ServerAlias *
+        DocumentRoot /var/www/html
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        SSLEngine on
+        SSLCertificateFile      /etc/letsencrypt/live/henk.waaromzomoeilijk.nl/fullchain.pem
+        SSLCertificateKeyFile   /etc/letsencrypt/live/henk.waaromzomoeilijk.nl/privkey.pem
+#       SSLCertificateFile      /etc/ssl/certs/nginx-selfsigned.crt
+#       SSLCertificateKeyFile  /etc/ssl/private/nginx-selfsigned.key
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+#	Redirect permanent "/" "https://henk.waaromzomoeilijk.nl:2021/"
+
+        Alias /static /var/www/pi/pidjango/static
+        <Directory /var/www/pi/pidjango/static>
+                Require all granted
+        </Directory>
+
+        <Directory /var/www/pi/pidjango/pidjango>
+                <Files wsgi.py>
+                        Require all granted
+                </Files>
+        </Directory>
+
+        WSGIDaemonProcess django-http python-path=/var/www/pi/pidjango python-home=/var/www/pi/env
+        WSGIProcessGroup django-http
+        WSGIScriptAlias / /var/www/pi/pidjango/pidjango/wsgi.py
+
+</VirtualHost>
 
 
-nginx
-server {
-       listen 2020;
 
-       server_name _;
-
-         location /static/ {
-                root /home/dietpi/pidjango;
-               # add_header Cache-Control "public, max-age=86400" always;
-        }
-       location / {
-                include proxy_params;
-                proxy_pass http://unix:/home/dietpi/pidjango/gunicorn.sock;
-        }
-}
-
+find /var/www/pi -type f -exec chmod 0640 {} +
+find /var/www/pi -type d -exec chmod 0750 {} +
+chown -R www-data:www-data /var/www/pi
 
 python3 server.py
 
