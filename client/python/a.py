@@ -72,7 +72,7 @@ while True:
 			screen.blit(label, (500, 250))
 			label = myfont.render("WAN (outside) url:", 1, WHITE)
 			screen.blit(label, (50, 300))
-			label = myfont.render("username.waaromzomoeilijk.nl", 1, GREEN)
+			label = myfont.render("wzc.waaromzomoeilijk.nl/USERNAME", 1, GREEN)
 			screen.blit(label, (500, 300))			
 			label = myfont.render("Storage:", 1, WHITE)
 			screen.blit(label, (50, 350))
@@ -86,12 +86,12 @@ while True:
 		if cf.read('activation_code') != '':
 			label = myfont.render("Please register:", 1, WHITE)
 			screen.blit(label, (50, 450))
-			label = myfont.render("register.waaromzomoeilijk.nl:2021", 1, GREEN)
+			label = myfont.render("wzc.waaromzomoeilijk.nl", 1, GREEN)
 			screen.blit(label, (500, 450))
 		if cf.read('activation_code') == '':
 			label = myfont.render("Manage your device:", 1, WHITE)
 			screen.blit(label, (50, 500))
-			label = myfont.render("henk.waaromzomoeilijk.nl:2021", 1, GREEN)
+			label = myfont.render("wzc.waaromzomoeilijk.nl", 1, GREEN)
 			screen.blit(label, (500, 500))
 		# show the whole thing
 		pygame.display.flip()
@@ -99,7 +99,7 @@ while True:
 	index_html = '''
 <html>
 <head>
-	<title>WaaromZoMoeilijk</title>
+	<title>WaaromZoCloud</title>
 	<meta http-equiv="refresh" content="3" />
 	<style type="text/css">
 body {
@@ -119,7 +119,7 @@ table{
 aaaa
 <tr>
 	<td align=list>Please activate:
-	<td>https://register.waaromzomoeilijk.nl:2021
+	<td>https://wzc.waaromzomoeilijk.nl
 </tr>
 </table></body></html>
 '''
