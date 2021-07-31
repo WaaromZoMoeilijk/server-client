@@ -1,0 +1,35 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block message %}
+{{ message }}
+{% endblock %}
+{% block menu %}
+<table width=100%>
+  {% for key,value in menu.items %}
+    <tr>
+      <td><a href="{{ key }}" class="menu">{{ value }}</a></td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+{% block content %}
+<table width=100%>
+  <tr><td colspan=5>
+    <form method="POST" action="/xx/clicommandnew">{% csrf_token %}
+      <input type="submit" value="Add" class="btn btn-primary">
+    </form>
+  </tr>
+  <tr class="h3"><td>Code<td>CLI Command<td>Remark<td></tr>
+  {% for value in clicommands %}
+    <tr style="background-color: {{ value.bgcolor }};">
+      <td><a href="/xx/clicommandedit/{{ value.id }}">{{ value.code }}</a>
+      <td>{{ value.command }}
+      <td>{{ value.remark }}
+      <td><a href="/xx/clicommanddelete/{{ value.id }}">delete</a>
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}

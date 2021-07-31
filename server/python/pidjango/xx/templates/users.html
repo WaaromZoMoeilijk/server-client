@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block message %}
+{{ message }}
+{% endblock %}
+{% block menu %}
+<table width=100%>
+  {% for key,value in menu.items %}
+    <tr>
+      <td><a href="{{ key }}" class="menu">{{ value }}</a></td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+{% block content %}
+<table width=100%>
+  <tr class="h3"><td><td>Name<td>ID<td>Userid<td>Failed</tr>
+  {% for value in users %}
+    <tr style="background-color: {{ value.bgcolor }};">
+      <td><a href="useredit/{{ value.id }}">Details</a>&nbsp;&nbsp;&nbsp;
+      <td>{{ value.name }}
+      <td>{{ value.id }}
+      <td>{{ value.userid }}
+      <td>{{ value.failed_logins }}
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+
+
+
+
+
+
+
+
