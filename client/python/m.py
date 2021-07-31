@@ -97,7 +97,7 @@ if now.hour == 6 and now.minute == 0:
 
 ourserver = cf.read('ourserver')
 if ourserver == '':
-	ourserver = 'https://henk.waaromzomoeilijk.nl:2021'
+	ourserver = 'https://wzc.waaromzomoeilijk.nl:443'
 if ourserver[:4] != 'http':
 	ourserver = 'https://' + ourserver
 
@@ -423,4 +423,4 @@ else:
 	f.write(str(int(runteller)))
 	f.close()
 
-print('my first sony ' + now.strftime('%Y-%m-%d %H:%M'))
+print('m.py ' + now.strftime('%Y-%m-%d %H:%M'))
