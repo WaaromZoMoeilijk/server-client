@@ -53,7 +53,7 @@ In order for this to work please execute the following before doing anything els
 
 ## Flash base image to SSD / SDCard
 - [Download](https://www.balena.io/etcher/) and install Balena Etcher
-- [Download client RaspberryPI4 (8GB) (ARMv6)](https://nextcloud.waaromzomoeilijk.nl/s/iQMjapjnFHbZ25K) | Download client RaspberryPI4 (8GB) (ARMv8) (64Bit)
+- [Download client RaspberryPI4 (8GB) (ARMv6)](https://nextcloud.waaromzomoeilijk.nl/s/XRS9ip8eKJQHdSj) | Download client RaspberryPI4 (8GB) (ARMv8) (64Bit)
 - Flash the base image to a proper SSD like a [2TB Samsung EVO](https://www.amazon.com/SAMSUNG-Inch-Internal-MZ-77E2T0B-AM/dp/B08QB93S6R/ref=sr_1_1?dchild=1&keywords=samsung+evo+2tb&qid=1622628534&sr=8-1)/[WD RED](https://www.amazon.com/Red-SA500-NAS-NAND-Internal/dp/B07YFGG261/ref=sr_1_3?dchild=1&keywords=wd+nas+2tb+ssd&qid=1622628747&s=electronics&sr=1-3) with a [SATA3 to USB3 adapter](https://www.amazon.com/dp/B00XLAZODE/ref=twister_B07X6JDCVM?_encoding=UTF8&th=1). Or an SDCard reader.
 
 ## First boot
