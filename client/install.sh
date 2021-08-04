@@ -64,7 +64,11 @@ apt install -y \
 
 ###################################
 # Set timezone based upon WAN ip 
+if curl -sL 'ip-api.com/json' | grep -q "404"; then
+	echo "Site is down, set timezone manually after installation with: sudo curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone"
+else
 curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
+fi
 
 # unattended-upgrades
 DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
