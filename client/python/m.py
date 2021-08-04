@@ -189,7 +189,7 @@ postinfo["version"] = cf.read('version')
 if sts.len() > 0:
 	postinfo['sendtoserver'] = cf.read('sendtoserver') # not a nice way. I didnt find another.
 
-api_url_base = ourserver + '/xx/api'
+api_url_base = ourserver + '/api'
 headers = {'Content-Type': 'multipart/form-data'}
 postinfo = json.dumps(postinfo)
 print('postinfo:' + str(postinfo))
