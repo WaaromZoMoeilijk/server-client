@@ -13,10 +13,10 @@ This system is modular and can be extended with anything later on. Prebuild soft
 
 ## To do:
 - [ ] What are we going to call the project?
-- [ ] network drive published (easy & automated)
+- [x] network drive published (easy & automated)
 - [ ] Prefer local connections over proxied connections
 - [ ] Functionalities user Web Interface
-- [ ] Have a nice material theme for the user Web Interface, current is just a functional design
+- [x] Have a nice material theme for the user Web Interface, current is just a functional design
 - [ ] Domain name?
 - [ ] Terms of service (milestone 4)
 - [ ] Privacy policy (milestone 4)
