@@ -28,7 +28,7 @@ as easy as possible
 2. Automated installation begins and takes about 15 minutes. (Setup screen is shown via HDMI and WEB: http://wzm.local)
 2. Either user goes to: http://wzm.local (on local LAN) or connect a monitor to the RPI
   a. From there writes down the activation code and device ID
-3. Visit https://register.waaromzomoeilijk.nl:2021/xx/register
+3. Visit https://wzc.waaromzomoeilijk.nl/register
   a. Enter Name, username (Userid), email and a password.
   b. Verify by email and login
   c. Register your device
@@ -66,18 +66,18 @@ In order for this to work please execute the following before doing anything els
 * Windows network share (Use [option 1](https://www.tenforums.com/tutorials/112017-view-all-network-shares-windows-pc.html) Or use [this](https://www.onmsft.com/how-to/how-to-connect-to-a-network-share-in-windows-10) guide.)
 
 ```
-Username / Password - Gets set to password used on register.waaromzomoeilijk.nl after device activation.
+Username / Password - Gets set to password used on wzc.waaromzomoeilijk.nl after device activation.
 root      raspberry
 dietpi    raspberry
 ```
 
 ## Optional installation options
-- On any debian based RaspberryPI4 you could do: `wget https://raw.githubusercontent.com/ezraholm50/server-client/main/client/install.sh && sudo bash install.sh`
-- If you are using DietPI you can add this [dietpi.txt](https://raw.githubusercontent.com/ezraholm50/server-client/main/client/dietpi.txt) file to your /boot/ directory
+- On any debian based RaspberryPI4 you could do: `wget https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/install.sh && sudo bash install.sh`
+- If you are using DietPI you can add this [dietpi.txt](https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/dietpi.txt) file to your /boot/ directory
 
 ## Functionalities user management panel:
 
-Users can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can manage and monitor their new Cloud RPI.
+Users can visit https://wzc.waaromzomoeilijk.nl where they can manage and monitor their new Cloud RPI.
 
 * Monitor: Resources, LAN/WAN IP, Health, Device ID, Uptime, Ping response server/client, Ports used for reverse SSH
 * Config: Wifi/ethernet config, hostname, remove node option, notifications
@@ -92,7 +92,7 @@ Users can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can 
 
 ## Functionalities admin management role:
 
-Administrators can visit https://davecloudserver.waaromzomoeilijk.nl:2021 where they can manage and monitor all online/offline registered devices.
+Administrators can visit https://wzc.waaromzomoeilijk.nl where they can manage and monitor all online/offline registered devices.
 
 * Monitor: Resources, LAN/WAN IP, Health, Device ID, Uptime, Ping response server/client, Ports used for reverse SSH of all devices
 * Individual system config (milestone 2)
