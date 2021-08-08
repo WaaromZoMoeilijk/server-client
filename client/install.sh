@@ -44,6 +44,7 @@ apt install -y \
 	git \
 	nano \
 	curl \
+	autossh \
 	unattended-upgrades \
 	sshpass \
 	net-tools \
