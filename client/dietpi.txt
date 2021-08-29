@@ -165,7 +165,7 @@ CONFIG_PROXY_USERNAME=
 CONFIG_PROXY_PASSWORD=
 
 # Delay boot until network is established: 0=disabled | 1=10 second wait max (default) | 2=infinite wait
-CONFIG_BOOT_WAIT_FOR_NETWORK=1
+CONFIG_BOOT_WAIT_FOR_NETWORK=2
 
 # Connection timeout in seconds, before G_CHECK_URL assumes the URL is dead. Increase if you have a "flaky" connection or slow DNS resolver.
 # - Set this to "0" to allow unlimited time, however this is not recommended to avoid unlimited hanging background scripts, e.g. daily DietPi update check.
