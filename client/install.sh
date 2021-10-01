@@ -66,9 +66,10 @@ apt install -y \
 ###################################
 # Set timezone based upon WAN ip 
 if curl -sL 'ip-api.com/json' | grep -q "404"; then
-	echo "Site is down, set timezone manually after installation with: sudo curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone"
+	#echo "Site is down, set timezone manually after installation with: sudo curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone"
+	curl -s --location --request GET 'https://api.ipgeolocation.io/timezone?apiKey=bbebedbbace2445386c258c0a472df1c' | jq '.timezone' | xargs timedatectl set-timezone
 else
-curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
+	curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
 fi
 
 # unattended-upgrades
