@@ -6,10 +6,7 @@ This system is modular and can be extended with anything later on. Prebuild soft
 [DietPI](https://dietpi.com/docs/software/) | [Linuxserver.io](https://docs.linuxserver.io/) | [Awesome Selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
 
 ## Timeline
-- [x] End May Base image (BETA) ready
-- End May / Early June POC server/client
-- July Beta 0.1
-- ? 1.0
+- TBD
 
 ## To do:
 - [ ] What are we going to call the project?
