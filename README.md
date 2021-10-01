@@ -42,7 +42,7 @@ In order for this to work please execute the following before doing anything els
 - Launch Raspberry Pi Imager
 - Select Misc utility images under Operating System
 - Select Bootloader
-- Select boot-mode USB
+- Select boot-mode SD (primary) then USB (secondary). Obviously if you want to run your SSD, don't insert an SD card.
 - Select SD card and then Write
 - Boot the Raspberry Pi with the new image and wait for at least 10 seconds.
 - The green activity LED will blink with a steady pattern and the HDMI display will be green on success.
