@@ -125,9 +125,8 @@ echo "Unset pass"
 
 # Delete admin
 # Leftover fix in final image
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete admin"
-echo "Default admin removed"
-rm -rf /mnt/dietpi_userdata/nextcloud_data/ezrawzm
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete ezrawzm"
+#/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete admin" && echo "Default admin removed"
+#rm -rf /mnt/dietpi_userdata/nextcloud_data/ezrawzm
+#/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete ezrawzm"
 
 exit 0
