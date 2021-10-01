@@ -116,9 +116,6 @@ crontab -l | { cat; echo "* * * * * pgrep "php" || sudo -u www-data php /var/www
 #crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
 echo "Crontab"
 
-# Install build in document editor
-/usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ app:install documentserver_community" &
-
 # install complete
 touch /home/dietpi/.smb_success
 
