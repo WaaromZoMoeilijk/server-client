@@ -117,6 +117,7 @@ crontab -l | { cat; echo "* * * * * pgrep "php" || sudo -u www-data php /var/www
 echo "Crontab"
 
 # install complete
+rm /home/dietpi/a.py
 touch /home/dietpi/.smb_success
 
 # Unset password var
@@ -129,4 +130,5 @@ echo "Unset pass"
 #rm -rf /mnt/dietpi_userdata/nextcloud_data/ezrawzm
 #/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete ezrawzm"
 
-exit 0
+# Reboot
+reboot
