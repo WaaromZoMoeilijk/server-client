@@ -137,7 +137,7 @@ echo "Crontab"
 #rm /home/dietpi/a.py
 rm /var/www/index.html
 
-# Revert subfolder to webroot
+# Revert subfolder to webroot and more
 sed -i "s|.*overwrite.cli.url.*|  'overwrite.cli.url' => 'https://$USERNAME.$DOMAIN/',|g" /var/www/nextcloud/config/config.php
 sed -i "s|.*htaccess.RewriteBase.*|  'htaccess.RewriteBase' => '/',|g" /var/www/nextcloud/config/config.php
 sed -i "s|.*ErrorDocument 403.*|ErrorDocument 403 /|g" /var/www/nextcloud/.htaccess
@@ -145,8 +145,15 @@ sed -i "s|.*ErrorDocument 404.*|ErrorDocument 404 /|g" /var/www/nextcloud/.htacc
 sed -i "s|.*RewriteBase.*|  RewriteBase /|g" /var/www/nextcloud/.htaccess
 sed -i "s|DocumentRoot /var/www|DocumentRoot /var/www/nextcloud|g" /etc/apache2/sites-enabled/000-default.conf  
 
+# Set static IP
+sed -i "s|iface eth0 inet dhcp|iface eth0 inet static|g" /etc/network/interfaces
+sed -i "s|gateway 192.168.0.1|gateway $GW|g" /etc/network/interfaces
+sed -i "s|netmask 255.255.255.0|netmask $NETMASK|g" /etc/network/interfaces
+sed -i "s|#dns-nameservers 9.9.9.9 149.112.112.112|dns-nameservers 1.1.1.1 1.0.0.1|g" /etc/network/interfaces
+
 # Set config values for nextcloud
-/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 1 --value localhost"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 0 --value localhost"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 1 --value $LANIP"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 2 --value $USERNAME.$DOMAIN"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 1 --value $USERNAME.$DOMAIN"
 
