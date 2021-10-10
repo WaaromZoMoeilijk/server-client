@@ -11,6 +11,8 @@ apt install -y \
        libapache2-mod-wsgi-py3 \
        inotify-tools
 
+crontab -l | { cat; echo "* * * * * /usr/bin/sudo /usr/bin/python3 /var/www/pi/pidjango/rpi_info.py"; } | crontab -
+
 CAT
 <VirtualHost *:2021>
         ServerName wzc.waaromzomoeilijk.nl
