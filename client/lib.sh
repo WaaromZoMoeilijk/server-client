@@ -8,18 +8,6 @@ HOME="/home/dietpi"
 # System
 USER="dietpi"
 
-# Client config
-#USERNAME=$(cat /home/dietpi/config.txt | jq '.userid')
-#EMAIL=$(cat /home/dietpi/config.txt | jq '.email')
-#NAMESERVER=$(cat /home/dietpi/config.txt | jq '.nameserver')
-#REVERSESSHSERVER=$(cat /home/dietpi/config.txt | jq '.reverse_ssh_server')
-#IPETH=$(cat /home/dietpi/config.txt | jq '.ipAddressEth')
-#GATEWAY=$(cat /home/dietpi/config.txt | jq '.gateway')
-#SUBNETMASK=$(cat /home/dietpi/config.txt | jq '.subnetEth')
-#ACTIVATIONCODE=$(cat /home/dietpi/config.txt | jq '.activation_code')
-#SSHPORT=$(cat /home/dietpi/config.txt | jq '.ssh_port')
-#ID=$(cat /home/dietpi/config.txt | jq '.id')
-
 # Network
 WANIP4=$(curl -s -k -m 5 https://ipv4bot.whatismyipaddress.com)
 GATEWAY=$(ip route | grep default | awk '{print $3}')
