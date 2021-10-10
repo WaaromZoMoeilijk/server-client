@@ -1,21 +1,27 @@
-server {
-    listen 443 ssl;
-    listen [::]:443 ssl;
+#!/bin/bash
+# Check for new clients, added to /var/www/pi/rpi_info/client-id.json
+# If new file, create new reverse proxy config for nextcloud.
+inotifywait -m /var/www/pi/rpi_info -e create -e moved_to |
+while read dir action file; do
+	echo "The file '$file' appeared in directory '$dir' via '$action'"
 
-    server_name nextcloud.*;
+        USERNAME=$(cat "$dir/$file" | jq -r .userid)
+	NGINXCONF=$(echo "$file" | sed 's|.json|.conf|g')
+        SSHPORT=$(cat "$dir/$file" | jq -r .ssh_port)
 
-    include /config/nginx/ssl.conf;
+	# Get Nginx config
+	wget -O /etc/nginx/sites-enabled/"$NGINXCONF" https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/scripts/proxy.conf
 
-    client_max_body_size 0;
+	# Change subdomain and proxy port
+	sed -i "s|USERNAME|$USERNAME|g" /etc/nginx/sites-enabled/"$NGINXCONF"
+	sed -i "s|SSHPORT|$SSHPORT|g" /etc/nginx/sites-enabled/"$NGINXCONF"
+        sed -i "s|wzc-|$USERNAME-|g" /etc/nginx/sites-enabled/"$NGINXCONF"
 
-    location / {
-        include /config/nginx/proxy.conf;
-        include /config/nginx/resolver.conf;
-        set $upstream_app nextcloud;
-        set $upstream_port 443;
-        set $upstream_proto https;
-        proxy_pass $upstream_proto://$upstream_app:$upstream_port;
+	# Check config
+	nginx -t || echo "Failed to set config please manually check" ; exit 1
 
-        proxy_max_temp_file_size 2048m;
-    }
-}
+	# Reload new config
+	service nginx reload
+done
+
+exit 0
