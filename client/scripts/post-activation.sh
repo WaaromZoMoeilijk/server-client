@@ -162,6 +162,11 @@ sed -i "s|#dns-nameservers 9.9.9.9 149.112.112.112|dns-nameservers 1.1.1.1 1.0.0
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 2 --value 192.168.22.2"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 3 --value  $ADDRESS"
 
+# Allow iFrame only from wzc.waaromzomoeilijk.nl for webframe of user cloud
+sed -i 's|</Directory>|        Header set X-Frame-Options: "ALLOW_FROM https://wzc.waaromzomoeilijk.nl"|g' /etc/apache2/sites-available/dietpi-nextcloud.conf
+echo '        Header set Content-Security-Policy: "frame-ancestors https://wzc.waaromzomoeilijk.nl"' >> /etc/apache2/sites-available/dietpi-nextcloud.conf
+echo "</Directory>" >> /etc/apache2/sites-available/dietpi-nextcloud.conf
+
 # Setup tunnel checker every minute
 crontab -l | { cat; echo "* * * * * /bin/bash $GITDIR/client/scripts/tunnel_check.sh"; } | crontab -
 
