@@ -134,11 +134,11 @@ rm /home/dietpi/a.py
 rm /var/www/index.html
 
 # Revert subfolder to webroot
-sed -i 's|.*overwrite.cli.url.*| 'overwrite.cli.url' => 'https://$USERNAME.$DOMAIN/',|g' /var/www/nextcloud/config/config.php
-sed -i 's|.*htaccess.RewriteBase.*|  'htaccess.RewriteBase' => '/',|g' /var/www/nextcloud/config/config.php
-sed -i 's|.*ErrorDocument 403.*|ErrorDocument 403 /|g' /var/www/nextcloud/.htaccess
-sed -i 's|.*ErrorDocument 404.*|ErrorDocument 404 /|g' /var/www/nextcloud/.htaccess
-sed -i 's|.*RewriteBase.*|  RewriteBase /|g' /var/www/nextcloud/.htaccess
+sed -i "s|.*overwrite.cli.url.*|  'overwrite.cli.url' => 'https://$USERNAME.$DOMAIN/',|g" /var/www/nextcloud/config/config.php
+sed -i "s|.*htaccess.RewriteBase.*|  'htaccess.RewriteBase' => '/',|g" /var/www/nextcloud/config/config.php
+sed -i "s|.*ErrorDocument 403.*|ErrorDocument 403 /|g" /var/www/nextcloud/.htaccess
+sed -i "s|.*ErrorDocument 404.*|ErrorDocument 404 /|g" /var/www/nextcloud/.htaccess
+sed -i "s|.*RewriteBase.*|  RewriteBase /|g" /var/www/nextcloud/.htaccess
 
 # Set config values for nextcloud
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 1 --value localhost"
