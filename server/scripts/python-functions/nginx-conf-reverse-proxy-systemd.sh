@@ -10,18 +10,20 @@ if [ -f "/etc/systemd/system/nginx-conf-reverse-proxy.service" ]; then
 else  
 cat > /etc/systemd/system/nginx-conf-reverse-proxy.service <<EOF
 [Unit]
-Description=Run script at startup after all systemd services are loaded
-After=default.target
+Description=Proxy checker nginx
+Type=simple
 
 [Service]
-Type=simple
-RemainAfterExit=yes
-StandardOutput=tty
-ExecStart=/var/scripts/nginx-conf-reverse-proxy.sh
-TimeoutStartSec=0
+ExecStart=/var/scripts/nginx-conf-reverse-proxy.sh --full --to-external
+Restart=on-failure
+PIDFile=/tmp/nginx-conf-reverse-proxy.pid
+#User=srvuser
+#WorkingDirectory=/var/yourservice
+#RuntimeDirectory=yourservice
+#RuntimeDirectoryMode=0755
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
