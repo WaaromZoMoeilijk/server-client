@@ -26,6 +26,7 @@ EOF
 
 systemctl daemon-reload
 systemctl enable nginx-conf-reverse-proxy.service
+systemctl start nginx-conf-reverse-proxy.service
 fi
 
 exit 0
