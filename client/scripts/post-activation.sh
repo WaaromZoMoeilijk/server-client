@@ -130,7 +130,7 @@ crontab -l | { cat; echo "* * * * * pgrep "php" || sudo -u www-data php /var/www
 echo "Crontab"
 
 # Remove webpage setup details
-rm /home/dietpi/a.py
+#rm /home/dietpi/a.py
 rm /var/www/index.html
 
 # Revert subfolder to webroot
