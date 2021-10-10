@@ -118,7 +118,7 @@ table{
 </tr>
 aaaa
 <tr>
-	<td align=list>Please activate:
+	<td align=list>Please sign up & add your new device:
 	<td>https://wzc.waaromzomoeilijk.nl
 </tr>
 </table></body></html>
