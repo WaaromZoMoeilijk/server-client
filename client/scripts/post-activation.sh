@@ -5,6 +5,19 @@
 # Variables & functions
 source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
 
+# Client config
+CNFSRC='/home/dietpi/config.txt'
+USERID=$(cat "$CNFSRC" | jq '.userid')
+EMAIL=$(cat "$CNFSRC" | jq '.email')
+NAMESERVER=$(cat "$CNFSRC" | jq '.nameserver')
+REVERSESSHSERVER=$(cat "$CNFSRC" | jq '.reverse_ssh_server')
+IPETH=$(cat "$CNFSRC" | jq '.ipAddressEth')
+GATEWAY=$(cat "$CNFSRC" | jq '.gateway')
+SUBNETMASK=$(cat "$CNFSRC"| jq '.subnetEth')
+ACTIVATIONCODE=$(cat "$CNFSRC" | jq '.activation_code')
+SSHPORT=$(cat "$CNFSRC" | jq '.ssh_port')
+ID=$(cat "$CNFSRC" | jq '.id')
+
 # Check for errors + debug code and abort if something isn't right
 # 1 = ON
 # 0 = OFF
@@ -116,9 +129,24 @@ crontab -l | { cat; echo "* * * * * pgrep "php" || sudo -u www-data php /var/www
 #crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
 echo "Crontab"
 
-# install complete
+# Remove webpage setup details
 rm /home/dietpi/a.py
-touch /home/dietpi/.smb_success
+rm /var/www/index.html
+
+# Revert subfolder to webroot
+sed -i 's|.*overwrite.cli.url.*| 'overwrite.cli.url' => 'https://$USERNAME.$DOMAIN/',|g' /var/www/nextcloud/config/config.php
+sed -i 's|.*htaccess.RewriteBase.*|  'htaccess.RewriteBase' => '/',|g' /var/www/nextcloud/config/config.php
+sed -i 's|.*ErrorDocument 403.*|ErrorDocument 403 /|g' /var/www/nextcloud/.htaccess
+sed -i 's|.*ErrorDocument 404.*|ErrorDocument 404 /|g' /var/www/nextcloud/.htaccess
+sed -i 's|.*RewriteBase.*|  RewriteBase /|g' /var/www/nextcloud/.htaccess
+
+# Set config values for nextcloud
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 1 --value localhost"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 2 --value $USERNAME.$DOMAIN"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 1 --value $USERNAME.$DOMAIN"
+
+# install complete
+touch /home/dietpi/.install_success
 
 # Unset password var
 unset PASSWORD
