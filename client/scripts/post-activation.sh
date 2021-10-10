@@ -44,6 +44,10 @@ echo "Curl login"
 #(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | passwd "$USERNAME"
 echo "Pam"
 
+# Change root password
+(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | passwd root
+echo "Root pass change"
+
 # Create SMB user
 (/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/sudo smbpasswd -as "$USERNAME" 
 echo "SMB"
