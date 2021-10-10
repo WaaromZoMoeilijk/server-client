@@ -50,7 +50,6 @@ if True:
 	os.system('sudo chmod 777 /bin/l')
 	writelog('/home/dietpi/ipaddress')
 	sstr = "* * * * * /usr/bin/sudo /usr/bin/python3 /home/dietpi/m.py >/dev/null 2>&1 &"
-	sstr += "\n" + '* * * * * /bin/bash /var/opt/server-client/client/scripts/tunnel_check.sh'
 	sstr = "cat <(crontab -l) <(echo '"+sstr+"') | crontab -"
 	subprocess.call(['bash', '-c', sstr])
 	writelog('crontab')
