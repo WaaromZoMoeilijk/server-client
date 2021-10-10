@@ -3,7 +3,7 @@
 
 mkdir -p /var/scripts
 wget -P /var/scripts https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/server/scripts/python-functions/nginx-conf-reverse-proxy.sh
-chmod +x /var/scripts/nginx-conf-reverse-proxy.sh
+chmod 750 /var/scripts/nginx-conf-reverse-proxy.sh
 
 if [ -f "/etc/systemd/system/nginx-conf-reverse-proxy.service" ]; then
       echo "/etc/systemd/system/nginx-conf-reverse-proxy.service exists"
