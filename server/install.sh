@@ -8,7 +8,8 @@ source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/mai
 apt install -y \
        python3-virtualenv \
        apache2 \
-       libapache2-mod-wsgi-py3
+       libapache2-mod-wsgi-py3 \
+       inotify-tools
 
 CAT
 <VirtualHost *:2021>
