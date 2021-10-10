@@ -143,6 +143,7 @@ sed -i "s|.*htaccess.RewriteBase.*|  'htaccess.RewriteBase' => '/',|g" /var/www/
 sed -i "s|.*ErrorDocument 403.*|ErrorDocument 403 /|g" /var/www/nextcloud/.htaccess
 sed -i "s|.*ErrorDocument 404.*|ErrorDocument 404 /|g" /var/www/nextcloud/.htaccess
 sed -i "s|.*RewriteBase.*|  RewriteBase /|g" /var/www/nextcloud/.htaccess
+sed -i "s|/var/www/index.html|/tmp/activation_screen|g" /home/dietpi/a.py
 
 # Set config values for nextcloud
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 1 --value localhost"
