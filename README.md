@@ -1,6 +1,10 @@
 # Server Client
 This project enables us to setup a client-server connection and automatic proxy (after registering) to access your personal cloud storage from anywhere without portforwarding. Besides that the device will publish mulitple file servers to accomodate a variaty of platforms to integrate.
 
+* Nextcloud - Local and external
+* SMB Network drive - Local
+* more?
+
 This system is modular and can be extended with anything later on. Prebuild software repo's:
 
 [DietPI](https://dietpi.com/docs/software/) | [Linuxserver.io](https://docs.linuxserver.io/) | [Awesome Selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
