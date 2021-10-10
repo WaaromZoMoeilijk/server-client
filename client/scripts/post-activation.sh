@@ -145,6 +145,9 @@ sed -i 's|.*RewriteBase.*|  RewriteBase /|g' /var/www/nextcloud/.htaccess
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 2 --value $USERNAME.$DOMAIN"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 1 --value $USERNAME.$DOMAIN"
 
+# Setup tunnel checker every minute
+crontab -l | { cat; echo "* * * * * /bin/bash /var/opt/server-client/client/scripts/tunnel_check.sh"; } | crontab -
+
 # install complete
 touch /home/dietpi/.install_success
 
