@@ -156,8 +156,11 @@ sed -i "s|#dns-nameservers 9.9.9.9 149.112.112.112|dns-nameservers 1.1.1.1 1.0.0
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 0 --value localhost"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 1 --value $ADDRESS"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 2 --value $USERNAME.$DOMAIN"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 3 --value 192.168.22.2"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 0 --value wzc.$DOMAIN"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 1 --value $USERNAME.$DOMAIN"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 2 --value 192.168.22.2"
+/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 3 --value  $ADDRESS"
 
 # Setup tunnel checker every minute
 crontab -l | { cat; echo "* * * * * /bin/bash $GITDIR/client/scripts/tunnel_check.sh"; } | crontab -
