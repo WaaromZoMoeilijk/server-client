@@ -10,11 +10,12 @@ while read dir action file; do
         SSHPORT=$(cat "$dir/$file" | jq -r .ssh_port)
 
 	# Get Nginx config
-	wget https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/scripts/proxy.conf -o /etc/nginx/sites-enabled/"$NGINXCONF"
+	wget -O /etc/nginx/sites-enabled/"$NGINXCONF" https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/scripts/proxy.conf
 
 	# Change subdomain and proxy port
 	sed -i "s|USERNAME|$USERNAME|g" /etc/nginx/sites-enabled/"$NGINXCONF"
 	sed -i "s|SSHPORT|$SSHPORT|g" /etc/nginx/sites-enabled/"$NGINXCONF"
+        sed -i "s|wzc-|$USERNAME-|g" /etc/nginx/sites-enabled/"$NGINXCONF"
 
 	# Check config
 	nginx -t || echo "Failed to set config please manually check" ; exit 1
