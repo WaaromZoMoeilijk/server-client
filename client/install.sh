@@ -2,9 +2,6 @@
 # info@waaromzomoeilijk.nl
 # login root/raspberry, dietpi/raspberry
 
-# Version
-# v0.2
-
 ###################################
 # Variables & functions
 source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
@@ -237,6 +234,9 @@ chmod -R 600 "$HOME"/.ssh/*
 # Init python setup
 /usr/bin/python3 "$HOME"/client.py
 sudo python3 "$HOME"/m.py >/dev/null 2>&1 &
+
+# Set version
+jq '.version = "$VERSION"' "$HOME"/config.txt
 
 clear
 
