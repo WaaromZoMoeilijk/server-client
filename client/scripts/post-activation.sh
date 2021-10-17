@@ -146,8 +146,35 @@ sed -i "s|.*RewriteBase.*|  RewriteBase /|g" /var/www/nextcloud/.htaccess
 sed -i "s|DocumentRoot /var/www|DocumentRoot /var/www/nextcloud|g" /etc/apache2/sites-enabled/000-default.conf  
 
 # Set static IP
+cat > '/etc/network/interfaces' <<EOF
+# Location: /etc/network/interfaces
+# Please modify network settings via: dietpi-config
+# Or create your own drop-ins in: /etc/network/interfaces.d/
+
+# Drop-in configs
+source interfaces.d/*
+
+# Ethernet
+allow-hotplug eth0
+iface eth0 inet static
+address $ADDRESS
+netmask $NETMASK
+gateway $GATEWAY
+dns-nameservers 1.1.1.1 1.0.0.1
+
+# WiFi
+#allow-hotplug wlan0
+iface wlan0 inet static
+address $ADDRESS
+netmask $NETMASK
+gateway $GATEWAY
+dns-nameservers 1.1.1.1 1.0.0.1
+wireless-power off
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+EOF
+
 #sed -i "s|iface eth0 inet dhcp|iface $IFACE inet static|g" /etc/network/interfaces
-#sed -i "s|gateway 192.168.0.1|gateway $GW|g" /etc/network/interfaces
+#sed -i "s|gateway 192.168.0.1|gateway $GATEWAY|g" /etc/network/interfaces
 #sed -i "s|address 192.168.0.100|ADDRESS $ADDRESS|g" /etc/network/interfaces
 #sed -i "s|netmask 255.255.255.0|netmask $NETMASK|g" /etc/network/interfaces
 #sed -i "s|#dns-nameservers 9.9.9.9 149.112.112.112|dns-nameservers 1.1.1.1 1.0.0.1|g" /etc/network/interfaces
