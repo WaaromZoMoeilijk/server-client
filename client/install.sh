@@ -237,7 +237,7 @@ chmod -R 600 "$HOME"/.ssh/*
 sudo python3 "$HOME"/m.py >/dev/null 2>&1 &
 
 # Set version
-jq '.version = "$VERSION"' "$HOME"/config.txt
+variable="$VERSION" ; jq --arg variable "$variable" '.version = $variable' "$HOME"/config.txt | /usr/bin/sponge "$HOME"/config.txt && echo "success" || echo "failed"
 
 clear
 
