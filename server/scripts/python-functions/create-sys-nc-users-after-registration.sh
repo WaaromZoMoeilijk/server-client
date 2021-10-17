@@ -10,3 +10,9 @@ su -s /bin/sh www-data -c 'php /var/www/nextcloud/occ user:add --password-from-e
 sudo -u www-data php /var/www/nextcloud/occ files_external:option 1 password "$PASSWORD"
 export OC_PASS=""
 reboot
+
+
+
+# clicommand: export PASSWORD="$PASSWORD" && export USERNAME="$USERNAME" && /bin/bash /var/opt/server-client/client/scripts/post-activation.sh
+# remarks: This command will be copied to the rpi when the rpi is activated. $PASSWORD and $USERNAME will be replaced with the password and userid. Dont change the code "newdevice".
+# code: newdevice
