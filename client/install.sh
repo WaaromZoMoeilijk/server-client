@@ -58,6 +58,7 @@ apt install -y \
 	avahi-daemon \
 	libnss-mdns \
 	php-pear \
+	moreutils \
 	miniupnpc
 
 ###################################
