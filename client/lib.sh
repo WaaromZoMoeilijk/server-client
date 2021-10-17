@@ -6,7 +6,8 @@ DJANGO="/home/dietpi/pidjango"
 HOME="/home/dietpi"
 
 # System
-USER="dietpi"
+USER='dietpi'
+VERSION='0.0.7'
 
 # Network
 WANIP4=$(curl -s -k -m 5 https://ipv4bot.whatismyipaddress.com)
