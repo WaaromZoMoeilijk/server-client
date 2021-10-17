@@ -34,7 +34,7 @@ if True:
 	writelog('/home/dietpi/log.txt')
 if True:
 	f = open("/home/dietpi/config.txt", 'w')
-	sstr = '{"reverse_ssh_server": "wzc.waaromzomoeilijk.nl", "version":"00000"}'
+	sstr = '{"reverse_ssh_server": "wzc.waaromzomoeilijk.nl", "version":"0.0.7"}'
 	f.write(sstr)
 	f.close()
 	writelog('config.txt')
