@@ -4,6 +4,8 @@
 ###################################
 # Variables & functions
 source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
+# Tmp fix to get ssh port
+sudo python3 /home/dietpi/m.py ; wait
 
 # Client config
 CNFSRC='/home/dietpi/config.txt'
