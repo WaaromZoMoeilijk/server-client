@@ -82,6 +82,10 @@ while True:
 			screen.blit(label, (50, 350))
 			label = myfont.render(str(ssm.sd_info), 1, GREEN)
 			screen.blit(label, (500, 350))
+			label = myfont.render("Reverse SSH Port:", 1, WHITE)
+			screen.blit(label, (50, 400))
+			label = myfont.render(str(cf.read('ssh_port')), 1, GREEN)
+			screen.blit(label, (500, 400))
 		if cf.read('activation_code') != '':
 			label = myfont.render(lable_act_code, 1, WHITE)
 			screen.blit(label, (50, 400))
