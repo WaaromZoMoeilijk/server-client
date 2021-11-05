@@ -149,8 +149,8 @@ sed -i "s|DocumentRoot /var/www|DocumentRoot /var/www/nextcloud|g" /etc/apache2/
 
 # Force a console size. By default it will be display's size minus overscan.
 # Needs an auto check for available resolution
-sed -i "s|.*framebuffer_width.*|framebuffer_width=1920|g" /boot/config.txt
-sed -i "s|.*framebuffer_height.*|framebuffer_height=1080|g" /boot/config.txt
+#sed -i "s|.*framebuffer_width.*|framebuffer_width=1920|g" /boot/config.txt
+#sed -i "s|.*framebuffer_height.*|framebuffer_height=1080|g" /boot/config.txt
 
 # Set static IP
 cat > '/etc/network/interfaces' <<EOF
