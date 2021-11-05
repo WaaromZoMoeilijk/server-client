@@ -213,4 +213,4 @@ echo "Unset pass"
 #/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ user:delete ezrawzm"
 
 # Reboot
-reboot
+#reboot
