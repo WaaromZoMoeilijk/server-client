@@ -20,12 +20,12 @@ cat >> "$CONFIG" <<EOF
 
 #-------Overclock-------
 # Dynamically overclock
-arm_freq=2000
-arm_freq_min=600
+#arm_freq=2000
+#arm_freq_min=600
 
 # Dynamically overvolt
-over_voltage=6
-over_voltage_min=0
+#over_voltage=6
+#over_voltage_min=0
 
 # When 75 celcius is reached, disable overclock
 temp_limit=75
@@ -34,7 +34,7 @@ temp_limit=75
 initial_turbo=60
 
 # Change to arm_boost=1
-#arm_boost=1
+arm_boost=1
 
 EOF
 
