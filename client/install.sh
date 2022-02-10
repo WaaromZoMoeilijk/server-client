@@ -61,6 +61,10 @@ apt install -y \
 	moreutils \
 	miniupnpc
 
+# Fix nextcloud issue on dietpi
+sed -i 's/128$//' /etc/php/*/cli/conf.d/98-dietpi-nextcloud.ini
+sed -i 's/256$//' /etc/php/*/cli/conf.d/98-dietpi-nextcloud.ini
+
 ###################################
 # Set timezone based upon WAN ip 
 #if curl -sL 'ip-api.com/json' | grep -q "404"; then
