@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2034,SC1090
+# shellcheck disable=SC2034,SC1090,SC2002
 # info@waaromzomoeilijk.nl
 
 ###################################
