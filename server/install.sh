@@ -1,59 +1,82 @@
 #!/bin/bash
-# info@waaromzomoeilijk.nl
+# scripting@waaromzomoeilijk.nl
 
-###################################
-# Variables & functions
-source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
+###############################################################################################################
+# VARIABLES                                                                                                    #
+###############################################################################################################
+DIRECTORY="/var/www/pi"
 
+###############################################################################################################
+# REQUIRED                                                                                                    #
+###############################################################################################################
 apt install -y \
+       python3 \
+       python3-pip \
        python3-virtualenv \
-       apache2 \
-       libapache2-mod-wsgi-py3 \
+       nginx \
+       fail2ban \
        inotify-tools
 
+###############################################################################################################
+# AUTO REVERSE PROXY ADDING MONITOR                                                                           #
+###############################################################################################################
 crontab -l | { cat; echo "* * * * * /usr/bin/sudo /usr/bin/python3 /var/www/pi/pidjango/rpi_info.py"; } | crontab -
 
-CAT
-<VirtualHost *:2021>
-        ServerName wzc.waaromzomoeilijk.nl
-        ServerAlias *
-        DocumentRoot /var/www/html
-        ErrorLog ${APACHE_LOG_DIR}/error.log
-        CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-        SSLEngine on
-        SSLCertificateFile      /etc/letsencrypt/live/henk.waaromzomoeilijk.nl/fullchain.pem
-        SSLCertificateKeyFile   /etc/letsencrypt/live/henk.waaromzomoeilijk.nl/privkey.pem
-#       SSLCertificateFile      /etc/ssl/certs/nginx-selfsigned.crt
-#       SSLCertificateKeyFile  /etc/ssl/private/nginx-selfsigned.key
-
-	ErrorLog ${APACHE_LOG_DIR}/error.log
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
-#	Redirect permanent "/" "https://henk.waaromzomoeilijk.nl:2021/"
-
-        Alias /static /var/www/pi/pidjango/static
-        <Directory /var/www/pi/pidjango/static>
-                Require all granted
-        </Directory>
-
-        <Directory /var/www/pi/pidjango/pidjango>
-                <Files wsgi.py>
-                        Require all granted
-                </Files>
-        </Directory>
-
-        WSGIDaemonProcess django-http python-path=/var/www/pi/pidjango python-home=/var/www/pi/env
-        WSGIProcessGroup django-http
-        WSGIScriptAlias / /var/www/pi/pidjango/pidjango/wsgi.py
-
-</VirtualHost>
-
-
-
+###############################################################################################################
+# GIT CLONE SERVER                                                                                            #
+###############################################################################################################
+git clone server "$DIRECTORY"
 find /var/www/pi -type f -exec chmod 0640 {} +
 find /var/www/pi -type d -exec chmod 0750 {} +
 chown -R www-data:www-data /var/www/pi
 
-python3 server.py
+###############################################################################################################
+# DJANGO                                                                                                      #
+###############################################################################################################
+cd "$DIRECTORY" 
+python3 -m venv env
+#source env/bin/activate
+pip3 install gunicorn django
+python manage.py makemigrations
+python manage.py migrate
+python manage.py collectstatic
+
+###############################################################################################################
+# SETUP SERVER AS A SERVICE                                                                                   #
+###############################################################################################################
+cat > /etc/systmd/system/wzc.service <<EOF
+[Unit]
+Description=WZC
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/pi/pidjango
+ExecStart=/var/www/pi/pidjango/env/bin/gunicorn --reload --access-logfile - --workers 5 --bind unix:/var/www/pi/pidjango/gunicorn.sock pidjango.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+EOF
+
+###############################################################################################################
+# DHPARAMS                                                                                                    #
+###############################################################################################################
+openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+
+###############################################################################################################
+# NGINX CONFIG                                                                                                #
+###############################################################################################################
+
+cat > /etc/nginx/sites-available/wzc.conf <<EOF
+
+EOF
+
+systemctl deamon-reload
+systemctl enable wzc.service
+systemctl restart gunicorn
+systemctl start wzc.service
+systemctl restart nginx.service
 
 exit 0

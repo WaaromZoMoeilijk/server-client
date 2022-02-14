@@ -1,10 +1,11 @@
 #!/bin/bash
+# shellcheck disable=SC2034,SC1090
 # info@waaromzomoeilijk.nl
 # login root/raspberry, dietpi/raspberry
 
 ###################################
 # Variables & functions
-source <(curl -sL https://raw.githubusercontent.com/ezraholm50/server-client/main/client/lib.sh)
+source <(curl -sL https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/lib.sh)
 
 # Check for errors + debug code and abort if something isn't right
 # 1 = ON
@@ -190,7 +191,7 @@ git clone "$REPO" "$GITDIR"
 # Overclock
 #clear
 echo "Overclocking"
-if cat /proc/cpuinfo | grep -q "Raspberry Pi 4"; then
+if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
      #dos2unix "$GITDIR"/client/scripts/overclock.sh
     /bin/bash "$GITDIR"/client/scripts/overclock.sh
 fi

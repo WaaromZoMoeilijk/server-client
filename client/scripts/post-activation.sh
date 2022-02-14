@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2034,SC1090
 # info@waaromzomoeilijk.nl
 
 ###################################
@@ -131,7 +132,7 @@ echo "SMBD restarted"
 #echo "sharing"
 
 # cronjob to check for files smb vs nc
-crontab -l | { cat; echo "* * * * * pgrep "php" || sudo -u www-data php /var/www/nextcloud/occ files:scan $USERNAME"; } | crontab -
+crontab -l | { cat; echo "* * * * * pgrep 'php' || sudo -u www-data php /var/www/nextcloud/occ files:scan $USERNAME"; } | crontab -
 #crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
 echo "Crontab"
 
@@ -205,7 +206,7 @@ echo "</Directory>" >> /etc/apache2/sites-available/dietpi-nextcloud.conf
 crontab -l | { cat; echo "* * * * * /bin/bash $GITDIR/client/scripts/tunnel_check.sh"; } | crontab -
 
 # install complete
-echo $(date) >> /home/dietpi/.install_success
+"$(date)" >> /home/dietpi/.install_success
 
 # Unset password var
 unset PASSWORD
