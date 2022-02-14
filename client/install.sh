@@ -63,8 +63,8 @@ apt install -y \
 	miniupnpc
 
 # Fix nextcloud issue on dietpi
-sed -i 's/128$//' /etc/php/*/cli/conf.d/98-dietpi-nextcloud.ini
-sed -i 's/256$//' /etc/php/*/cli/conf.d/98-dietpi-nextcloud.ini
+#sed -i 's/128$//' /etc/php/*/cli/conf.d/98-dietpi-nextcloud.ini
+#sed -i 's/256$//' /etc/php/*/cli/conf.d/98-dietpi-nextcloud.ini
 
 ###################################
 # Set timezone based upon WAN ip 
