@@ -210,7 +210,7 @@ fi
 
 ###################################
 # Nextcloud
-/boot/dietpi/dietpi-software install 114
+#/boot/dietpi/dietpi-software install 114
 
 # Install document editor
 #/usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ app:install documentserver_community" &
