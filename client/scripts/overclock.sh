@@ -33,9 +33,6 @@ temp_limit=75
 # Set turbo mode on boot until freq is set
 initial_turbo=60
 
-# Change to arm_boost=1
-arm_boost=1
-
 EOF
 
 exit 0
