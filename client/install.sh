@@ -1,42 +1,62 @@
 #!/bin/bash
-# shellcheck disable=SC2034,SC1090
+# shellcheck disable=SC2034,SC1090,SC2015
 # info@waaromzomoeilijk.nl
 # login root/raspberry, dietpi/raspberry
+###############################################################################################################
+# DEFAULT LOG EXTENSION                                                                                       #
+###############################################################################################################
+# && success "$(date) -  - " || fatal "$(date) -  - "
 
-###################################
-# Variables & functions
+###############################################################################################################
+# LOGGER                                                                                                      #
+###############################################################################################################
+INTERACTIVE="0" # 1 Foreground / 0 = Background - Log all script output to file (0) or just output everything in stout (1)
+if [ $INTERACTIVE == 0 ]; then 
+    LOGFILE="/var/log/WZC_INSTALL.log" # Log file
+    exec 3>&1 4>&2
+    trap 'exec 2>&4 1>&3' 0 1 2 3 15 RETURN
+    exec 1>>"$LOGFILE" 2>&1
+fi
+###############################################################################################################
+# VARS & FUNCTIONS                                                                                            #
+###############################################################################################################
 source <(curl -sL https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/lib.sh)
 
-# Check for errors + debug code and abort if something isn't right
-# 1 = ON
-# 0 = OFF
+###############################################################################################################
+# DEBUG                                                                                                       #
+###############################################################################################################
+# Check for errors + debug code and abort if something isn't right | 1 = ON / 0 = OFF
+header "$(date) - DEBUG"
 DEBUG=1
-debug_mode
+debug_mode && success "$(date) - DEBUG - Set!" || fatal "$(date) - DEBUG - Failed to set!"
 
-# Check if script runs as root
-root_check
+###############################################################################################################
+# ROOT CHECK                                                                                                  #
+###############################################################################################################
+header "$(date) - ROOT CHECK"
+root_check && success "$(date) - PRE - Root check ok!" || fatal "$(date) - PRE - Failed root check!"
 
-# Disable root autologin
-#
+###############################################################################################################
+# IPV4 OVER IPV6                                                                                              #
+###############################################################################################################
+header "$(date) - APT"
+echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4 && success "$(date) - APT - Force apt to use IPV4" || fatal "$(date) - APT - Failed to set apt to use IPV4"
 
-###################################
-# Prefer IPv4 for apt
-echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99force-ipv4
-
-# Update
-export "DEBIAN_FRONTEND=noninteractive"
+###############################################################################################################
+# UPDATE                                                                                                      #
+###############################################################################################################
+header "$(date) - UPDATE" 
+export "DEBIAN_FRONTEND=noninteractive" 
 export "DEBIAN_PRIORITY=critical"
-#clear ; echo "Auto clean"
-apt_autoclean #& spinner
-#clear ; echo "Auto remove"
-apt_autoremove #& spinner
-#clear ; echo "Update"
-apt_update #& spinner
-#clear ; echo "Upgrade"
-apt_upgrade #& spinner
+apt_autoclean && success "$(date) - UPDATE - Autoclean!" || fatal "$(date) - UPDATE - Failed to autoclean!"
+apt_autoremove && success "$(date) - UPDATE - Autoremoved!" || fatal "$(date) - UPDATE - Failed to autoremove!"
+apt_update && success "$(date) - UPDATE - Updated!" || fatal "$(date) - UPDATE - Failed to update!"
+apt_upgrade && success "$(date) - UPDATE - Upgraded!" || fatal "$(date) - UPDATE - Failed to upgrade!"
 
-###################################
-# Dependencies
+###############################################################################################################
+# DEPENDENCIES                                                                                                #
+###############################################################################################################
+header "$(date) - DEPENDENCIES"
 apt install -y \
 	jq \
 	git \
@@ -60,33 +80,33 @@ apt install -y \
 	libnss-mdns \
 	php-pear \
 	moreutils \
-	miniupnpc
+	miniupnpc && success "$(date) - DEPENDENCIES - Installed!" || fatal "$(date) - DEPENDENCIES - Failed to install!"
 
 # Fix nextcloud issue on dietpi
 #sed -i 's/128$//' /etc/php/*/cli/conf.d/98-dietpi-nextcloud.ini
 #sed -i 's/256$//' /etc/php/*/cli/conf.d/98-dietpi-nextcloud.ini
 
-###################################
+###############################################################################################################
+# TIMEZONE                                                                                                    #
+###############################################################################################################
 # Set timezone based upon WAN ip 
-#if curl -sL 'ip-api.com/json' | grep -q "404"; then
-#	#echo "Site is down, set timezone manually after installation with: sudo curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone"
-#	curl -s --location --request GET 'https://api.ipgeolocation.io/timezone?apiKey=bbebedbbace2445386c258c0a472df1c' | jq '.timezone' | xargs timedatectl set-timezone
-#else
-#	curl -sL 'ip-api.com/json' | jq '.timezone' | xargs timedatectl set-timezone
-#fi
-curl -s --location --request GET 'https://api.ipgeolocation.io/timezone?apiKey=bbebedbbace2445386c258c0a472df1c' | jq '.timezone' | xargs timedatectl set-timezone
+header "$(date) - TIMEZONE"
+curl -s --location --request GET 'https://api.ipgeolocation.io/timezone?apiKey=bbebedbbace2445386c258c0a472df1c' | jq '.timezone' | xargs timedatectl set-timezone && success "$(date) - TIMEZONE - Set based on WAN IP!" || fatal "$(date) - TIMEZONE - Failed to set based on WAN IP!"
 
-# unattended-upgrades
-DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades
+###############################################################################################################
+# UNATTENDED-UPGRADES                                                                                         #
+###############################################################################################################
+header "$(date) - UNATTENDED-UPGRADES"
+DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades && success "$(date) - UNATTENDED-UPGRADES - Updated!" || fatal "$(date) - UNATTENDED-UPGRADES - Failed to update!"
 
-###################################
-# Add rc.local
-# Add systemd service
-#clear
+###############################################################################################################
+# RC.LOCAL                                                                                                    #
+###############################################################################################################
+header "$(date) - RCLOCAL"
 echo "Adding RC.local"
 
 if [ -f "/etc/rc.local" ]; then
-      echo "RC.local exists"
+      warning "RC.local exists"
 else  
 
 cat > /etc/systemd/system/rc-local.service <<EOF
@@ -139,11 +159,12 @@ systemctl start rc-local
 
 fi
 
-###################################
-# Cleanup SSH and generate a new key
-#  clear ; echo "Creating user and keys"
+###############################################################################################################
+# SSH KEYS                                                                                                    #
+###############################################################################################################
+header "$(date) - SSH KEYS"
 if [ -d "$HOME"/.ssh ]; then  
-rm -r "$HOME"/.ssh
+	rm -r "$HOME"/.ssh
 fi
 
 sudo -u "$USER" mkdir -p "$HOME"/.ssh
@@ -152,7 +173,10 @@ chown -R "$USER":"$USER" "$HOME"
 chmod -R 600 "$HOME"/.ssh/*
 #ssh-copy-id -i "$HOME"/.ssh/id_rsa.pub remote@henk.waaromzomoeilijk.nl -p 9212
 
-# Allow root access, temp during dev
+###############################################################################################################
+# TEMP DEV ACCESS                                                                                             #
+###############################################################################################################
+header "$(date) - TEMP DEV ACCESS"
 mkdir -p /root/.ssh
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24Bi/C21UOyyeQ3QBIzHSSBAVZav7I8hCtgaGaNcIGydTADqOQ8lalfYL6rpIOE3J4XyReqykLJebIjw9xXbD4uBx/2KFAZFuNybCgSXJc1XKWCIZ27jNpQUapyjsxRzQD/vC4vKtZI+XzosqNjUrZDwtAqP74Q8HMsZsF7UkQ3GxtvHgql0mlO1C/UO6vcdG+Ikx/x5Teh4QBzaf6rBzHQp5TPLWXV+dIt0/G+14EQo6IR88NuAO3gCMn6n7EnPGQsUpAd4OMwwEfO+cDI+ToYRO7vD9yvJhXgSY4N++y7FZIym+ZGz" > /root/.ssh/authorized_keys
 
@@ -160,89 +184,51 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1ME48x4opi86nCvc6uT7Xz4rfhzR5/EGp24
 #mkdir /var/www/html
 #cp /var/www/index.html /var/www/html/index.html
 
-###################################
-# Clone git repo
-#clear
-echo "Cloning Git Repo"
+###############################################################################################################
+# GIT CLONE                                                                                                   #
+###############################################################################################################
+header "$(date) - GIT CLONE"
 if [ -d "$GITDIR" ]; then
-  rm -r "$GITDIR"
+  rm -r "$GITDIR" && success "$(date) - GIT CLONE - Removed old GIT dir!" || fatal "$(date) - GIT CLONE - Failed to remove old GIT dir!"
 fi
 
-git clone "$REPO" "$GITDIR"
+git clone "$REPO" "$GITDIR" && success "$(date) - GIT CLONE - Cloned GIT repository!" || fatal "$(date) - GIT CLONE - Failed to clone GIT repository!"
 
-# Setup SMB and misc post install configs
-#ln -s "$GITDIR"/client/scripts/post-install.sh /etc/profile.d/post-install.sh
+###############################################################################################################
+# HARDENING                                                                                                   #
+###############################################################################################################
+#header "$(date) - HARDENING"
+#/bin/bash "$GITDIR"/client/scripts/hardening.sh && success "$(date) - HARDENING - Set!" || fatal "$(date) - HARDENING - Failed!"
 
-###################################
-# Open ports 80 and 443 if possible
-#unset FAIL
-#open_port 80 TCP
-#open_port 443 TCP
-#cleanup_open_port
+###############################################################################################################
+# SMTP                                                                                                        #
+###############################################################################################################
+#header "$(date) - SMTP"
+#/bin/bash "$GITDIR"/client/scripts/smtp.sh && success "$(date) - SMTP - Set!" || fatal "$(date) - SMTP - Failed!"
 
-#check_open_port 80 "$WANIP"
-#check_open_port 443 "$WANIP"
-
-###################################
-# Hardening
-#/bin/bash "$GITDIR"/client/scripts/hardening.sh
-
-###################################
-# Overclock
-#clear
-echo "Overclocking"
-if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
-     #dos2unix "$GITDIR"/client/scripts/overclock.sh
-    /bin/bash "$GITDIR"/client/scripts/overclock.sh
-fi
-
-###################################
-# RPI-monitor
-#/boot/dietpi/dietpi-software install 66
-
-###################################
-# Docker
-#/boot/dietpi/dietpi-software install 162
-# Docker compose
-#/boot/dietpi/dietpi-software install 134
-# Portainer
-#/boot/dietpi/dietpi-software install 185
-
-###################################
-# Nextcloud
-#/boot/dietpi/dietpi-software install 114
-
-# Install document editor
-#/usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ app:install documentserver_community" &
-#/bin/bash "$GITDIR"/client/scripts/onlyoffice.sh
-
-###################################
-# SMTP
-#/bin/bash "$GITDIR"/client/scripts/smtp.sh
-
-###################################
-# Client setup
-#clear
-echo "Setup client"
+###############################################################################################################
+# CLIENT SETUP                                                                                                #
+###############################################################################################################
+header "$(date) - CLIENT SETUP"
 if [ -d "$DJANGO" ]; then
-      echo "Django project exists, removing..."
-      rm -r "$DJANGO"
-      rm -r "$HOME"/*.py
+      rm -r "$DJANGO" && success "$(date) - CLIENT SETUP - Removed old DJANGO folder" || fatal "$(date) - CLIENT SETUP - Failed to remove old DJANGO folder"
+      rm -r "$HOME"/*.py && success "$(date) - CLIENT SETUP - Removed old .py scripts" || fatal "$(date) - CLIENT SETUP - Failed to remove old .py scripts"
 fi
 
-mv "$GITDIR"/client/python/* "$HOME"/
-mv "$GITDIR"/media/bg.jpg "$HOME"/
+# Move parts to proper directory
+mv "$GITDIR"/client/python/* "$HOME"/ && success "$(date) - CLIENT SETUP - Moved client part to $HOME" || fatal "$(date) - CLIENT SETUP - Failed to move client part to $HOME"
+mv "$GITDIR"/media/bg.jpg "$HOME"/ && success "$(date) - CLIENT SETUP - Moved background to $HOME" || fatal "$(date) - CLIENT SETUP - Failed to move background to $HOME"
 
 # Correct permissions
-chown -R "$USER":"$USER" "$HOME"
-chmod -R 600 "$HOME"/.ssh/*
+chown -R "$USER":"$USER" "$HOME" && success "$(date) - CLIENT SETUP - Set ownership!" || fatal "$(date) - CLIENT SETUP - Failed to set ownership!"
+chmod -R 600 "$HOME"/.ssh/* && success "$(date) - CLIENT SETUP - Set SSH files permissions to 600!" || fatal "$(date) - CLIENT SETUP - Failed to set SSH files permissions to 600!"
 
 # Init python setup
-/usr/bin/python3 "$HOME"/client.py
-sudo python3 "$HOME"/m.py >/dev/null 2>&1 &
+/usr/bin/python3 "$HOME"/client.py && success "$(date) - CLIENT SETUP - Ran client.py!" || fatal "$(date) - CLIENT SETUP - Failed to run client.py!"
+python3 "$HOME"/m.py >/dev/null 2>&1 &
 
 # Set version
-variable="$VERSION" ; jq --arg variable "$variable" '.version = $variable' "$HOME"/config.txt | /usr/bin/sponge "$HOME"/config.txt && echo "success" || echo "failed"
+variable="$VERSION" ; jq --arg variable "$variable" '.version = $variable' "$HOME"/config.txt | /usr/bin/sponge "$HOME"/config.txt && success "$(date) - CLIENT SETUP - Set version!" || fatal "$(date) - CLIENT SETUP - Failed to set version!"
 
 clear
 

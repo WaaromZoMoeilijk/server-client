@@ -122,11 +122,13 @@ AUTO_SETUP_GLOBAL_PASSWORD=raspberry
 # Portainer
 #AUTO_SETUP_INSTALL_SOFTWARE_ID=185
 # Nextcloud
-#AUTO_SETUP_INSTALL_SOFTWARE_ID=114
+AUTO_SETUP_INSTALL_SOFTWARE_ID=114
 # Nextcloud Talk
 #AUTO_SETUP_INSTALL_SOFTWARE_ID=
 # RPI monitor
 #AUTO_SETUP_INSTALL_SOFTWARE_ID=66
+# Dietpi Dashboard
+AUTO_SETUP_INSTALL_SOFTWARE_ID=200
 
 #------------------------------------------------------------------------------------------------------
 ##### Misc DietPi program settings #####
