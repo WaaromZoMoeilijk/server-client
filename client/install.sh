@@ -232,4 +232,8 @@ variable="$VERSION" ; jq --arg variable "$variable" '.version = $variable' "$HOM
 
 clear
 
+sleep 5 
+
+reboot
+
 exit 0
