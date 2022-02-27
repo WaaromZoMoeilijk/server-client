@@ -18,7 +18,7 @@ fi
 source <(curl -sL https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/lib.sh)
 
 # Tmp fix to get ssh port
-sudo python3 /home/dietpi/m.py ; wait
+#sudo python3 /home/dietpi/m.py ; wait
 
 # Client config
 CNFSRC='/home/dietpi/config.txt'
