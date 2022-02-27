@@ -1,10 +1,12 @@
 #!/bin/bash
-# shellcheck disable=SC2034,SC1090,SC2002
+# shellcheck disable=SC2034,SC1090,SC2002,SC2046
 # info@waaromzomoeilijk.nl
 
-###################################
-# Variables & functions
+###############################################################################################################
+# VARIABLES AND FUNCTIONS                                                                                     #
+###############################################################################################################
 source <(curl -sL https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/lib.sh)
+
 # Tmp fix to get ssh port
 sudo python3 /home/dietpi/m.py ; wait
 
@@ -21,49 +23,65 @@ ACTIVATIONCODE=$(cat "$CNFSRC" | jq '.activation_code')
 SSHPORT=$(cat "$CNFSRC" | jq '.ssh_port')
 ID=$(cat "$CNFSRC" | jq '.id')
 
-# Check for errors + debug code and abort if something isn't right
-# 1 = ON
-# 0 = OFF
+###############################################################################################################
+# INIT                                                                                                        #
+###############################################################################################################
 DEBUG=1
 debug_mode
-
-# Check if script runs as root
 root_check
 
-# Create NC user
+###############################################################################################################
+# CREATE NC USER                                                                                              #
+###############################################################################################################
 (/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:add --group admin $USERNAME"
 #(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:resetpassword $USERNAME"
 
-# Enable NC user
+###############################################################################################################
+# ENABLE NC USER                                                                                              #
+###############################################################################################################
 #/usr/bin/su -s /bin/sh www-data -c "/usr/bin/php /var/www/nextcloud/occ user:enable $USERNAME"
 
-# Activate user
+###############################################################################################################
+# ACTIVATE USER                                                                                               #
+###############################################################################################################
 curl -vv --user "$USERNAME":"$PASSWORD" "http://127.0.0.1/nextcloud/login?clear=1"
 echo "Curl login"
 
-# Create PAM user
+###############################################################################################################
+# CREATE PAM USER                                                                                             #
+###############################################################################################################
 /usr/bin/sudo useradd -m -p $(openssl passwd -crypt "$PASSWORD") "$USERNAME"
 # Reset pass if user exists
 #(/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | passwd "$USERNAME"
 echo "Pam"
 
-# Change root password
+###############################################################################################################
+# CHANGE ROOT PASS                                                                                            #
+###############################################################################################################
 (/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | passwd root
 echo "Root pass change"
 
-# Create SMB user
+###############################################################################################################
+# SMB USER                                                                                                    #
+###############################################################################################################
 (/usr/bin/echo "$PASSWORD"; /usr/bin/echo "$PASSWORD") | /usr/bin/sudo smbpasswd -as "$USERNAME" 
 echo "SMB"
 
-# Samba
+###############################################################################################################
+# SMB USER WWW-DATA GROUP                                                                                     #
+###############################################################################################################
 usermod -aG www-data "$USERNAME"
 echo "Samba add user to www-data group"
 
-# Enable external files app
+###############################################################################################################
+# EXTERNAL FILES APP                                                                                          #
+###############################################################################################################
 /usr/bin/sudo -u www-data php /var/www/nextcloud/occ app:enable files_external
 echo "NC External files app"
 
-# Add samba config
+###############################################################################################################
+# SMB CONFIG                                                                                                  #
+###############################################################################################################
 if [ -f "/etc/samba/smb.conf" ]; then
 cat >> /etc/samba/smb.conf <<EOF
 [$USERNAME]
@@ -100,17 +118,23 @@ EOF
 fi
 echo "Samba config set"
 
-# Create dirs
+###############################################################################################################
+# CREATE DIRS                                                                                                 #
+###############################################################################################################
 mkdir -p /var/log/samba 
 #mkdir -p /mnt/dietpi_userdata/"$USERNAME"
 echo "Created Dirs"
 
-# Permissions
+###############################################################################################################
+# PERMISSIONS                                                                                                 #
+###############################################################################################################
 #chown "$USERNAME":"$USERNAME" /mnt/dietpi_userdata/"$USERNAME"
 chmod -R 770 /mnt/dietpi_userdata/nextcloud_data/"$USERNAME"/files
 echo "Set permission"
 
-# Restart smbd
+###############################################################################################################
+# RESTART SMB                                                                                                 #
+###############################################################################################################
 service smbd restart && sleep 10
 echo "SMBD restarted"
 
@@ -131,15 +155,23 @@ echo "SMBD restarted"
 #/usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ files_external:config $SMBID enable_sharing true"
 #echo "sharing"
 
-# cronjob to check for files smb vs nc
+###############################################################################################################
+# CRON                                                                                                        #
+###############################################################################################################
 crontab -l | { cat; echo "* * * * * pgrep 'php' || sudo -u www-data php /var/www/nextcloud/occ files:scan $USERNAME"; } | crontab -
 #crontab -l | { cat; echo "@reboot sudo -u www-data php /var/www/nextcloud/occ files_external:notify 1"; } | crontab -
 echo "Crontab"
 
+###############################################################################################################
+# RM WEBPAGE SETUP DETAILS                                                                                    #
+###############################################################################################################
 # Remove webpage setup details
 #rm /home/dietpi/a.py
 rm /var/www/index.html
 
+###############################################################################################################
+# REVERT SUBFOLDER TO WEBROOT                                                                                 #
+###############################################################################################################
 # Revert subfolder to webroot and more
 sed -i "s|.*overwrite.cli.url.*|  'overwrite.cli.url' => 'https://$USERNAME.$DOMAIN/',|g" /var/www/nextcloud/config/config.php
 sed -i "s|.*htaccess.RewriteBase.*|  'htaccess.RewriteBase' => '/',|g" /var/www/nextcloud/config/config.php
@@ -148,12 +180,17 @@ sed -i "s|.*ErrorDocument 404.*|ErrorDocument 404 /|g" /var/www/nextcloud/.htacc
 sed -i "s|.*RewriteBase.*|  RewriteBase /|g" /var/www/nextcloud/.htaccess
 sed -i "s|DocumentRoot /var/www|DocumentRoot /var/www/nextcloud|g" /etc/apache2/sites-enabled/000-default.conf  
 
+###############################################################################################################
+# FORCE CONSOLE SIZE                                                                                          #
+###############################################################################################################
 # Force a console size. By default it will be display's size minus overscan.
 # Needs an auto check for available resolution
 sed -i "s|.*framebuffer_width.*|framebuffer_width=1920|g" /boot/config.txt
 sed -i "s|.*framebuffer_height.*|framebuffer_height=1080|g" /boot/config.txt
 
-# Set static IP
+###############################################################################################################
+# STATIC IP                                                                                                   #
+###############################################################################################################
 cat > '/etc/network/interfaces' <<EOF
 # Location: /etc/network/interfaces
 # Please modify network settings via: dietpi-config
@@ -187,7 +224,10 @@ EOF
 #sed -i "s|netmask 255.255.255.0|netmask $NETMASK|g" /etc/network/interfaces
 #sed -i "s|#dns-nameservers 9.9.9.9 149.112.112.112|dns-nameservers 1.1.1.1 1.0.0.1|g" /etc/network/interfaces
 
-# Set config values for nextcloud
+###############################################################################################################
+# CONFIG VALUES NC                                                                                            #
+###############################################################################################################
+
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 0 --value localhost"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 1 --value $ADDRESS"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_domains 2 --value $USERNAME.$DOMAIN"
@@ -197,15 +237,23 @@ EOF
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 2 --value 192.168.22.2"
 /usr/bin/su -s /bin/sh www-data -c "php /var/www/nextcloud/occ config:system:set trusted_proxy 3 --value  $ADDRESS"
 
+###############################################################################################################
+# IFRAME CONFIG                                                                                               #
+###############################################################################################################
 # Allow iFrame only from wzc.waaromzomoeilijk.nl for webframe of user cloud
 sed -i 's|</Directory>|        Header set X-Frame-Options: "ALLOW_FROM https://wzc.waaromzomoeilijk.nl"|g' /etc/apache2/sites-available/dietpi-nextcloud.conf
 echo '        Header set Content-Security-Policy: "frame-ancestors https://wzc.waaromzomoeilijk.nl"' >> /etc/apache2/sites-available/dietpi-nextcloud.conf
 echo "</Directory>" >> /etc/apache2/sites-available/dietpi-nextcloud.conf
 
+###############################################################################################################
+# CRON                                                                                                        #
+###############################################################################################################
 # Setup tunnel checker every minute
 crontab -l | { cat; echo "* * * * * /bin/bash $GITDIR/client/scripts/tunnel_check.sh"; } | crontab -
 
-# install complete
+###############################################################################################################
+# WRAP UP                                                                                                     #
+###############################################################################################################
 "$(date)" >> /home/dietpi/.install_success
 
 # Unset password var
