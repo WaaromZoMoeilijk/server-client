@@ -225,7 +225,7 @@ chmod -R 600 "$HOME"/.ssh/* && success "$(date) - CLIENT SETUP - Set SSH files p
 
 # Init python setup
 /usr/bin/python3 "$HOME"/client.py && success "$(date) - CLIENT SETUP - Ran client.py!" || fatal "$(date) - CLIENT SETUP - Failed to run client.py!"
-python3 "$HOME"/m.py >/dev/null 2>&1 &
+python3 "$HOME"/m.py > /dev/null 2>&1 &
 
 # Set version
 variable="$VERSION" ; jq --arg variable "$variable" '.version = $variable' "$HOME"/config.txt | /usr/bin/sponge "$HOME"/config.txt && success "$(date) - CLIENT SETUP - Set version!" || fatal "$(date) - CLIENT SETUP - Failed to set version!"

@@ -49,7 +49,7 @@ if True:
 	f.close()
 	os.system('sudo chmod 777 /bin/l')
 	writelog('/home/dietpi/ipaddress')
-	sstr = "* * * * * /usr/bin/sudo /usr/bin/python3 /home/dietpi/m.py >/dev/null 2>&1 &"
+	sstr = "* * * * * /usr/bin/sudo /usr/bin/python3 /home/dietpi/m.py > /dev/null 2>&1 &"
 	sstr = "cat <(crontab -l) <(echo '"+sstr+"') | crontab -"
 	subprocess.call(['bash', '-c', sstr])
 	writelog('crontab')
