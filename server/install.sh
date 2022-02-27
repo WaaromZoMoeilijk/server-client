@@ -1,6 +1,6 @@
 #!/bin/bash
 # scripting@waaromzomoeilijk.nl
-# shellcheck disable=SC1091,SC2164
+# shellcheck disable=SC1091,SC2164,SC2154
 
 ###############################################################################################################
 # VARIABLES                                                                                                    #
@@ -49,7 +49,7 @@ python manage.py collectstatic
 ###############################################################################################################
 # SETUP SERVER AS A SERVICE                                                                                   #
 ###############################################################################################################
-cat > /etc/systmd/system/wzc.service <<EOF
+cat > /etc/systemd/system/wzc.service <<EOF
 [Unit]
 Description=WZC
 After=network.target
@@ -67,16 +67,17 @@ EOF
 ###############################################################################################################
 # SETUP INOTIFY AS A SERVICE                                                                                  #
 ###############################################################################################################
-cat > /etc/systmd/system/wzc_inotify.service <<EOF
+cat > /etc/systemd/system/wzc_inotify.service <<EOF
 [Unit]
 Description=Inotify folder checker
 After=network.target
 
 [Service]
-User=www-data
-Group=www-data
+User=root
+Group=root
 WorkingDirectory=/var/www/pi/rpi_info
 ExecStart=/bin/bash /opt/server-client/server/scripts/python-functions/nginx-conf-reverse-proxy.sh
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
