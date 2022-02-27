@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2001
+# shellcheck disable=SC2001,SC2237
 
 inotifywait -m /var/www/pi/rpi_info -e create -e moved_to |
 while read -r dir action file; do
@@ -10,6 +10,21 @@ while read -r dir action file; do
         USERNAME=$(jq -r .userid < "$dir/$file")
         NGINXCONF=$(echo "$file" | sed 's|.json|.conf|g')
         SSHPORT=$(jq -r .ssh_port < "$dir/$file")
+
+		if ! [ -n "$PUBKEY" ]; then
+			rm "$file"
+			exit 1
+		fi
+
+		if ! [ -n "$USERNAME" ]; then
+			rm "$file"
+			exit 1
+		fi
+
+		if ! [ -n "$SSHPORT" ]; then
+			rm "$file"
+			exit 1
+		fi		
 
         # Get Nginx config
         wget -O /etc/nginx/sites-enabled/"$NGINXCONF" https://raw.githubusercontent.com/WaaromZoMoeilijk/server-client/main/client/scripts/proxy.conf
@@ -24,11 +39,10 @@ while read -r dir action file; do
 
         # Set pubkey
         mkdir -p /home/remote/.ssh
-        {
-        echo "$file added on $DATE"
-        echo "$PUBKEY"
-        echo
-        } >> /home/remote/.ssh/authorized_keys
+
+        echo "$file added on $DATE" >> /home/remote/.ssh/authorized_keys
+        echo "$PUBKEY" >> /home/remote/.ssh/authorized_keys
+		echo "" >> /home/remote/.ssh/authorized_keys
 
         # Reload new config
         service nginx reload

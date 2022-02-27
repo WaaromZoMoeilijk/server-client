@@ -1,6 +1,16 @@
 #!/bin/bash
 # shellcheck disable=SC2034,SC1090,SC2002,SC2046
 # info@waaromzomoeilijk.nl
+###############################################################################################################
+# LOGGER                                                                                                      #
+###############################################################################################################
+INTERACTIVE="0" # 1 Foreground / 0 = Background - Log all script output to file (0) or just output everything in stout (1)
+if [ $INTERACTIVE == 0 ]; then 
+    LOGFILE="/var/log/post_activation.log" # Log file
+    exec 3>&1 4>&2
+    trap 'exec 2>&4 1>&3' 0 1 2 3 15 RETURN
+    exec 1>>"$LOGFILE" 2>&1
+fi
 
 ###############################################################################################################
 # VARIABLES AND FUNCTIONS                                                                                     #
@@ -12,16 +22,16 @@ sudo python3 /home/dietpi/m.py ; wait
 
 # Client config
 CNFSRC='/home/dietpi/config.txt'
-USERID=$(cat "$CNFSRC" | jq '.userid')
-EMAIL=$(cat "$CNFSRC" | jq '.email')
-NAMESERVER=$(cat "$CNFSRC" | jq '.nameserver')
-REVERSESSHSERVER=$(cat "$CNFSRC" | jq '.reverse_ssh_server')
-IPETH=$(cat "$CNFSRC" | jq '.ipAddressEth')
-GATEWAY=$(cat "$CNFSRC" | jq '.gateway')
-SUBNETMASK=$(cat "$CNFSRC"| jq '.subnetEth')
-ACTIVATIONCODE=$(cat "$CNFSRC" | jq '.activation_code')
-SSHPORT=$(cat "$CNFSRC" | jq '.ssh_port')
-ID=$(cat "$CNFSRC" | jq '.id')
+USERID=$(jq '.userid' < "$CNFSRC")
+EMAIL=$(jq '.email' < "$CNFSRC")
+NAMESERVER=$(jq '.nameserver' < "$CNFSRC")
+REVERSESSHSERVER=$(jq '.reverse_ssh_server' < "$CNFSRC")
+IPETH=$(jq '.ipAddressEth' < "$CNFSRC")
+GATEWAY=$(jq '.gateway' < "$CNFSRC")
+SUBNETMASK=$(jq '.subnetEth' < "$CNFSRC")
+ACTIVATIONCODE=$(jq '.activation_code' < "$CNFSRC")
+SSHPORT=$(jq '.ssh_port' < "$CNFSRC")
+ID=$(jq '.id' < "$CNFSRC")
 
 ###############################################################################################################
 # INIT                                                                                                        #
