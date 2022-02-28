@@ -17,6 +17,7 @@ if [ $INTERACTIVE == 0 ]; then
     trap 'exec 2>&4 1>&3' 0 1 2 3 15 RETURN
     exec 1>>"$LOGFILE" 2>&1
 fi
+
 ###############################################################################################################
 # VARS & FUNCTIONS                                                                                            #
 ###############################################################################################################
@@ -218,6 +219,7 @@ fi
 # Move parts to proper directory
 mv "$GITDIR"/client/python/* "$HOME"/ && success "$(date) - CLIENT SETUP - Moved client part to $HOME" || fatal "$(date) - CLIENT SETUP - Failed to move client part to $HOME"
 mv "$GITDIR"/media/bg.jpg "$HOME"/ && success "$(date) - CLIENT SETUP - Moved background to $HOME" || fatal "$(date) - CLIENT SETUP - Failed to move background to $HOME"
+mv "$GITDIR"/client/scripts/* "$HOME"/ && success "$(date) - CLIENT SETUP - Moved client part to $HOME" || fatal "$(date) - CLIENT SETUP - Failed to move client part to $HOME"
 
 # Correct permissions
 chown -R "$USER":"$USER" "$HOME" && success "$(date) - CLIENT SETUP - Set ownership!" || fatal "$(date) - CLIENT SETUP - Failed to set ownership!"
